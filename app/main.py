@@ -10,14 +10,45 @@ No browser needed for Phase 1.
 """
 
 import asyncio
+import os
 import sys
+from contextlib import asynccontextmanager
+
+# When running directly (python app/main.py), the project root
+# isn't on sys.path. Add it so `from app.x import y` works.
+_project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+if _project_root not in sys.path:
+    sys.path.insert(0, _project_root)
 
 from fastapi import FastAPI
 from fastapi.responses import JSONResponse
 
 from app.config import settings
 
-# ── FastAPI app (for health check and later phases) ──────────────────────────
+
+# ── Lifespan (replaces deprecated on_event) ───────────────────────────────────
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Startup
+    print("=" * 60)
+    print("  WorkerSaathi starting up")
+    print(f"  Environment : {settings.app_env}")
+    print(f"  Listening on: {settings.app_host}:{settings.app_port}")
+    print("=" * 60)
+
+    if not settings.assemblyai_api_key or settings.assemblyai_api_key == "your_key_here":
+        print("  [!] ASSEMBLYAI_API_KEY not set -- voice features will not work.")
+    else:
+        print("  [ok] AssemblyAI API key loaded")
+
+    yield  # App runs here
+
+    # Shutdown
+    print("WorkerSaathi shutting down.")
+
+
+# ── FastAPI app ───────────────────────────────────────────────────────────────
 
 app = FastAPI(
     title="WorkerSaathi",
@@ -28,6 +59,7 @@ app = FastAPI(
         "safety escalation, and evidence generation."
     ),
     version="0.1.0",
+    lifespan=lifespan,
 )
 
 
@@ -44,26 +76,7 @@ async def health():
     )
 
 
-@app.on_event("startup")
-async def startup():
-    print("=" * 60)
-    print("  WorkerSaathi starting up")
-    print(f"  Environment : {settings.app_env}")
-    print(f"  Listening on: {settings.app_host}:{settings.app_port}")
-    print("=" * 60)
-
-    if not settings.assemblyai_api_key or settings.assemblyai_api_key == "your_key_here":
-        print("  [!] ASSEMBLYAI_API_KEY not set -- voice features will not work.")
-    else:
-        print("  [ok] AssemblyAI API key loaded")
-
-
-@app.on_event("shutdown")
-async def shutdown():
-    print("WorkerSaathi shutting down.")
-
-
-# ── Voice agent CLI runner ───────────────────────────────────────────────────
+# ── Voice agent CLI runner ────────────────────────────────────────────────────
 
 async def run_voice_agent():
     """
@@ -94,7 +107,6 @@ async def run_voice_agent():
     print()
 
     agent = AssemblyAIAgent(api_key=api_key)
-
     mic = Microphone()
     speaker = Speaker()
 
@@ -114,7 +126,7 @@ async def run_voice_agent():
         print("[audio] Audio devices closed.")
 
 
-# ── Direct execution ─────────────────────────────────────────────────────────
+# ── Direct execution ──────────────────────────────────────────────────────────
 
 if __name__ == "__main__":
     # When run directly, start the voice agent (not the web server)
