@@ -1,10 +1,6 @@
 """
-rag/ — Legal knowledge retrieval system.
+app.rag -- Legal knowledge system.
 
-Responsibilities:
-  - Document ingestion and chunking
-  - Embedding generation
-  - Vector search with metadata filtering
-  - Hybrid retrieval (semantic + keyword + metadata)
-  - Evidence formatting
+Provides source registry, rights matrix, and retrieval pipeline.
+All legal data flows from knowledge/links.txt through this module.
 """

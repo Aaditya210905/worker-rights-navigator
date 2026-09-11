@@ -1,0 +1,1018 @@
+[
+  {
+    "source_id": "fe1e551287c4",
+    "title": "Ministry of Labour & Employment",
+    "source_type": "portal",
+    "authority": "Government of India",
+    "jurisdiction": "central",
+    "state": null,
+    "worker_types": [
+      "all"
+    ],
+    "issue_categories": [
+      "all"
+    ],
+    "source_url": "https://labour.gov.in/en",
+    "status": "active",
+    "effective_from": null,
+    "last_verified": "2026-09-11",
+    "notes": null
+  },
+  {
+    "source_id": "dc59cd8c7947",
+    "title": "Chief Labour Commissioner",
+    "source_type": "portal",
+    "authority": "Ministry of Labour & Employment",
+    "jurisdiction": "central",
+    "state": null,
+    "worker_types": [
+      "all"
+    ],
+    "issue_categories": [
+      "unpaid_wages",
+      "workplace_injury"
+    ],
+    "source_url": "https://clc.gov.in/",
+    "status": "active",
+    "effective_from": null,
+    "last_verified": "2026-09-11",
+    "notes": null
+  },
+  {
+    "source_id": "db88bd76d71e",
+    "title": "e-Shram — National Database of Unorganised Workers",
+    "source_type": "portal",
+    "authority": "Ministry of Labour & Employment",
+    "jurisdiction": "central",
+    "state": null,
+    "worker_types": [
+      "all"
+    ],
+    "issue_categories": [
+      "registration",
+      "welfare"
+    ],
+    "source_url": "https://eshram.gov.in/",
+    "status": "active",
+    "effective_from": null,
+    "last_verified": "2026-09-11",
+    "notes": "Covers construction, gig, platform, domestic, migrant workers"
+  },
+  {
+    "source_id": "3e5e4b5f2323",
+    "title": "e-Shram — Acts & Rules",
+    "source_type": "law",
+    "authority": "Ministry of Labour & Employment",
+    "jurisdiction": "central",
+    "state": null,
+    "worker_types": [
+      "all"
+    ],
+    "issue_categories": [
+      "all"
+    ],
+    "source_url": "https://eshram.gov.in/act-and-rules",
+    "status": "active",
+    "effective_from": null,
+    "last_verified": "2026-09-11",
+    "notes": "Labour Codes and related documents"
+  },
+  {
+    "source_id": "ae67e84c2218",
+    "title": "e-Shram — Social Security Welfare Schemes",
+    "source_type": "scheme",
+    "authority": "Ministry of Labour & Employment",
+    "jurisdiction": "central",
+    "state": null,
+    "worker_types": [
+      "all"
+    ],
+    "issue_categories": [
+      "welfare"
+    ],
+    "source_url": "https://www.eshram.gov.in/social-security-welfare-schemes",
+    "status": "active",
+    "effective_from": null,
+    "last_verified": "2026-09-11",
+    "notes": null
+  },
+  {
+    "source_id": "16bda24d9415",
+    "title": "Shram Suvidha — Unified Labour Portal",
+    "source_type": "portal",
+    "authority": "Ministry of Labour & Employment",
+    "jurisdiction": "central",
+    "state": null,
+    "worker_types": [
+      "all"
+    ],
+    "issue_categories": [
+      "all"
+    ],
+    "source_url": "https://shramsuvidha.gov.in/",
+    "status": "active",
+    "effective_from": null,
+    "last_verified": "2026-09-11",
+    "notes": null
+  },
+  {
+    "source_id": "10c1072817db",
+    "title": "EPFO — Employees' Provident Fund Organisation",
+    "source_type": "portal",
+    "authority": "Ministry of Labour & Employment",
+    "jurisdiction": "central",
+    "state": null,
+    "worker_types": [
+      "all"
+    ],
+    "issue_categories": [
+      "welfare"
+    ],
+    "source_url": "https://www.epfindia.gov.in/",
+    "status": "active",
+    "effective_from": null,
+    "last_verified": "2026-09-11",
+    "notes": null
+  },
+  {
+    "source_id": "16a5c9c6a0b2",
+    "title": "ESIC — Employees' State Insurance Corporation",
+    "source_type": "portal",
+    "authority": "Ministry of Labour & Employment",
+    "jurisdiction": "central",
+    "state": null,
+    "worker_types": [
+      "all"
+    ],
+    "issue_categories": [
+      "welfare",
+      "workplace_injury"
+    ],
+    "source_url": "https://esic.gov.in/",
+    "status": "active",
+    "effective_from": null,
+    "last_verified": "2026-09-11",
+    "notes": null
+  },
+  {
+    "source_id": "ad32d395ee0a",
+    "title": "National Career Service",
+    "source_type": "portal",
+    "authority": "Ministry of Labour & Employment",
+    "jurisdiction": "central",
+    "state": null,
+    "worker_types": [
+      "all"
+    ],
+    "issue_categories": [
+      "registration"
+    ],
+    "source_url": "https://www.ncs.gov.in/",
+    "status": "active",
+    "effective_from": null,
+    "last_verified": "2026-09-11",
+    "notes": null
+  },
+  {
+    "source_id": "0ea3120f6b4c",
+    "title": "India Code — Central Acts Repository",
+    "source_type": "law",
+    "authority": "Legislative Department, Ministry of Law and Justice",
+    "jurisdiction": "central",
+    "state": null,
+    "worker_types": [
+      "all"
+    ],
+    "issue_categories": [
+      "all"
+    ],
+    "source_url": "https://indiacode.nic.in/",
+    "status": "active",
+    "effective_from": null,
+    "last_verified": "2026-09-11",
+    "notes": "Primary source for all central legislation"
+  },
+  {
+    "source_id": "4f8a17bf23b9",
+    "title": "NALSA — National Legal Services Authority",
+    "source_type": "portal",
+    "authority": "Government of India",
+    "jurisdiction": "central",
+    "state": null,
+    "worker_types": [
+      "all"
+    ],
+    "issue_categories": [
+      "all"
+    ],
+    "source_url": "https://nalsa.gov.in/",
+    "status": "active",
+    "effective_from": null,
+    "last_verified": "2026-09-11",
+    "notes": "Free legal aid information for workers"
+  },
+  {
+    "source_id": "f3c050d9ddea",
+    "title": "Samadhan — Labour Grievance Redressal",
+    "source_type": "portal",
+    "authority": "Ministry of Labour & Employment",
+    "jurisdiction": "central",
+    "state": null,
+    "worker_types": [
+      "all"
+    ],
+    "issue_categories": [
+      "unpaid_wages",
+      "workplace_injury"
+    ],
+    "source_url": "https://samadhan.labour.gov.in/",
+    "status": "active",
+    "effective_from": null,
+    "last_verified": "2026-09-11",
+    "notes": null
+  },
+  {
+    "source_id": "82e769092fe6",
+    "title": "Code on Social Security, 2020",
+    "source_type": "law",
+    "authority": "Parliament of India",
+    "jurisdiction": "central",
+    "state": null,
+    "worker_types": [
+      "all"
+    ],
+    "issue_categories": [
+      "welfare",
+      "registration"
+    ],
+    "source_url": "https://www.indiacode.nic.in/handle/123456789/16823",
+    "status": "active",
+    "effective_from": "2025-11-21",
+    "last_verified": "2026-09-11",
+    "notes": "Covers unorganised, gig, platform workers. In force from Nov 2025."
+  },
+  {
+    "source_id": "e8b2314259e6",
+    "title": "Andhra Pradesh Labour Department",
+    "source_type": "portal",
+    "authority": "Government of Andhra Pradesh",
+    "jurisdiction": "state",
+    "state": "Andhra Pradesh",
+    "worker_types": [
+      "all"
+    ],
+    "issue_categories": [
+      "all"
+    ],
+    "source_url": "https://labour.ap.gov.in/",
+    "status": "active",
+    "effective_from": null,
+    "last_verified": "2026-09-11",
+    "notes": null
+  },
+  {
+    "source_id": "11b7377be0c0",
+    "title": "Arunachal Pradesh Government Portal",
+    "source_type": "portal",
+    "authority": "Government of Arunachal Pradesh",
+    "jurisdiction": "state",
+    "state": "Arunachal Pradesh",
+    "worker_types": [
+      "all"
+    ],
+    "issue_categories": [
+      "all"
+    ],
+    "source_url": "https://www.arunachalpradesh.gov.in/",
+    "status": "verify",
+    "effective_from": null,
+    "last_verified": "2026-09-11",
+    "notes": "Labour under state portal, no dedicated labour domain found"
+  },
+  {
+    "source_id": "74921c2d41d8",
+    "title": "Assam Labour Department",
+    "source_type": "portal",
+    "authority": "Government of Assam",
+    "jurisdiction": "state",
+    "state": "Assam",
+    "worker_types": [
+      "all"
+    ],
+    "issue_categories": [
+      "all"
+    ],
+    "source_url": "https://labour.assam.gov.in/",
+    "status": "active",
+    "effective_from": null,
+    "last_verified": "2026-09-11",
+    "notes": null
+  },
+  {
+    "source_id": "c605be8f239c",
+    "title": "Bihar Labour Resources Department",
+    "source_type": "portal",
+    "authority": "Government of Bihar",
+    "jurisdiction": "state",
+    "state": "Bihar",
+    "worker_types": [
+      "all"
+    ],
+    "issue_categories": [
+      "all"
+    ],
+    "source_url": "https://state.bihar.gov.in/labour/CitizenHome.html",
+    "status": "active",
+    "effective_from": null,
+    "last_verified": "2026-09-11",
+    "notes": null
+  },
+  {
+    "source_id": "f74fa3121e67",
+    "title": "Chhattisgarh Labour Department",
+    "source_type": "portal",
+    "authority": "Government of Chhattisgarh",
+    "jurisdiction": "state",
+    "state": "Chhattisgarh",
+    "worker_types": [
+      "all"
+    ],
+    "issue_categories": [
+      "all"
+    ],
+    "source_url": "https://cglabour.nic.in/",
+    "status": "active",
+    "effective_from": null,
+    "last_verified": "2026-09-11",
+    "notes": null
+  },
+  {
+    "source_id": "db2cb29f0996",
+    "title": "Goa Labour Department",
+    "source_type": "portal",
+    "authority": "Government of Goa",
+    "jurisdiction": "state",
+    "state": "Goa",
+    "worker_types": [
+      "all"
+    ],
+    "issue_categories": [
+      "all"
+    ],
+    "source_url": "http://labour.goa.gov.in",
+    "status": "active",
+    "effective_from": null,
+    "last_verified": "2026-09-11",
+    "notes": null
+  },
+  {
+    "source_id": "ae2a54a33462",
+    "title": "Gujarat Labour & Employment Department",
+    "source_type": "portal",
+    "authority": "Government of Gujarat",
+    "jurisdiction": "state",
+    "state": "Gujarat",
+    "worker_types": [
+      "all"
+    ],
+    "issue_categories": [
+      "all"
+    ],
+    "source_url": "https://labour.gujarat.gov.in/",
+    "status": "active",
+    "effective_from": null,
+    "last_verified": "2026-09-11",
+    "notes": null
+  },
+  {
+    "source_id": "1ddde341a5c6",
+    "title": "Haryana Labour Department",
+    "source_type": "portal",
+    "authority": "Government of Haryana",
+    "jurisdiction": "state",
+    "state": "Haryana",
+    "worker_types": [
+      "all"
+    ],
+    "issue_categories": [
+      "all"
+    ],
+    "source_url": "https://hrylabour.gov.in/",
+    "status": "active",
+    "effective_from": null,
+    "last_verified": "2026-09-11",
+    "notes": null
+  },
+  {
+    "source_id": "b6e132800959",
+    "title": "Himachal Pradesh Labour & Employment Department",
+    "source_type": "portal",
+    "authority": "Government of Himachal Pradesh",
+    "jurisdiction": "state",
+    "state": "Himachal Pradesh",
+    "worker_types": [
+      "all"
+    ],
+    "issue_categories": [
+      "all"
+    ],
+    "source_url": "http://himachal.nic.in/employment/",
+    "status": "active",
+    "effective_from": null,
+    "last_verified": "2026-09-11",
+    "notes": null
+  },
+  {
+    "source_id": "2bd59a29e316",
+    "title": "Jharkhand Shramadhan Portal",
+    "source_type": "portal",
+    "authority": "Government of Jharkhand",
+    "jurisdiction": "state",
+    "state": "Jharkhand",
+    "worker_types": [
+      "all"
+    ],
+    "issue_categories": [
+      "all"
+    ],
+    "source_url": "https://shramadhan.jharkhand.gov.in/home",
+    "status": "active",
+    "effective_from": null,
+    "last_verified": "2026-09-11",
+    "notes": null
+  },
+  {
+    "source_id": "b014dc5e34d3",
+    "title": "Karnataka Labour Department",
+    "source_type": "portal",
+    "authority": "Government of Karnataka",
+    "jurisdiction": "state",
+    "state": "Karnataka",
+    "worker_types": [
+      "all"
+    ],
+    "issue_categories": [
+      "all"
+    ],
+    "source_url": "https://labour.karnataka.gov.in/",
+    "status": "active",
+    "effective_from": null,
+    "last_verified": "2026-09-11",
+    "notes": null
+  },
+  {
+    "source_id": "c8b7e3bae9e8",
+    "title": "Karnataka Platform Based Gig Workers (Social Security and Welfare) Act, 2025",
+    "source_type": "law",
+    "authority": "Karnataka Legislature",
+    "jurisdiction": "state",
+    "state": "Karnataka",
+    "worker_types": [
+      "gig_worker"
+    ],
+    "issue_categories": [
+      "platform_deactivation",
+      "welfare",
+      "registration"
+    ],
+    "source_url": "https://kla.kar.nic.in/assembly/bills/bill1670_31.pdf",
+    "status": "active",
+    "effective_from": "2025-05-30",
+    "last_verified": "2026-09-11",
+    "notes": "Deemed in force from May 30, 2025. Enacted Sep 12, 2025. Covers aggregators, social security, dispute resolution."
+  },
+  {
+    "source_id": "ad98f080e1a0",
+    "title": "Kerala Labour Commissioner",
+    "source_type": "portal",
+    "authority": "Government of Kerala",
+    "jurisdiction": "state",
+    "state": "Kerala",
+    "worker_types": [
+      "all"
+    ],
+    "issue_categories": [
+      "all"
+    ],
+    "source_url": "https://lc.kerala.gov.in/",
+    "status": "active",
+    "effective_from": null,
+    "last_verified": "2026-09-11",
+    "notes": null
+  },
+  {
+    "source_id": "befb8dd1f860",
+    "title": "Madhya Pradesh Labour Department",
+    "source_type": "portal",
+    "authority": "Government of Madhya Pradesh",
+    "jurisdiction": "state",
+    "state": "Madhya Pradesh",
+    "worker_types": [
+      "all"
+    ],
+    "issue_categories": [
+      "all"
+    ],
+    "source_url": "https://labour.mp.gov.in/",
+    "status": "active",
+    "effective_from": null,
+    "last_verified": "2026-09-11",
+    "notes": null
+  },
+  {
+    "source_id": "76b05efb5401",
+    "title": "Maharashtra Labour Department",
+    "source_type": "portal",
+    "authority": "Government of Maharashtra",
+    "jurisdiction": "state",
+    "state": "Maharashtra",
+    "worker_types": [
+      "all"
+    ],
+    "issue_categories": [
+      "all"
+    ],
+    "source_url": "https://labour.maharashtra.gov.in/",
+    "status": "active",
+    "effective_from": null,
+    "last_verified": "2026-09-11",
+    "notes": null
+  },
+  {
+    "source_id": "392869c578fc",
+    "title": "Maharashtra Kamgar Kalyan Portal",
+    "source_type": "portal",
+    "authority": "Government of Maharashtra",
+    "jurisdiction": "state",
+    "state": "Maharashtra",
+    "worker_types": [
+      "all"
+    ],
+    "issue_categories": [
+      "welfare"
+    ],
+    "source_url": "https://mahakamgar.maharashtra.gov.in/",
+    "status": "active",
+    "effective_from": null,
+    "last_verified": "2026-09-11",
+    "notes": null
+  },
+  {
+    "source_id": "6e96777e2161",
+    "title": "Manipur Government Portal",
+    "source_type": "portal",
+    "authority": "Government of Manipur",
+    "jurisdiction": "state",
+    "state": "Manipur",
+    "worker_types": [
+      "all"
+    ],
+    "issue_categories": [
+      "all"
+    ],
+    "source_url": "https://manipur.gov.in/",
+    "status": "verify",
+    "effective_from": null,
+    "last_verified": "2026-09-11",
+    "notes": "No dedicated labour portal found"
+  },
+  {
+    "source_id": "b17d069f394b",
+    "title": "Meghalaya Government Portal",
+    "source_type": "portal",
+    "authority": "Government of Meghalaya",
+    "jurisdiction": "state",
+    "state": "Meghalaya",
+    "worker_types": [
+      "all"
+    ],
+    "issue_categories": [
+      "all"
+    ],
+    "source_url": "https://meghalaya.gov.in/",
+    "status": "verify",
+    "effective_from": null,
+    "last_verified": "2026-09-11",
+    "notes": "No dedicated labour portal found"
+  },
+  {
+    "source_id": "fd6803df1bcb",
+    "title": "Mizoram Government Portal",
+    "source_type": "portal",
+    "authority": "Government of Mizoram",
+    "jurisdiction": "state",
+    "state": "Mizoram",
+    "worker_types": [
+      "all"
+    ],
+    "issue_categories": [
+      "all"
+    ],
+    "source_url": "https://mizoram.gov.in/",
+    "status": "verify",
+    "effective_from": null,
+    "last_verified": "2026-09-11",
+    "notes": "No dedicated labour portal found"
+  },
+  {
+    "source_id": "58adedf5db83",
+    "title": "Nagaland Government Portal",
+    "source_type": "portal",
+    "authority": "Government of Nagaland",
+    "jurisdiction": "state",
+    "state": "Nagaland",
+    "worker_types": [
+      "all"
+    ],
+    "issue_categories": [
+      "all"
+    ],
+    "source_url": "https://nagaland.gov.in/",
+    "status": "verify",
+    "effective_from": null,
+    "last_verified": "2026-09-11",
+    "notes": "No dedicated labour portal found"
+  },
+  {
+    "source_id": "d9c1d48fc937",
+    "title": "Odisha Labour Directorate",
+    "source_type": "portal",
+    "authority": "Government of Odisha",
+    "jurisdiction": "state",
+    "state": "Odisha",
+    "worker_types": [
+      "all"
+    ],
+    "issue_categories": [
+      "all"
+    ],
+    "source_url": "https://labourdirectorate.odisha.gov.in/",
+    "status": "active",
+    "effective_from": null,
+    "last_verified": "2026-09-11",
+    "notes": null
+  },
+  {
+    "source_id": "131fe11572ef",
+    "title": "Punjab Labour Department",
+    "source_type": "portal",
+    "authority": "Government of Punjab",
+    "jurisdiction": "state",
+    "state": "Punjab",
+    "worker_types": [
+      "all"
+    ],
+    "issue_categories": [
+      "all"
+    ],
+    "source_url": "https://pblabour.gov.in/",
+    "status": "active",
+    "effective_from": null,
+    "last_verified": "2026-09-11",
+    "notes": null
+  },
+  {
+    "source_id": "60cc9b11d880",
+    "title": "Rajasthan Labour Department",
+    "source_type": "portal",
+    "authority": "Government of Rajasthan",
+    "jurisdiction": "state",
+    "state": "Rajasthan",
+    "worker_types": [
+      "all"
+    ],
+    "issue_categories": [
+      "all"
+    ],
+    "source_url": "https://labour.rajasthan.gov.in/",
+    "status": "active",
+    "effective_from": null,
+    "last_verified": "2026-09-11",
+    "notes": null
+  },
+  {
+    "source_id": "3de70b53ac33",
+    "title": "Sikkim Government Portal",
+    "source_type": "portal",
+    "authority": "Government of Sikkim",
+    "jurisdiction": "state",
+    "state": "Sikkim",
+    "worker_types": [
+      "all"
+    ],
+    "issue_categories": [
+      "all"
+    ],
+    "source_url": "https://sikkim.gov.in/",
+    "status": "verify",
+    "effective_from": null,
+    "last_verified": "2026-09-11",
+    "notes": "No dedicated labour portal found"
+  },
+  {
+    "source_id": "b94f78aaeecc",
+    "title": "Tamil Nadu Labour Welfare & Skill Development Department",
+    "source_type": "portal",
+    "authority": "Government of Tamil Nadu",
+    "jurisdiction": "state",
+    "state": "Tamil Nadu",
+    "worker_types": [
+      "all"
+    ],
+    "issue_categories": [
+      "all"
+    ],
+    "source_url": "https://labour.tn.gov.in/",
+    "status": "active",
+    "effective_from": null,
+    "last_verified": "2026-09-11",
+    "notes": null
+  },
+  {
+    "source_id": "e4801651ec1a",
+    "title": "Tamil Nadu Unorganised Workers Welfare Boards",
+    "source_type": "board",
+    "authority": "Government of Tamil Nadu",
+    "jurisdiction": "state",
+    "state": "Tamil Nadu",
+    "worker_types": [
+      "construction_worker",
+      "domestic_worker"
+    ],
+    "issue_categories": [
+      "welfare",
+      "registration"
+    ],
+    "source_url": "https://tnuwwb.tn.gov.in/",
+    "status": "active",
+    "effective_from": null,
+    "last_verified": "2026-09-11",
+    "notes": "Includes Domestic Workers Welfare Board (DOME)"
+  },
+  {
+    "source_id": "3b93a6dde289",
+    "title": "Tamil Nadu Domestic Workers Social Security and Welfare Scheme, 2007",
+    "source_type": "scheme",
+    "authority": "Government of Tamil Nadu",
+    "jurisdiction": "state",
+    "state": "Tamil Nadu",
+    "worker_types": [
+      "domestic_worker"
+    ],
+    "issue_categories": [
+      "welfare"
+    ],
+    "source_url": "https://tnlegalservices.tn.gov.in/welfare_schemes_GOs/12.%20No.II%282%29%20LE%20515%20%28d-4%29%2020008.pdf",
+    "status": "active",
+    "effective_from": "2007",
+    "last_verified": "2026-09-11",
+    "notes": "Manual workers engaged in domestic work"
+  },
+  {
+    "source_id": "b7cc5c43728b",
+    "title": "Telangana Labour Department",
+    "source_type": "portal",
+    "authority": "Government of Telangana",
+    "jurisdiction": "state",
+    "state": "Telangana",
+    "worker_types": [
+      "all"
+    ],
+    "issue_categories": [
+      "all"
+    ],
+    "source_url": "https://labour.telangana.gov.in/",
+    "status": "active",
+    "effective_from": null,
+    "last_verified": "2026-09-11",
+    "notes": null
+  },
+  {
+    "source_id": "27c463615419",
+    "title": "Tripura Government Portal",
+    "source_type": "portal",
+    "authority": "Government of Tripura",
+    "jurisdiction": "state",
+    "state": "Tripura",
+    "worker_types": [
+      "all"
+    ],
+    "issue_categories": [
+      "all"
+    ],
+    "source_url": "https://tripura.gov.in/",
+    "status": "verify",
+    "effective_from": null,
+    "last_verified": "2026-09-11",
+    "notes": "No dedicated labour portal found"
+  },
+  {
+    "source_id": "b1abcd562235",
+    "title": "Uttar Pradesh Labour Department",
+    "source_type": "portal",
+    "authority": "Government of Uttar Pradesh",
+    "jurisdiction": "state",
+    "state": "Uttar Pradesh",
+    "worker_types": [
+      "all"
+    ],
+    "issue_categories": [
+      "all"
+    ],
+    "source_url": "https://uplabour.gov.in/",
+    "status": "active",
+    "effective_from": null,
+    "last_verified": "2026-09-11",
+    "notes": null
+  },
+  {
+    "source_id": "0c229feb5285",
+    "title": "Uttarakhand Labour Department",
+    "source_type": "portal",
+    "authority": "Government of Uttarakhand",
+    "jurisdiction": "state",
+    "state": "Uttarakhand",
+    "worker_types": [
+      "all"
+    ],
+    "issue_categories": [
+      "all"
+    ],
+    "source_url": "https://labour.uk.gov.in/",
+    "status": "active",
+    "effective_from": null,
+    "last_verified": "2026-09-11",
+    "notes": null
+  },
+  {
+    "source_id": "1a8b0ba7c168",
+    "title": "West Bengal Labour Department",
+    "source_type": "portal",
+    "authority": "Government of West Bengal",
+    "jurisdiction": "state",
+    "state": "West Bengal",
+    "worker_types": [
+      "all"
+    ],
+    "issue_categories": [
+      "all"
+    ],
+    "source_url": "https://labour.wb.gov.in/",
+    "status": "active",
+    "effective_from": null,
+    "last_verified": "2026-09-11",
+    "notes": null
+  },
+  {
+    "source_id": "6e4f3e7b9b2b",
+    "title": "Andaman & Nicobar Labour Department",
+    "source_type": "portal",
+    "authority": "UT Administration",
+    "jurisdiction": "ut",
+    "state": "Andaman and Nicobar Islands",
+    "worker_types": [
+      "all"
+    ],
+    "issue_categories": [
+      "all"
+    ],
+    "source_url": "https://labour.and.nic.in/",
+    "status": "active",
+    "effective_from": null,
+    "last_verified": "2026-09-11",
+    "notes": null
+  },
+  {
+    "source_id": "ddbab1c1b187",
+    "title": "Chandigarh Administration",
+    "source_type": "portal",
+    "authority": "UT Administration",
+    "jurisdiction": "ut",
+    "state": "Chandigarh",
+    "worker_types": [
+      "all"
+    ],
+    "issue_categories": [
+      "all"
+    ],
+    "source_url": "https://chandigarh.gov.in/",
+    "status": "verify",
+    "effective_from": null,
+    "last_verified": "2026-09-11",
+    "notes": "No dedicated labour portal found"
+  },
+  {
+    "source_id": "ed7b28a5e019",
+    "title": "DNHDD Administration",
+    "source_type": "portal",
+    "authority": "UT Administration",
+    "jurisdiction": "ut",
+    "state": "Dadra and Nagar Haveli and Daman and Diu",
+    "worker_types": [
+      "all"
+    ],
+    "issue_categories": [
+      "all"
+    ],
+    "source_url": "https://ddd.gov.in/",
+    "status": "verify",
+    "effective_from": null,
+    "last_verified": "2026-09-11",
+    "notes": "No dedicated labour portal found"
+  },
+  {
+    "source_id": "b63225e6f69e",
+    "title": "Delhi Labour Department",
+    "source_type": "portal",
+    "authority": "Government of NCT of Delhi",
+    "jurisdiction": "ut",
+    "state": "Delhi",
+    "worker_types": [
+      "all"
+    ],
+    "issue_categories": [
+      "all"
+    ],
+    "source_url": "https://labour.delhi.gov.in/",
+    "status": "active",
+    "effective_from": null,
+    "last_verified": "2026-09-11",
+    "notes": null
+  },
+  {
+    "source_id": "3b5626224705",
+    "title": "J&K Labour & Employment Department",
+    "source_type": "portal",
+    "authority": "UT Administration",
+    "jurisdiction": "ut",
+    "state": "Jammu and Kashmir",
+    "worker_types": [
+      "all"
+    ],
+    "issue_categories": [
+      "all"
+    ],
+    "source_url": "http://jklabouremp.nic.in/",
+    "status": "active",
+    "effective_from": null,
+    "last_verified": "2026-09-11",
+    "notes": null
+  },
+  {
+    "source_id": "82bc2ead1ebb",
+    "title": "Ladakh Administration",
+    "source_type": "portal",
+    "authority": "UT Administration",
+    "jurisdiction": "ut",
+    "state": "Ladakh",
+    "worker_types": [
+      "all"
+    ],
+    "issue_categories": [
+      "all"
+    ],
+    "source_url": "https://ladakh.gov.in/",
+    "status": "verify",
+    "effective_from": null,
+    "last_verified": "2026-09-11",
+    "notes": "No dedicated labour portal found"
+  },
+  {
+    "source_id": "19da5c61404c",
+    "title": "Lakshadweep Administration",
+    "source_type": "portal",
+    "authority": "UT Administration",
+    "jurisdiction": "ut",
+    "state": "Lakshadweep",
+    "worker_types": [
+      "all"
+    ],
+    "issue_categories": [
+      "all"
+    ],
+    "source_url": "https://lakshadweep.gov.in/",
+    "status": "verify",
+    "effective_from": null,
+    "last_verified": "2026-09-11",
+    "notes": "No dedicated labour portal found"
+  },
+  {
+    "source_id": "bf1bf47ff22a",
+    "title": "Puducherry Administration",
+    "source_type": "portal",
+    "authority": "UT Administration",
+    "jurisdiction": "ut",
+    "state": "Puducherry",
+    "worker_types": [
+      "all"
+    ],
+    "issue_categories": [
+      "all"
+    ],
+    "source_url": "https://py.gov.in/",
+    "status": "verify",
+    "effective_from": null,
+    "last_verified": "2026-09-11",
+    "notes": "No dedicated labour portal found"
+  }
+]
