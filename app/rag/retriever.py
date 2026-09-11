@@ -1,20 +1,27 @@
 """
-retriever.py -- Hybrid retrieval + reranking + LegalEvidence.
+retriever.py -- Phase 5 Hybrid Retrieval Engine.
 
-Combines:
-  1. Semantic search (Qdrant + Qwen3-Embedding-8B)
-  2. BM25 keyword search (rank_bm25)
-  3. Reciprocal Rank Fusion (RRF) for score merging
-  4. Reranking by evidence_level priority
-  5. Gap/conflict awareness
-  6. LegalEvidence output for the agent
+Combines all components into a single retrieval pipeline:
 
-This is the core intelligence layer of Phase 4.
+  CaseState / params
+       |
+  QueryBuilder   -> structured query with issue expansion
+       |
+  Qdrant         -> semantic search with metadata filters
+  BM25           -> keyword search
+       |
+  RRF fusion     -> merge semantic + keyword results
+       |
+  Reranker       -> authority/status/specificity weighting
+       |
+  Validator      -> legal status + applicability checks
+       |
+  EvidenceAssembler -> LegalEvidence output
+       |
+  Agent / LLM
 """
 
-import json
 import re
-from pathlib import Path
 from typing import Optional
 
 from rank_bm25 import BM25Okapi
@@ -25,15 +32,11 @@ from app.rag.models import (
 )
 from app.rag.embeddings import EmbeddingClient
 from app.rag.qdrant_store import QdrantStore
+from app.rag.query_builder import QueryBuilder, RetrievalQuery
+from app.rag.reranker import rerank
+from app.rag.validator import EvidenceValidator
+from app.rag.evidence import EvidenceAssembler
 
-
-# Evidence level priority (lower = more authoritative)
-EVIDENCE_PRIORITY = {
-    EvidenceLevel.PRIMARY_LEGAL.value: 0,
-    EvidenceLevel.OFFICIAL_GOVERNMENT.value: 1,
-    EvidenceLevel.OFFICIAL_EXPLANATORY.value: 2,
-    EvidenceLevel.SECONDARY.value: 3,
-}
 
 # RRF constant
 RRF_K = 60
@@ -41,10 +44,15 @@ RRF_K = 60
 
 class HybridRetriever:
     """
-    Hybrid retrieval with semantic + BM25 + reranking.
+    Phase 5 hybrid retrieval engine.
 
     Usage:
         retriever = HybridRetriever(qdrant, embedder, docs, gaps, conflicts)
+
+        # From CaseState
+        evidence = retriever.retrieve_for_case(case_state)
+
+        # From explicit params
         evidence = retriever.retrieve(
             query="salary not paid",
             worker_type="gig_worker",
@@ -70,6 +78,15 @@ class HybridRetriever:
         tokenized_docs = [_tokenize(doc.text) for doc in documents]
         self._bm25 = BM25Okapi(tokenized_docs)
 
+    def retrieve_for_case(self, case) -> LegalEvidence:
+        """
+        Retrieve evidence using a CaseState object.
+
+        This is the primary entry point for the voice agent.
+        """
+        rq = QueryBuilder.from_case(case)
+        return self._execute(rq)
+
     def retrieve(
         self,
         query: str = None,
@@ -80,104 +97,98 @@ class HybridRetriever:
         top_k: int = 5,
     ) -> LegalEvidence:
         """
-        Retrieve relevant legal evidence for a worker's case.
+        Retrieve evidence from explicit parameters.
 
-        Args:
-            query: search query (built from case if not provided)
-            worker_type: e.g., "gig_worker"
-            state: e.g., "Karnataka" (used for gap detection)
-            issue: e.g., "unpaid_wages"
-            raw_description: worker's own words
-            top_k: number of results to return
-
-        Returns:
-            LegalEvidence with findings, gaps, and conflicts.
+        Used for testing and direct API calls.
         """
-        # Build query from case info if not provided
-        if not query:
-            parts = []
-            if issue:
-                parts.append(issue.replace("_", " "))
-            if worker_type:
-                parts.append(worker_type.replace("_", " "))
-            if raw_description:
-                parts.append(raw_description)
-            query = " ".join(parts) if parts else "worker rights"
+        rq = QueryBuilder.from_params(
+            worker_type=worker_type,
+            issue=issue,
+            query=query,
+            raw_description=raw_description,
+        )
+        return self._execute(rq, state=state, top_k=top_k)
+
+    def _execute(
+        self,
+        rq: RetrievalQuery,
+        state: str = None,
+        top_k: int = 5,
+    ) -> LegalEvidence:
+        """Execute the full retrieval pipeline."""
 
         # ── 1. Semantic search via Qdrant ────────────────────────
-        query_vector = self._embedder.embed_query(query)
+        query_vector = self._embedder.embed_query(rq.semantic_query)
+
+        # Use the primary worker type and issue for Qdrant filter
+        primary_worker = rq.worker_types[0] if rq.worker_types else None
+        primary_issue = rq.issue_categories[0] if rq.issue_categories else None
+
         semantic_results = self._qdrant.search(
             query_vector=query_vector,
-            limit=top_k * 2,
-            jurisdiction="central",
-            worker_type=worker_type,
-            issue_category=issue,
+            limit=top_k * 3,
+            jurisdiction=rq.jurisdiction,
+            worker_type=primary_worker,
+            issue_category=primary_issue,
         )
 
         # ── 2. BM25 keyword search ──────────────────────────────
-        query_tokens = _tokenize(query)
+        query_tokens = _tokenize(rq.semantic_query)
         bm25_scores = self._bm25.get_scores(query_tokens)
 
-        # Filter BM25 results by worker_type and issue
         bm25_ranked = []
         for idx, score in enumerate(bm25_scores):
             if score <= 0:
                 continue
             doc = self._documents[idx]
-            # Apply same filters as Qdrant
-            if worker_type and "all_workers" not in doc.worker_types:
-                if worker_type not in doc.worker_types:
+            # Filter by worker type (any match in expanded list)
+            if rq.worker_types and "all_workers" not in rq.worker_types:
+                doc_workers = set(doc.worker_types)
+                query_workers = set(rq.worker_types) | {"all_workers"}
+                if not doc_workers.intersection(query_workers):
                     continue
-            if issue and "all" not in doc.issue_categories:
-                if issue not in doc.issue_categories:
+            # Filter by issue (any match in expanded list)
+            if rq.issue_categories and "all" not in rq.issue_categories:
+                doc_issues = set(doc.issue_categories)
+                query_issues = set(rq.issue_categories) | {"all"}
+                if not doc_issues.intersection(query_issues):
                     continue
             bm25_ranked.append((idx, score))
 
         bm25_ranked.sort(key=lambda x: x[1], reverse=True)
-        bm25_ranked = bm25_ranked[:top_k * 2]
+        bm25_ranked = bm25_ranked[:top_k * 3]
 
-        # ── 3. Reciprocal Rank Fusion ────────────────────────────
-        fused_scores = {}
+        # ── 3. Reciprocal Rank Fusion (RRF) ──────────────────────
+        fused = {}
 
-        # Score semantic results
         for rank, result in enumerate(semantic_results):
-            doc_id = result["payload"].get("doc_id", "")
+            doc_id = result["payload"].get("doc_id", f"sem_{rank}")
             rrf_score = 1.0 / (RRF_K + rank + 1)
-            if doc_id not in fused_scores:
-                fused_scores[doc_id] = {
-                    "score": 0.0,
-                    "payload": result["payload"],
-                    "semantic_score": result["score"],
-                }
-            fused_scores[doc_id]["score"] += rrf_score
+            if doc_id not in fused:
+                fused[doc_id] = {"score": 0.0, "payload": result["payload"]}
+            fused[doc_id]["score"] += rrf_score
 
-        # Score BM25 results
         for rank, (idx, bm25_score) in enumerate(bm25_ranked):
             doc = self._documents[idx]
             doc_id = doc.doc_id
             rrf_score = 1.0 / (RRF_K + rank + 1)
-            if doc_id not in fused_scores:
-                fused_scores[doc_id] = {
-                    "score": 0.0,
-                    "payload": doc.to_qdrant_payload(),
-                    "semantic_score": 0.0,
-                }
-            fused_scores[doc_id]["score"] += rrf_score
+            if doc_id not in fused:
+                fused[doc_id] = {"score": 0.0, "payload": doc.to_qdrant_payload()}
+            fused[doc_id]["score"] += rrf_score
 
-        # ── 4. Rerank by evidence_level ──────────────────────────
-        ranked = sorted(
-            fused_scores.values(),
-            key=lambda x: (
-                -x["score"],  # Higher score first
-                EVIDENCE_PRIORITY.get(
-                    x["payload"].get("evidence_level", "secondary"), 9
-                ),
-            ),
+        candidates = list(fused.values())
+
+        # ── 4. Rerank ────────────────────────────────────────────
+        reranked = rerank(
+            candidates,
+            worker_type=primary_worker,
+            issue=primary_issue,
+            top_k=top_k,
         )
 
         # ── 5. Build findings ────────────────────────────────────
         findings = []
-        for item in ranked[:top_k]:
+        for item in reranked:
             p = item["payload"]
             finding = EvidenceFinding(
                 claim=p.get("title", ""),
@@ -189,68 +200,45 @@ class HybridRetriever:
                 evidence_level=p.get("evidence_level", "secondary"),
                 legal_status=p.get("legal_status", ""),
                 last_verified=p.get("last_verified", ""),
-                retrieval_score=item["score"],
+                retrieval_score=item.get("composite_score", item["score"]),
             )
             findings.append(finding)
 
-        # ── 6. Check gaps ────────────────────────────────────────
-        relevant_gaps = self._find_relevant_gaps(worker_type, issue)
+        # ── 6. Validate ─────────────────────────────────────────
+        # Pass original worker type so validator detects "unknown"
+        original_wt = getattr(rq, 'original_worker_type', primary_worker)
+        valid_findings, val_limitations = EvidenceValidator.validate(
+            findings,
+            worker_type=original_wt,
+            issue=primary_issue,
+            jurisdiction=rq.jurisdiction,
+        )
 
-        # ── 7. Check conflicts ───────────────────────────────────
+        # ── 7. Find relevant gaps ────────────────────────────────
+        relevant_gaps = self._find_relevant_gaps(primary_worker, primary_issue)
+
+        # ── 8. Find relevant conflicts ───────────────────────────
         relevant_conflicts = self._find_relevant_conflicts(
-            worker_type, issue, findings
+            primary_worker, primary_issue
         )
 
-        # ── 8. Determine coverage ────────────────────────────────
-        # Check if top findings are themselves gap-describing docs
-        gap_keywords = ["not_found", "no verified", "gap", "unconfirmed",
-                        "insufficient_verified"]
-        findings_are_gaps = findings and all(
-            any(kw in (f.evidence_text.lower() + f.legal_status.lower())
-                for kw in gap_keywords)
-            for f in findings[:2]  # check top 2
-        )
-
-        if relevant_conflicts:
-            coverage = RetrievalCoverage.CONFLICT
-        elif relevant_gaps and (not findings or findings_are_gaps):
-            coverage = RetrievalCoverage.GAP
-        elif findings and relevant_gaps:
-            coverage = RetrievalCoverage.PARTIAL
-        elif findings:
-            coverage = RetrievalCoverage.FULL
-        else:
-            coverage = RetrievalCoverage.NONE
-
-        # ── 9. Build limitations ─────────────────────────────────
-        limitations = []
-        if state and state.lower() != "central":
-            limitations.append(
-                f"This information is from Central Government sources only. "
-                f"State-specific ({state}) laws may also apply."
-            )
-        limitations.append(
-            "WorkerSaathi is not a lawyer. This information is for "
-            "guidance only. Consult a legal professional for specific advice."
-        )
-
-        return LegalEvidence(
-            issue=issue or "",
-            jurisdiction="central",
-            worker_type=worker_type or "",
-            coverage=coverage,
-            evidence=findings,
-            gaps=[g["gap"] for g in relevant_gaps],
-            conflicts=[c["description"] for c in relevant_conflicts],
-            limitations=limitations,
+        # ── 9. Assemble LegalEvidence ────────────────────────────
+        return EvidenceAssembler.assemble(
+            findings=valid_findings,
+            gaps=relevant_gaps,
+            conflicts=relevant_conflicts,
+            limitations=val_limitations,
+            worker_type=primary_worker or "",
+            issue=primary_issue or "",
+            state=state,
+            jurisdiction=rq.jurisdiction,
         )
 
     def _find_relevant_gaps(
         self, worker_type: str = None, issue: str = None
     ) -> list[dict]:
-        """Find gaps relevant to this case."""
+        """Find gaps relevant to this case using word-level matching."""
         relevant = []
-        # Build search words from worker_type and issue
         search_words = set()
         if worker_type:
             for word in worker_type.split("_"):
@@ -265,7 +253,6 @@ class HybridRetriever:
             gap_text = gap.get("gap", "").lower()
             gap_id = gap.get("id", "").lower()
             combined = gap_text + " " + gap_id
-            # Match if ANY two search words appear in the gap
             matches = sum(1 for w in search_words if w in combined)
             if matches >= 2 or (matches >= 1 and len(search_words) == 1):
                 relevant.append(gap)
@@ -273,12 +260,9 @@ class HybridRetriever:
         return relevant
 
     def _find_relevant_conflicts(
-        self,
-        worker_type: str = None,
-        issue: str = None,
-        findings: list[EvidenceFinding] = None,
+        self, worker_type: str = None, issue: str = None
     ) -> list[dict]:
-        """Find conflicts relevant to this case."""
+        """Find conflicts relevant to this case using word-level matching."""
         relevant = []
         search_words = set()
         if worker_type:
@@ -305,5 +289,4 @@ def _tokenize(text: str) -> list[str]:
     """Simple tokenizer for BM25."""
     text = text.lower()
     tokens = re.findall(r'\b\w+\b', text)
-    # Remove very short tokens
     return [t for t in tokens if len(t) > 1]

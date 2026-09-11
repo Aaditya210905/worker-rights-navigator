@@ -1,9 +1,8 @@
 """
-agent/ — Agent behavior and tool architecture.
+WorkerSaathi Agent -- Orchestrator, tools, and prompts.
 
-Responsibilities:
-  - System prompt definition
-  - Tool implementations (retrieve_rights, log_case_field, etc.)
-  - Tool dispatcher / gateway
-  - Policy rules (hedging language, safety priority)
+Phase 6: Full backend orchestration with tool calling.
 """
+
+from app.agent.orchestrator import Orchestrator
+from app.agent.tool_registry import ALL_TOOLS, get_tools_for_status

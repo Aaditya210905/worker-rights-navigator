@@ -1,12 +1,11 @@
 """
 assemblyai.py -- AssemblyAI Voice Agent WebSocket integration.
 
-Phase 2: Uses LLM tool calling for case classification.
-The LLM calls update_case_info whenever it identifies information
-from the worker's speech. We process the tool call, update case
-state, and send tool.result back.
+Phase 6: Full tool calling with backend orchestrator.
+Tools: update_case_info, retrieve_rights, generate_evidence,
+       draft_message, escalate_safety.
 
-Event flow for tool calls (from events-reference.md):
+Event flow for tool calls:
   1. LLM decides to call a tool
   2. Server sends tool.call with arguments
   3. Server sends reply.done (tool call reply)
@@ -28,8 +27,8 @@ import json
 import websockets
 
 from app.voice.audio import Microphone, Speaker
-from app.agent.conversation import ConversationController
-from app.agent.classifier import CASE_TOOLS
+from app.agent.orchestrator import Orchestrator
+from app.agent.tool_registry import ALL_TOOLS, get_tools_for_status
 
 # ── Constants ────────────────────────────────────────────────────────────────
 
@@ -50,9 +49,8 @@ class AssemblyAIAgent:
     """
     Manages a single voice session with AssemblyAI's Voice Agent API.
 
-    Phase 2: Uses LLM tool calling for intelligent case classification.
-    The LLM calls update_case_info to extract structured case data,
-    and we guide its next question via tool results and prompt updates.
+    Phase 6: Full backend orchestration with 5 tools.
+    LLM calls tools -> Orchestrator validates + executes -> results returned.
     """
 
     def __init__(self, api_key: str):
@@ -66,7 +64,7 @@ class AssemblyAIAgent:
         self._session_id = None
         self._session_ready = asyncio.Event()
         self._running = False
-        self._controller = ConversationController()
+        self._orchestrator = Orchestrator()
         self._pending_tool_calls = []  # accumulate tool.call events
 
     async def run(self, mic: Microphone, speaker: Speaker):
@@ -109,11 +107,11 @@ class AssemblyAIAgent:
         Send session.update.
 
         On first call: sends full config (prompt, greeting, voice, language, tools).
-        On subsequent calls: sends only the updated system_prompt (mutable).
+        On subsequent calls: sends updated system_prompt + tools (both mutable).
         """
         if system_prompt is None:
-            # First call — full configuration including tools
-            initial_prompt = self._controller.get_initial_prompt()
+            # First call — full configuration
+            initial_prompt = self._orchestrator.get_initial_prompt()
             config = {
                 "type": "session.update",
                 "session": {
@@ -125,17 +123,20 @@ class AssemblyAIAgent:
                     "output": {
                         "voice": VOICE_ID,
                     },
-                    "tools": CASE_TOOLS,
+                    "tools": ALL_TOOLS,
                 },
             }
             await self._ws.send(json.dumps(config))
-            print("[agent] session.update sent (initial with tools).")
+            print("[agent] session.update sent (initial with 5 tools).")
         else:
-            # Subsequent call — only update system_prompt (mutable)
+            # Subsequent call — update prompt + tools based on status
+            status = self._orchestrator.case.status.value
+            available_tools = get_tools_for_status(status)
             config = {
                 "type": "session.update",
                 "session": {
                     "system_prompt": system_prompt,
+                    "tools": available_tools,
                 },
             }
             await self._ws.send(json.dumps(config))
@@ -266,11 +267,11 @@ class AssemblyAIAgent:
         self._session_ready.set()
 
     def _on_user_transcript(self, event):
-        """Final transcript — log it and track in controller."""
+        """Final transcript — log it and track in orchestrator."""
         text = event.get("text", "")
         if text.strip():
             print(f"\n  You: {text}")
-            self._controller.process_transcript(text)
+            self._orchestrator.process_transcript(text)
 
     def _on_tool_call(self, event):
         """
@@ -281,7 +282,7 @@ class AssemblyAIAgent:
         name = event.get("name", "")
         arguments = event.get("arguments", {})
 
-        print(f"\n  [tool.call] {name}({json.dumps(arguments, ensure_ascii=False)})")
+        print(f"\n  [tool.call] {name}({json.dumps(arguments, ensure_ascii=False)[:100]})")
         self._pending_tool_calls.append({
             "call_id": call_id,
             "name": name,
@@ -327,14 +328,24 @@ class AssemblyAIAgent:
         # Process any pending tool calls
         if self._pending_tool_calls:
             for tc in self._pending_tool_calls:
-                result = self._controller.process_tool_call(
+                result = self._orchestrator.handle_tool_call(
                     tc["name"], tc["arguments"]
                 )
 
-                # Send tool.result back to the LLM
-                await self._send_tool_result(tc["call_id"], result["tool_result"])
+                # Check for error
+                is_error = False
+                try:
+                    parsed = json.loads(result["tool_result"])
+                    is_error = parsed.get("status") == "error"
+                except (json.JSONDecodeError, KeyError):
+                    pass
 
-                # Update system prompt if case state changed
+                # Send tool.result back to the LLM
+                await self._send_tool_result(
+                    tc["call_id"], result["tool_result"], is_error
+                )
+
+                # Update system prompt + available tools if state changed
                 if result["needs_prompt_update"] and result["new_prompt"]:
                     await self._send_session_update(result["new_prompt"])
 
