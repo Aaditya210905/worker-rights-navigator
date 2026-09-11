@@ -1,0 +1,75 @@
+{
+  "retrieved_at": "2026-09-11",
+  "gaps": [
+    {
+      "id": "G-INDIA-CODE-PDF",
+      "gap": "India Code bitstream PDFs for the four Codes returned 404/500 from this sandbox. IR Code text was previously fetchable at https://www.indiacode.nic.in/bitstream/123456789/22040/1/A2020-35.pdf (web index). Canonical Act section text for Wages/SS/OSH should be re-downloaded from India Code before citing section numbers as TIER 1.",
+      "priority": "high"
+    },
+    {
+      "id": "G-DEACTIVATION",
+      "gap": "No Central reinstatement/deactivation appeal procedure found for gig/platform account suspension.",
+      "priority": "high"
+    },
+    {
+      "id": "G-GIG-WAGE-CLAIM",
+      "gap": "No verified Central source applying Code on Wages employee remedies to gig/platform workers defined as outside employer-employee relationship.",
+      "priority": "high"
+    },
+    {
+      "id": "G-FLOOR-WAGE-AMOUNT",
+      "gap": "Floor wage rupee amount notified by Central Government: NOT_FOUND.",
+      "priority": "high"
+    },
+    {
+      "id": "G-S45-AUTHORITY-LIST",
+      "gap": "Names/addresses of authorities appointed under Code on Wages s.45 for each Central jurisdiction: NOT_FOUND as a list.",
+      "priority": "high"
+    },
+    {
+      "id": "G-GIG-SCHEMES-OPERATIONAL",
+      "gap": "Claim-ready notified gig-only social security schemes funded by aggregator contribution: CURRENT_STATUS_UNCONFIRMED.",
+      "priority": "high"
+    },
+    {
+      "id": "G-PMJAY-PLATFORM-LAUNCH",
+      "gap": "AB-PMJAY for platform workers announced in Budget 2025-26; Aug 2025 PIB said yet to be launched. Launch status as of 2026-09-11 UNCONFIRMED (NHA/pmjay.gov.in 503).",
+      "priority": "medium"
+    },
+    {
+      "id": "G-DOMESTIC-ESTABLISHMENT",
+      "gap": "Whether private household is an establishment under the four Codes: NOT_FOUND.",
+      "priority": "high"
+    },
+    {
+      "id": "G-SO5321-CANONICAL",
+      "gap": "Standalone Gazette PDF of S.O. 5321(E) OSH commencement not independently fetched; text previously seen in compiled extract. IR S.O. 5320(E) CLC PDF failed to download this session.",
+      "priority": "medium"
+    },
+    {
+      "id": "G-SAMADHAN-LIVE",
+      "gap": "samadhan.labour.gov.in HTTP 503 this session. Live form fields UNVERIFIED.",
+      "priority": "medium"
+    },
+    {
+      "id": "G-GMS-LIVE",
+      "gap": "gms.eshram.gov.in HTTP 503 this session. Helpline numbers taken from e-Shram FAQ.",
+      "priority": "medium"
+    },
+    {
+      "id": "G-LSA-ACT-PDF",
+      "gap": "Canonical Legal Services Authorities Act 1987 PDF not downloaded; eligibility quoted from NALSA pages.",
+      "priority": "medium"
+    },
+    {
+      "id": "G-ESI-DISABLEMENT-RATES",
+      "gap": "Numeric ESI disablement/dependants benefit rates not extracted from SS Rules in this pass.",
+      "priority": "medium"
+    },
+    {
+      "id": "G-WORKER-ACCIDENT-COMPLAINT-FORM",
+      "gap": "FORM-XI is employer notice. Worker-initiated accident complaint form: NOT_FOUND.",
+      "priority": "medium"
+    }
+  ]
+}

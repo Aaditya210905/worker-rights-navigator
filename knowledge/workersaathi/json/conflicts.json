@@ -1,0 +1,72 @@
+{
+  "retrieved_at": "2026-09-11",
+  "conflicts": [
+    {
+      "conflict": true,
+      "id": "C-ESHRAM-AGE",
+      "description": "e-Shram upper age limit: Objectives page (updated 11-Sep-2026) says age 16 years or above with no upper cap. FAQ Q11 on beta.eshram.gov.in says 16-59 years. PIB PRID 2303053 says 16 years and above. Social Security (Central) Rules 2026 Rule 48 requires completed sixteen years of age with no upper cap for unorganised/gig registration under s.113; Rule 49(4) ceases gig scheme eligibility at age sixty.",
+      "sources": [
+        "https://eshram.gov.in/e-shram-objectives",
+        "https://beta.eshram.gov.in/faqs",
+        "https://www.labour.gov.in/static/uploads/2026/05/49aa9b62c2125499c37399b90e969d67.pdf"
+      ],
+      "recommended_primary_source": "Social Security (Central) Rules, 2026 Rule 48 for Code registration; for the e-Shram portal operational FAQ, disclose both statements and do not invent a cap.",
+      "requires_human_review": true
+    },
+    {
+      "conflict": true,
+      "id": "C-WAGES-SECTION-WAGE-PERIOD",
+      "description": "MoLE explainer attributes wage-period fixation and payment timelines to Section 6 of Code on Wages. Code on Wages (Central) Rules 2026 Rule 3 cites section 6(5) for calculating minimum rate of wages, not wage periods. Explainer section numbering is TIER 3 and must not be treated as India Code text.",
+      "sources": [
+        "https://www.labour.gov.in/static/uploads/2026/02/83978455025732b99b0165def80ab171.pdf",
+        "https://www.labour.gov.in/static/uploads/2026/05/6eb0c35ba63b776487a025e5123b6b12.pdf"
+      ],
+      "recommended_primary_source": "Code on Wages (Central) Rules, 2026 and India Code Act text (bitstream not downloaded this session).",
+      "requires_human_review": true
+    },
+    {
+      "conflict": true,
+      "id": "C-SAMADHAN-OLD-ACTS",
+      "description": "Four Codes commenced 21 Nov 2025. CLC still points workers to SAMADHAN. Prior verified SAMADHAN homepage/FAQ listed Payment of Wages Act 1936, Minimum Wages Act 1948, Industrial Disputes Act 1947. MoLE list-of-enactments page dated 2026-01-10 still listed repealed pre-Code Acts. PIB said SAMADHAN under revamp. This session SAMADHAN returned HTTP 503.",
+      "sources": [
+        "https://samadhan.labour.gov.in/",
+        "https://clc.gov.in/clc/online-services",
+        "https://labour.gov.in/en/list-enactments-ministry"
+      ],
+      "recommended_primary_source": "Gazette commencement notifications + Central Rules 2026 for the law; SAMADHAN/CLC as the filing channel only, not as the statement of applicable Act names.",
+      "requires_human_review": true
+    },
+    {
+      "conflict": true,
+      "id": "C-NALSA-SC-INCOME",
+      "description": "NALSA FAQ first answer states Supreme Court income ceiling as less than rupees twelve thousand or higher amount prescribed by Central Government. Same FAQ later table/paragraph and legal-aid page state less than Rs 5 lakh for Supreme Court.",
+      "sources": [
+        "https://nalsa.gov.in/faqs/",
+        "https://nalsa.gov.in/legal-aid/"
+      ],
+      "recommended_primary_source": "https://nalsa.gov.in/legal-aid/ (Rs 5 Lakh) plus Legal Services Authorities Act 1987 canonical text (not downloaded this session).",
+      "requires_human_review": true
+    },
+    {
+      "conflict": true,
+      "id": "C-ESHRAM-FAQ-Q24-TYPO",
+      "description": "e-Shram FAQ Q24 text as extracted: 'What if after registration on e-Shram the unorganised worker moves to organised sector?' Answer: 'In case if a worker moves to unorganised sector, he/she will only be entitled for benefits defined for organised sector workers.' Question and answer refer to opposite sectors. Do not use this Q&A without human review.",
+      "sources": [
+        "https://beta.eshram.gov.in/faqs"
+      ],
+      "recommended_primary_source": "Do not ingest this Q&A as a right.",
+      "requires_human_review": true
+    },
+    {
+      "conflict": true,
+      "id": "C-AGGREGATOR-RATE-NOTIFIED",
+      "description": "PIB 9 Dec 2025 states aggregators 'are now required to contribute 1-2% of annual turnover capped at 5% of payments'. Additional FAQs 16.03.2026 Q15 says the contribution 'will be notified by the Central Government'. Rules 2026 provide Form-XX assessment using the % notified under s.114(4). The specific percentage in force is therefore PENDING/UNCONFIRMED as a Gazette-notified number.",
+      "sources": [
+        "https://static.pib.gov.in/WriteReadData/specificdocs/documents/2025/dec/doc2025129723601.pdf",
+        "https://www.labour.gov.in/static/uploads/2026/03/a4ccf4c6d97c4f1f36a6d83f8c64213d.pdf"
+      ],
+      "recommended_primary_source": "Additional FAQs Q15 + Rule 49 until a Gazette rate notification is located.",
+      "requires_human_review": true
+    }
+  ]
+}

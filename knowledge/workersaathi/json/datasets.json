@@ -1,0 +1,87 @@
+{
+  "retrieved_at": "2026-09-11",
+  "note": "DATASET ≠ LEGAL AUTHORITY",
+  "datasets": [
+    {
+      "dataset_title": "State/UT-wise Number of Unorganised Workers Registered on e-Shram (multiple vintages)",
+      "description": "Registration counts; STATISTICS only",
+      "ministry": "Ministry of Labour and Employment",
+      "fields": [
+        "State/UT",
+        "registrations",
+        "as-on date"
+      ],
+      "time_period": "2022-2025 vintages listed",
+      "geographic_scope": "India",
+      "update_frequency": "NOT_FOUND",
+      "api_availability": "UNVERIFIED",
+      "download_format": "NOT_FOUND this session",
+      "source_url": "https://www.data.gov.in/keywords/e-SHRAM",
+      "last_updated": "NOT_FOUND",
+      "last_verified": "2026-09-11",
+      "note": "DATASET ≠ LEGAL AUTHORITY"
+    },
+    {
+      "dataset_title": "State/UT-wise Details of Gig Workers and Platform Workers Registered on eShram Portal as on 27-03-2025",
+      "description": "Gig/platform worker counts by State",
+      "ministry": "Ministry of Labour and Employment",
+      "fields": [
+        "State/UT",
+        "gig/platform worker count"
+      ],
+      "time_period": "as on 2025-03-27",
+      "geographic_scope": "India",
+      "update_frequency": "NOT_FOUND",
+      "api_availability": "UNVERIFIED",
+      "download_format": "NOT_FOUND this session",
+      "source_url": "https://tn.data.gov.in/keywords/Worker",
+      "last_updated": "2025-03-27",
+      "last_verified": "2026-09-11",
+      "note": "Discovered via data.gov.in keyword index; STATISTICS only"
+    },
+    {
+      "dataset_title": "Category-wise Total Number of Unorganised Workers including Migrant and Gig Workers on eShram as on 27-03-2025",
+      "description": "Category counts",
+      "ministry": "Ministry of Labour and Employment",
+      "fields": [
+        "category",
+        "count"
+      ],
+      "time_period": "as on 2025-03-27",
+      "geographic_scope": "India",
+      "update_frequency": "NOT_FOUND",
+      "api_availability": "UNVERIFIED",
+      "download_format": "NOT_FOUND",
+      "source_url": "https://tn.data.gov.in/keywords/Worker",
+      "last_updated": "2025-03-27",
+      "last_verified": "2026-09-11"
+    },
+    {
+      "dataset_title": "PIB Annexure e-Shram scheme enrolments as on 14.07.2026",
+      "description": "Matched enrolments of e-Shram registrants in 13 schemes",
+      "ministry": "Ministry of Labour and Employment",
+      "fields": [
+        "scheme",
+        "enrollments"
+      ],
+      "time_period": "as on 2026-07-14",
+      "geographic_scope": "India",
+      "update_frequency": "parliamentary/PIB",
+      "api_availability": "no",
+      "download_format": "PIB HTML table",
+      "source_url": "https://www.pib.gov.in/PressReleasePage.aspx?PRID=2286757",
+      "last_updated": "2026-07-20",
+      "last_verified": "2026-09-11",
+      "note": "STATISTICS not legal rights"
+    }
+  ],
+  "labour_bureau": [
+    {
+      "title": "CPI-IW used for Variable Dearness Allowance under Wages (Central) Rules 2026 Rule 4",
+      "type": "statistics",
+      "url": "https://labourbureau.gov.in/",
+      "note": "Rule 4: VDA revised before 1 April and 1 October using Average CPI-IW published by Labour Bureau. STATISTICS must never be used as a legal entitlement. Specific January 2026 MIL PDF was listed in prior registry.",
+      "last_verified": "2026-09-11"
+    }
+  ]
+}
