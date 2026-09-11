@@ -211,9 +211,9 @@ def test_generate_evidence():
     assert parsed["status"] == "success"
     package = json.loads(parsed["evidence_package"])
     assert package["purpose"] == "complaint"
-    assert package["worker_information"]["worker_type"] == "construction_worker"
-    assert "scaffolding" in package["incident"]["injury_details"]
-    print(f"    Package includes worker info + incident -> PASS")
+    assert package["worker_summary"]["worker_type"] == "construction_worker"
+    assert "scaffolding" in package["claims"]["injury_details"]
+    print(f"    Package includes worker info + claims -> PASS")
 
     return True
 

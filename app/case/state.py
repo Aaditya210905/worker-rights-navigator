@@ -14,6 +14,8 @@ from app.case.fields import (
     get_missing_fields, get_next_question, has_required_fields,
     SAFETY_FIRST_QUESTION,
 )
+from app.db.database import db
+import json
 
 
 class CaseManager:
@@ -30,6 +32,18 @@ class CaseManager:
     def __init__(self):
         self.case = CaseState()
         self._safety_asked = False
+        self._sync_to_db()
+
+    def _sync_to_db(self):
+        """Sync current state to the database."""
+        db.upsert_case(
+            case_id=self.case.case_id,
+            worker_type=self.case.worker_type.value,
+            issue_category=self.case.issue_category.value,
+            status=self.case.status.value,
+            state=self.case.state.value if self.case.state else "Unknown",
+            created_at=self.case.created_at
+        )
 
     def update_field(self, field: str, value) -> bool:
         """
@@ -45,7 +59,17 @@ class CaseManager:
             return False
 
         setattr(self.case, field, value)
+        
+        # Log event and sync
+        db.log_event(
+            case_id=self.case.case_id,
+            event_type="field_updated",
+            field=field,
+            value=value.value if hasattr(value, "value") else value,
+            source="worker_statement"
+        )
         self._advance_status()
+        self._sync_to_db()
         return True
 
     def update_fields(self, updates: dict) -> list:
@@ -149,5 +173,5 @@ class CaseManager:
             self.case.status = CaseStatus.COLLECTING_INFORMATION
 
         if self.is_ready_for_retrieval():
-            if self.case.status != CaseStatus.SAFETY_ESCALATION:
+            if self.case.status in (CaseStatus.CLASSIFIED, CaseStatus.COLLECTING_INFORMATION):
                 self.case.status = CaseStatus.RETRIEVING_RIGHTS

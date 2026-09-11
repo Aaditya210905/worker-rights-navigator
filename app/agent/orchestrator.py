@@ -23,6 +23,8 @@ from app.case.models import (
     IssueCategory, WorkerType, IndianState, SafetyLevel,
     CaseStatus, STATE_NAME_MAP,
 )
+from app.db.database import db
+from app.evidence.action_planner import ActionPlanner
 
 
 # ── Error codes ──────────────────────────────────────────────────────────────
@@ -238,44 +240,51 @@ class Orchestrator:
                 "Not enough case information. Continue collecting details."
             )
 
-        # Build package
+        # Build action plan
+        action_plan_steps = ActionPlanner.generate_plan(case, self._last_evidence)
+        db.save_action_plan(case.case_id, action_plan_steps)
+
+        # Build package distinguishing facts vs claims
         package = {
             "purpose": purpose,
             "case_id": case.case_id,
             "created_at": getattr(case, 'created_at', ''),
-            "worker_information": {},
-            "incident": {},
-            "legal_evidence_summary": "",
+            "worker_summary": {},
+            "claims": {},
+            "legal_facts": "",
+            "action_plan": action_plan_steps,
+            "missing_fields": self.case_manager.get_missing_fields()
         }
 
-        # Worker info
+        # Worker info (claims)
         if case.worker_type:
-            package["worker_information"]["worker_type"] = case.worker_type.value
+            package["worker_summary"]["worker_type"] = case.worker_type.value
         if case.state and case.state != IndianState.UNKNOWN:
-            package["worker_information"]["state"] = case.state.value
+            package["worker_summary"]["state"] = case.state.value
         if case.platform_or_employer:
-            package["worker_information"]["employer"] = case.platform_or_employer
+            package["claims"]["employer"] = case.platform_or_employer
 
-        # Incident
+        # Incident claims
         if case.issue_category:
-            package["incident"]["issue"] = case.issue_category.value
+            package["claims"]["issue"] = case.issue_category.value
         if case.amount:
-            package["incident"]["amount"] = case.amount
+            package["claims"]["amount_claimed"] = case.amount
         if case.payment_pending_duration:
-            package["incident"]["pending_since"] = case.payment_pending_duration
+            package["claims"]["pending_since"] = case.payment_pending_duration
         if case.incident_date:
-            package["incident"]["date"] = case.incident_date
+            package["claims"]["incident_date"] = case.incident_date
         if case.injury_details:
-            package["incident"]["injury_details"] = case.injury_details
+            package["claims"]["injury_details"] = case.injury_details
         if case.deactivation_reason:
-            package["incident"]["deactivation_reason"] = case.deactivation_reason
+            package["claims"]["deactivation_reason"] = case.deactivation_reason
         if case.raw_description:
-            package["incident"]["description"] = case.raw_description
+            package["claims"]["worker_statement"] = case.raw_description
 
-        # Legal evidence
+        # Legal evidence (verified facts)
         if self._last_evidence:
-            package["legal_evidence_summary"] = self._last_evidence.to_prompt_context()
+            package["legal_facts"] = self._last_evidence.to_prompt_context()
 
+        # Update case status
         self.case_manager.update_field("status", CaseStatus.EVIDENCE_GENERATED)
 
         result = {
@@ -283,8 +292,8 @@ class Orchestrator:
             "evidence_package": json.dumps(package, ensure_ascii=False, indent=2),
             "instruction": (
                 "Share this evidence package with the worker. "
-                "Explain each section clearly. Ask if they want to "
-                "draft a follow-up message to their employer."
+                "Explain each section clearly. Emphasize the Action Plan steps. "
+                "Ask if they want to draft a follow-up message to their employer."
             ),
         }
 

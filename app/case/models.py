@@ -219,6 +219,7 @@ class CaseState(BaseModel):
     """
 
     case_id: str = Field(default_factory=_generate_case_id)
+    created_at: str = Field(default_factory=lambda: datetime.now().isoformat())
 
     # ── Classification ───────────────────────────────────────────
     worker_type: WorkerType = WorkerType.UNKNOWN
