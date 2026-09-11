@@ -1,21 +1,24 @@
 """
 assemblyai.py -- AssemblyAI Voice Agent WebSocket integration.
 
-This module handles:
-  - WebSocket connection to wss://agents.assemblyai.com/v1/ws
-  - session.update with correct inline field structure
-  - Sending input.audio (microphone PCM -> base64 -> WebSocket)
-  - Receiving all events per the official events reference
-  - session.end on clean shutdown
-  - Barge-in detection (reply.done with status=interrupted)
+Phase 2: Uses LLM tool calling for case classification.
+The LLM calls update_case_info whenever it identifies information
+from the worker's speech. We process the tool call, update case
+state, and send tool.result back.
 
-Field reference (from official events-reference.md):
-  session.update.session.system_prompt  -> string
-  session.update.session.greeting       -> string
-  session.update.session.output.voice   -> string  (NOT top-level voice)
-  reply.audio.data                      -> base64 PCM16
-  reply.done.status                     -> "completed" | "interrupted"
-  transcript.agent.interrupted          -> bool
+Event flow for tool calls (from events-reference.md):
+  1. LLM decides to call a tool
+  2. Server sends tool.call with arguments
+  3. Server sends reply.done (tool call reply)
+  4. We send tool.result with the result
+  5. LLM generates a response using the result
+  6. Server sends reply.started, reply.audio, reply.done
+
+Field reference:
+  session.update.session.tools           -> array   (tool definitions)
+  session.update.session.system_prompt   -> string  (MUTABLE mid-session)
+  session.update.session.greeting        -> string  (IMMUTABLE after first)
+  session.update.session.output.voice    -> string  (IMMUTABLE after first)
 """
 
 import asyncio
@@ -25,36 +28,12 @@ import json
 import websockets
 
 from app.voice.audio import Microphone, Speaker
+from app.agent.conversation import ConversationController
+from app.agent.classifier import CASE_TOOLS
 
 # ── Constants ────────────────────────────────────────────────────────────────
 
 WS_URL = "wss://agents.assemblyai.com/v1/ws"
-
-SYSTEM_PROMPT = """\
-You are WorkerSaathi, a helpful voice assistant \
-for informal and gig workers in India.
-
-You are not a lawyer and do not provide legal advice.
-
-Listen carefully to the worker's problem.
-Ask one question at a time.
-Keep spoken responses short and natural (1-3 sentences).
-Speak in a warm, respectful tone.
-
-IMPORTANT LANGUAGE RULES:
-- You ONLY speak Hindi, English, or Hinglish.
-- Match the language used by the worker.
-- If the worker mixes Hindi and English, respond in the same mixed style.
-- If someone speaks in any other language, politely say: \
-  "Main sirf Hindi aur English mein baat kar sakta hoon."
-- NEVER respond in any language other than Hindi, English, or Hinglish.
-
-When the worker describes a problem, acknowledge it empathetically \
-and ask a single clarifying question to understand their situation better.
-
-Do not give specific legal advice or cite specific laws yet. \
-Simply listen, understand, and clarify.\
-"""
 
 GREETING = (
     "Namaste. Main WorkerSaathi hoon. "
@@ -71,9 +50,9 @@ class AssemblyAIAgent:
     """
     Manages a single voice session with AssemblyAI's Voice Agent API.
 
-    Lifecycle:
-        agent = AssemblyAIAgent(api_key)
-        await agent.run(mic, speaker)   # blocks until session ends
+    Phase 2: Uses LLM tool calling for intelligent case classification.
+    The LLM calls update_case_info to extract structured case data,
+    and we guide its next question via tool results and prompt updates.
     """
 
     def __init__(self, api_key: str):
@@ -84,9 +63,11 @@ class AssemblyAIAgent:
             )
         self._api_key = api_key
         self._ws = None
-        self._session_id = None          # saved from session.ready for reconnection
+        self._session_id = None
         self._session_ready = asyncio.Event()
         self._running = False
+        self._controller = ConversationController()
+        self._pending_tool_calls = []  # accumulate tool.call events
 
     async def run(self, mic: Microphone, speaker: Speaker):
         """
@@ -123,36 +104,54 @@ class AssemblyAIAgent:
             self._ws = None
             print("[agent] Session ended.")
 
-    async def _send_session_update(self):
+    async def _send_session_update(self, system_prompt: str = None):
         """
-        Send session.update as the first message.
+        Send session.update.
 
-        Correct field structure per events-reference.md:
-          - system_prompt : top-level in session
-          - greeting      : top-level in session
-          - output.voice  : nested under output (NOT top-level voice)
+        On first call: sends full config (prompt, greeting, voice, language, tools).
+        On subsequent calls: sends only the updated system_prompt (mutable).
         """
-        config = {
-            "type": "session.update",
-            "session": {
-                "system_prompt": SYSTEM_PROMPT,
-                "greeting": GREETING,
-                "input": {
-                    "language_codes": ["en", "hi"],
+        if system_prompt is None:
+            # First call — full configuration including tools
+            initial_prompt = self._controller.get_initial_prompt()
+            config = {
+                "type": "session.update",
+                "session": {
+                    "system_prompt": initial_prompt,
+                    "greeting": GREETING,
+                    "input": {
+                        "language_codes": ["en", "hi"],
+                    },
+                    "output": {
+                        "voice": VOICE_ID,
+                    },
+                    "tools": CASE_TOOLS,
                 },
-                "output": {
-                    "voice": VOICE_ID,
+            }
+            await self._ws.send(json.dumps(config))
+            print("[agent] session.update sent (initial with tools).")
+        else:
+            # Subsequent call — only update system_prompt (mutable)
+            config = {
+                "type": "session.update",
+                "session": {
+                    "system_prompt": system_prompt,
                 },
-            },
+            }
+            await self._ws.send(json.dumps(config))
+
+    async def _send_tool_result(self, call_id: str, result: str, is_error: bool = False):
+        """Send tool.result back to the LLM."""
+        msg = {
+            "type": "tool.result",
+            "call_id": call_id,
+            "result": result,
+            "is_error": is_error,
         }
-        await self._ws.send(json.dumps(config))
-        print("[agent] session.update sent.")
+        await self._ws.send(json.dumps(msg))
 
     async def _send_session_end(self):
-        """
-        Send session.end for clean teardown.
-        Stops billing immediately instead of 30s grace window.
-        """
+        """Send session.end for clean teardown."""
         if self._ws and not self._ws.closed:
             try:
                 await self._ws.send(json.dumps({"type": "session.end"}))
@@ -198,7 +197,7 @@ class AssemblyAIAgent:
                     self._on_session_ready(event)
 
                 elif event_type == "session.updated":
-                    pass  # session.update accepted — no action needed
+                    pass  # accepted
 
                 elif event_type == "session.ended":
                     secs = event.get("session_duration_seconds", "?")
@@ -214,7 +213,7 @@ class AssemblyAIAgent:
                     pass
 
                 elif event_type == "transcript.user.delta":
-                    pass  # partial — wait for final transcript.user
+                    pass
 
                 elif event_type == "transcript.user":
                     self._on_user_transcript(event)
@@ -227,21 +226,24 @@ class AssemblyAIAgent:
                     self._on_reply_audio(event, speaker)
 
                 elif event_type == "transcript.agent.delta":
-                    pass  # partial — wait for final transcript.agent
+                    pass
 
                 elif event_type == "transcript.agent":
                     self._on_agent_transcript(event, speaker)
 
                 elif event_type == "reply.done":
-                    self._on_reply_done(event, speaker)
+                    await self._on_reply_done(event, speaker)
+
+                # ── Tool calls ────────────────────────────────────
+                elif event_type == "tool.call":
+                    self._on_tool_call(event)
 
                 # ── Errors ────────────────────────────────────────
                 elif event_type == "session.error":
                     self._on_session_error(event)
 
-                # ── Unknown ───────────────────────────────────────
                 else:
-                    pass  # silently ignore unknown event types
+                    pass
 
         except websockets.exceptions.ConnectionClosed:
             print("[agent] WebSocket closed.")
@@ -264,10 +266,27 @@ class AssemblyAIAgent:
         self._session_ready.set()
 
     def _on_user_transcript(self, event):
-        """Final transcript of the worker's utterance."""
+        """Final transcript — log it and track in controller."""
         text = event.get("text", "")
         if text.strip():
             print(f"\n  You: {text}")
+            self._controller.process_transcript(text)
+
+    def _on_tool_call(self, event):
+        """
+        LLM wants to call a tool. Accumulate it — we process
+        all pending tool calls when reply.done arrives.
+        """
+        call_id = event.get("call_id", "")
+        name = event.get("name", "")
+        arguments = event.get("arguments", {})
+
+        print(f"\n  [tool.call] {name}({json.dumps(arguments, ensure_ascii=False)})")
+        self._pending_tool_calls.append({
+            "call_id": call_id,
+            "name": name,
+            "arguments": arguments,
+        })
 
     def _on_reply_audio(self, event, speaker: Speaker):
         """Decode base64 PCM16 and play through speaker."""
@@ -280,10 +299,7 @@ class AssemblyAIAgent:
                 print(f"[agent] Audio playback error: {e}")
 
     def _on_agent_transcript(self, event, speaker: Speaker):
-        """
-        Final transcript of the agent's reply.
-        If interrupted=True, the worker cut in — flush speaker.
-        """
+        """Final transcript of the agent's reply."""
         text = event.get("text", "")
         interrupted = event.get("interrupted", False)
 
@@ -294,13 +310,35 @@ class AssemblyAIAgent:
         if interrupted:
             speaker.flush()
 
-    def _on_reply_done(self, event, speaker: Speaker):
+    async def _on_reply_done(self, event, speaker: Speaker):
         """
-        Reply finished. status = "completed" | "interrupted".
-        Belt-and-suspenders flush alongside transcript.agent handler.
+        Reply finished.
+
+        If there are pending tool calls, process them and send results.
+        On interruption, flush audio and discard pending tool calls.
         """
-        if event.get("status") == "interrupted":
+        status = event.get("status", "completed")
+
+        if status == "interrupted":
             speaker.flush()
+            self._pending_tool_calls.clear()
+            return
+
+        # Process any pending tool calls
+        if self._pending_tool_calls:
+            for tc in self._pending_tool_calls:
+                result = self._controller.process_tool_call(
+                    tc["name"], tc["arguments"]
+                )
+
+                # Send tool.result back to the LLM
+                await self._send_tool_result(tc["call_id"], result["tool_result"])
+
+                # Update system prompt if case state changed
+                if result["needs_prompt_update"] and result["new_prompt"]:
+                    await self._send_session_update(result["new_prompt"])
+
+            self._pending_tool_calls.clear()
 
     def _on_session_error(self, event):
         """Log session errors with full context."""

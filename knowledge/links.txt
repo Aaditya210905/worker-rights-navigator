@@ -1,0 +1,588 @@
+# ============================================================================
+# WorkerSaathi Legal Source Registry
+# ============================================================================
+# 
+# HOW TO EDIT:
+#   - Each source is a block separated by "---"
+#   - Lines starting with # inside a block are metadata (KEY: VALUE)
+#   - The plain line (no #) is the URL
+#   - To ADD a source: copy any block, change the fields, paste
+#   - To REMOVE a source: delete the entire block (including ---)
+#   - To DISABLE a source: change STATUS to "disabled"
+#
+# FIELDS:
+#   JURISDICTION : central | state | ut
+#   STATE        : state/UT name (omit for central)
+#   TYPE         : law | rules | scheme | portal | board | notification
+#   TITLE        : human-readable name
+#   AUTHORITY    : issuing body
+#   WORKER_TYPES : comma-separated (gig_worker, construction_worker, 
+#                  domestic_worker, factory_worker, all)
+#   ISSUES       : comma-separated (unpaid_wages, workplace_injury,
+#                  platform_deactivation, welfare, registration, all)
+#   STATUS       : active | verify | disabled
+#   EFFECTIVE    : date or "ongoing" (optional)
+#   NOTES        : any extra info (optional)
+#
+# ============================================================================
+
+
+# ============================================================================
+# CENTRAL GOVERNMENT
+# ============================================================================
+
+---
+# JURISDICTION: central
+# TYPE: portal
+# TITLE: Ministry of Labour & Employment
+# AUTHORITY: Government of India
+# WORKER_TYPES: all
+# ISSUES: all
+# STATUS: active
+https://labour.gov.in/en
+---
+# JURISDICTION: central
+# TYPE: portal
+# TITLE: Chief Labour Commissioner
+# AUTHORITY: Ministry of Labour & Employment
+# WORKER_TYPES: all
+# ISSUES: unpaid_wages, workplace_injury
+# STATUS: active
+https://clc.gov.in/
+---
+# JURISDICTION: central
+# TYPE: portal
+# TITLE: e-Shram — National Database of Unorganised Workers
+# AUTHORITY: Ministry of Labour & Employment
+# WORKER_TYPES: all
+# ISSUES: registration, welfare
+# STATUS: active
+# NOTES: Covers construction, gig, platform, domestic, migrant workers
+https://eshram.gov.in/
+---
+# JURISDICTION: central
+# TYPE: law
+# TITLE: e-Shram — Acts & Rules
+# AUTHORITY: Ministry of Labour & Employment
+# WORKER_TYPES: all
+# ISSUES: all
+# STATUS: active
+# NOTES: Labour Codes and related documents
+https://eshram.gov.in/act-and-rules
+---
+# JURISDICTION: central
+# TYPE: scheme
+# TITLE: e-Shram — Social Security Welfare Schemes
+# AUTHORITY: Ministry of Labour & Employment
+# WORKER_TYPES: all
+# ISSUES: welfare
+# STATUS: active
+https://www.eshram.gov.in/social-security-welfare-schemes
+---
+# JURISDICTION: central
+# TYPE: portal
+# TITLE: Shram Suvidha — Unified Labour Portal
+# AUTHORITY: Ministry of Labour & Employment
+# WORKER_TYPES: all
+# ISSUES: all
+# STATUS: active
+https://shramsuvidha.gov.in/
+---
+# JURISDICTION: central
+# TYPE: portal
+# TITLE: EPFO — Employees' Provident Fund Organisation
+# AUTHORITY: Ministry of Labour & Employment
+# WORKER_TYPES: all
+# ISSUES: welfare
+# STATUS: active
+https://www.epfindia.gov.in/
+---
+# JURISDICTION: central
+# TYPE: portal
+# TITLE: ESIC — Employees' State Insurance Corporation
+# AUTHORITY: Ministry of Labour & Employment
+# WORKER_TYPES: all
+# ISSUES: welfare, workplace_injury
+# STATUS: active
+https://esic.gov.in/
+---
+# JURISDICTION: central
+# TYPE: portal
+# TITLE: National Career Service
+# AUTHORITY: Ministry of Labour & Employment
+# WORKER_TYPES: all
+# ISSUES: registration
+# STATUS: active
+https://www.ncs.gov.in/
+---
+# JURISDICTION: central
+# TYPE: law
+# TITLE: India Code — Central Acts Repository
+# AUTHORITY: Legislative Department, Ministry of Law and Justice
+# WORKER_TYPES: all
+# ISSUES: all
+# STATUS: active
+# NOTES: Primary source for all central legislation
+https://indiacode.nic.in/
+---
+# JURISDICTION: central
+# TYPE: portal
+# TITLE: NALSA — National Legal Services Authority
+# AUTHORITY: Government of India
+# WORKER_TYPES: all
+# ISSUES: all
+# STATUS: active
+# NOTES: Free legal aid information for workers
+https://nalsa.gov.in/
+---
+# JURISDICTION: central
+# TYPE: portal
+# TITLE: Samadhan — Labour Grievance Redressal
+# AUTHORITY: Ministry of Labour & Employment
+# WORKER_TYPES: all
+# ISSUES: unpaid_wages, workplace_injury
+# STATUS: active
+https://samadhan.labour.gov.in/
+---
+# JURISDICTION: central
+# TYPE: law
+# TITLE: Code on Social Security, 2020
+# AUTHORITY: Parliament of India
+# WORKER_TYPES: all
+# ISSUES: welfare, registration
+# STATUS: active
+# EFFECTIVE: 2025-11-21
+# NOTES: Covers unorganised, gig, platform workers. In force from Nov 2025.
+https://www.indiacode.nic.in/handle/123456789/16823
+---
+
+
+# ============================================================================
+# STATES
+# ============================================================================
+
+---
+# JURISDICTION: state
+# STATE: Andhra Pradesh
+# TYPE: portal
+# TITLE: Andhra Pradesh Labour Department
+# AUTHORITY: Government of Andhra Pradesh
+# WORKER_TYPES: all
+# ISSUES: all
+# STATUS: active
+https://labour.ap.gov.in/
+---
+# JURISDICTION: state
+# STATE: Arunachal Pradesh
+# TYPE: portal
+# TITLE: Arunachal Pradesh Government Portal
+# AUTHORITY: Government of Arunachal Pradesh
+# WORKER_TYPES: all
+# ISSUES: all
+# STATUS: verify
+# NOTES: Labour under state portal, no dedicated labour domain found
+https://www.arunachalpradesh.gov.in/
+---
+# JURISDICTION: state
+# STATE: Assam
+# TYPE: portal
+# TITLE: Assam Labour Department
+# AUTHORITY: Government of Assam
+# WORKER_TYPES: all
+# ISSUES: all
+# STATUS: active
+https://labour.assam.gov.in/
+---
+# JURISDICTION: state
+# STATE: Bihar
+# TYPE: portal
+# TITLE: Bihar Labour Resources Department
+# AUTHORITY: Government of Bihar
+# WORKER_TYPES: all
+# ISSUES: all
+# STATUS: active
+https://state.bihar.gov.in/labour/CitizenHome.html
+---
+# JURISDICTION: state
+# STATE: Chhattisgarh
+# TYPE: portal
+# TITLE: Chhattisgarh Labour Department
+# AUTHORITY: Government of Chhattisgarh
+# WORKER_TYPES: all
+# ISSUES: all
+# STATUS: active
+https://cglabour.nic.in/
+---
+# JURISDICTION: state
+# STATE: Goa
+# TYPE: portal
+# TITLE: Goa Labour Department
+# AUTHORITY: Government of Goa
+# WORKER_TYPES: all
+# ISSUES: all
+# STATUS: active
+http://labour.goa.gov.in
+---
+# JURISDICTION: state
+# STATE: Gujarat
+# TYPE: portal
+# TITLE: Gujarat Labour & Employment Department
+# AUTHORITY: Government of Gujarat
+# WORKER_TYPES: all
+# ISSUES: all
+# STATUS: active
+https://labour.gujarat.gov.in/
+---
+# JURISDICTION: state
+# STATE: Haryana
+# TYPE: portal
+# TITLE: Haryana Labour Department
+# AUTHORITY: Government of Haryana
+# WORKER_TYPES: all
+# ISSUES: all
+# STATUS: active
+https://hrylabour.gov.in/
+---
+# JURISDICTION: state
+# STATE: Himachal Pradesh
+# TYPE: portal
+# TITLE: Himachal Pradesh Labour & Employment Department
+# AUTHORITY: Government of Himachal Pradesh
+# WORKER_TYPES: all
+# ISSUES: all
+# STATUS: active
+http://himachal.nic.in/employment/
+---
+# JURISDICTION: state
+# STATE: Jharkhand
+# TYPE: portal
+# TITLE: Jharkhand Shramadhan Portal
+# AUTHORITY: Government of Jharkhand
+# WORKER_TYPES: all
+# ISSUES: all
+# STATUS: active
+https://shramadhan.jharkhand.gov.in/home
+---
+# JURISDICTION: state
+# STATE: Karnataka
+# TYPE: portal
+# TITLE: Karnataka Labour Department
+# AUTHORITY: Government of Karnataka
+# WORKER_TYPES: all
+# ISSUES: all
+# STATUS: active
+https://labour.karnataka.gov.in/
+---
+# JURISDICTION: state
+# STATE: Karnataka
+# TYPE: law
+# TITLE: Karnataka Platform Based Gig Workers (Social Security and Welfare) Act, 2025
+# AUTHORITY: Karnataka Legislature
+# WORKER_TYPES: gig_worker
+# ISSUES: platform_deactivation, welfare, registration
+# STATUS: active
+# EFFECTIVE: 2025-05-30
+# NOTES: Deemed in force from May 30, 2025. Enacted Sep 12, 2025. Covers aggregators, social security, dispute resolution.
+https://kla.kar.nic.in/assembly/bills/bill1670_31.pdf
+---
+# JURISDICTION: state
+# STATE: Kerala
+# TYPE: portal
+# TITLE: Kerala Labour Commissioner
+# AUTHORITY: Government of Kerala
+# WORKER_TYPES: all
+# ISSUES: all
+# STATUS: active
+https://lc.kerala.gov.in/
+---
+# JURISDICTION: state
+# STATE: Madhya Pradesh
+# TYPE: portal
+# TITLE: Madhya Pradesh Labour Department
+# AUTHORITY: Government of Madhya Pradesh
+# WORKER_TYPES: all
+# ISSUES: all
+# STATUS: active
+https://labour.mp.gov.in/
+---
+# JURISDICTION: state
+# STATE: Maharashtra
+# TYPE: portal
+# TITLE: Maharashtra Labour Department
+# AUTHORITY: Government of Maharashtra
+# WORKER_TYPES: all
+# ISSUES: all
+# STATUS: active
+https://labour.maharashtra.gov.in/
+---
+# JURISDICTION: state
+# STATE: Maharashtra
+# TYPE: portal
+# TITLE: Maharashtra Kamgar Kalyan Portal
+# AUTHORITY: Government of Maharashtra
+# WORKER_TYPES: all
+# ISSUES: welfare
+# STATUS: active
+https://mahakamgar.maharashtra.gov.in/
+---
+# JURISDICTION: state
+# STATE: Manipur
+# TYPE: portal
+# TITLE: Manipur Government Portal
+# AUTHORITY: Government of Manipur
+# WORKER_TYPES: all
+# ISSUES: all
+# STATUS: verify
+# NOTES: No dedicated labour portal found
+https://manipur.gov.in/
+---
+# JURISDICTION: state
+# STATE: Meghalaya
+# TYPE: portal
+# TITLE: Meghalaya Government Portal
+# AUTHORITY: Government of Meghalaya
+# WORKER_TYPES: all
+# ISSUES: all
+# STATUS: verify
+# NOTES: No dedicated labour portal found
+https://meghalaya.gov.in/
+---
+# JURISDICTION: state
+# STATE: Mizoram
+# TYPE: portal
+# TITLE: Mizoram Government Portal
+# AUTHORITY: Government of Mizoram
+# WORKER_TYPES: all
+# ISSUES: all
+# STATUS: verify
+# NOTES: No dedicated labour portal found
+https://mizoram.gov.in/
+---
+# JURISDICTION: state
+# STATE: Nagaland
+# TYPE: portal
+# TITLE: Nagaland Government Portal
+# AUTHORITY: Government of Nagaland
+# WORKER_TYPES: all
+# ISSUES: all
+# STATUS: verify
+# NOTES: No dedicated labour portal found
+https://nagaland.gov.in/
+---
+# JURISDICTION: state
+# STATE: Odisha
+# TYPE: portal
+# TITLE: Odisha Labour Directorate
+# AUTHORITY: Government of Odisha
+# WORKER_TYPES: all
+# ISSUES: all
+# STATUS: active
+https://labourdirectorate.odisha.gov.in/
+---
+# JURISDICTION: state
+# STATE: Punjab
+# TYPE: portal
+# TITLE: Punjab Labour Department
+# AUTHORITY: Government of Punjab
+# WORKER_TYPES: all
+# ISSUES: all
+# STATUS: active
+https://pblabour.gov.in/
+---
+# JURISDICTION: state
+# STATE: Rajasthan
+# TYPE: portal
+# TITLE: Rajasthan Labour Department
+# AUTHORITY: Government of Rajasthan
+# WORKER_TYPES: all
+# ISSUES: all
+# STATUS: active
+https://labour.rajasthan.gov.in/
+---
+# JURISDICTION: state
+# STATE: Sikkim
+# TYPE: portal
+# TITLE: Sikkim Government Portal
+# AUTHORITY: Government of Sikkim
+# WORKER_TYPES: all
+# ISSUES: all
+# STATUS: verify
+# NOTES: No dedicated labour portal found
+https://sikkim.gov.in/
+---
+# JURISDICTION: state
+# STATE: Tamil Nadu
+# TYPE: portal
+# TITLE: Tamil Nadu Labour Welfare & Skill Development Department
+# AUTHORITY: Government of Tamil Nadu
+# WORKER_TYPES: all
+# ISSUES: all
+# STATUS: active
+https://labour.tn.gov.in/
+---
+# JURISDICTION: state
+# STATE: Tamil Nadu
+# TYPE: board
+# TITLE: Tamil Nadu Unorganised Workers Welfare Boards
+# AUTHORITY: Government of Tamil Nadu
+# WORKER_TYPES: construction_worker, domestic_worker
+# ISSUES: welfare, registration
+# STATUS: active
+# NOTES: Includes Domestic Workers Welfare Board (DOME)
+https://tnuwwb.tn.gov.in/
+---
+# JURISDICTION: state
+# STATE: Tamil Nadu
+# TYPE: scheme
+# TITLE: Tamil Nadu Domestic Workers Social Security and Welfare Scheme, 2007
+# AUTHORITY: Government of Tamil Nadu
+# WORKER_TYPES: domestic_worker
+# ISSUES: welfare
+# STATUS: active
+# EFFECTIVE: 2007
+# NOTES: Manual workers engaged in domestic work
+https://tnlegalservices.tn.gov.in/welfare_schemes_GOs/12.%20No.II%282%29%20LE%20515%20%28d-4%29%2020008.pdf
+---
+# JURISDICTION: state
+# STATE: Telangana
+# TYPE: portal
+# TITLE: Telangana Labour Department
+# AUTHORITY: Government of Telangana
+# WORKER_TYPES: all
+# ISSUES: all
+# STATUS: active
+https://labour.telangana.gov.in/
+---
+# JURISDICTION: state
+# STATE: Tripura
+# TYPE: portal
+# TITLE: Tripura Government Portal
+# AUTHORITY: Government of Tripura
+# WORKER_TYPES: all
+# ISSUES: all
+# STATUS: verify
+# NOTES: No dedicated labour portal found
+https://tripura.gov.in/
+---
+# JURISDICTION: state
+# STATE: Uttar Pradesh
+# TYPE: portal
+# TITLE: Uttar Pradesh Labour Department
+# AUTHORITY: Government of Uttar Pradesh
+# WORKER_TYPES: all
+# ISSUES: all
+# STATUS: active
+https://uplabour.gov.in/
+---
+# JURISDICTION: state
+# STATE: Uttarakhand
+# TYPE: portal
+# TITLE: Uttarakhand Labour Department
+# AUTHORITY: Government of Uttarakhand
+# WORKER_TYPES: all
+# ISSUES: all
+# STATUS: active
+https://labour.uk.gov.in/
+---
+# JURISDICTION: state
+# STATE: West Bengal
+# TYPE: portal
+# TITLE: West Bengal Labour Department
+# AUTHORITY: Government of West Bengal
+# WORKER_TYPES: all
+# ISSUES: all
+# STATUS: active
+https://labour.wb.gov.in/
+---
+
+
+# ============================================================================
+# UNION TERRITORIES
+# ============================================================================
+
+---
+# JURISDICTION: ut
+# STATE: Andaman and Nicobar Islands
+# TYPE: portal
+# TITLE: Andaman & Nicobar Labour Department
+# AUTHORITY: UT Administration
+# WORKER_TYPES: all
+# ISSUES: all
+# STATUS: active
+https://labour.and.nic.in/
+---
+# JURISDICTION: ut
+# STATE: Chandigarh
+# TYPE: portal
+# TITLE: Chandigarh Administration
+# AUTHORITY: UT Administration
+# WORKER_TYPES: all
+# ISSUES: all
+# STATUS: verify
+# NOTES: No dedicated labour portal found
+https://chandigarh.gov.in/
+---
+# JURISDICTION: ut
+# STATE: Dadra and Nagar Haveli and Daman and Diu
+# TYPE: portal
+# TITLE: DNHDD Administration
+# AUTHORITY: UT Administration
+# WORKER_TYPES: all
+# ISSUES: all
+# STATUS: verify
+# NOTES: No dedicated labour portal found
+https://ddd.gov.in/
+---
+# JURISDICTION: ut
+# STATE: Delhi
+# TYPE: portal
+# TITLE: Delhi Labour Department
+# AUTHORITY: Government of NCT of Delhi
+# WORKER_TYPES: all
+# ISSUES: all
+# STATUS: active
+https://labour.delhi.gov.in/
+---
+# JURISDICTION: ut
+# STATE: Jammu and Kashmir
+# TYPE: portal
+# TITLE: J&K Labour & Employment Department
+# AUTHORITY: UT Administration
+# WORKER_TYPES: all
+# ISSUES: all
+# STATUS: active
+http://jklabouremp.nic.in/
+---
+# JURISDICTION: ut
+# STATE: Ladakh
+# TYPE: portal
+# TITLE: Ladakh Administration
+# AUTHORITY: UT Administration
+# WORKER_TYPES: all
+# ISSUES: all
+# STATUS: verify
+# NOTES: No dedicated labour portal found
+https://ladakh.gov.in/
+---
+# JURISDICTION: ut
+# STATE: Lakshadweep
+# TYPE: portal
+# TITLE: Lakshadweep Administration
+# AUTHORITY: UT Administration
+# WORKER_TYPES: all
+# ISSUES: all
+# STATUS: verify
+# NOTES: No dedicated labour portal found
+https://lakshadweep.gov.in/
+---
+# JURISDICTION: ut
+# STATE: Puducherry
+# TYPE: portal
+# TITLE: Puducherry Administration
+# AUTHORITY: UT Administration
+# WORKER_TYPES: all
+# ISSUES: all
+# STATUS: verify
+# NOTES: No dedicated labour portal found
+https://py.gov.in/
+---
