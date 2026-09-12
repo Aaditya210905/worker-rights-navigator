@@ -418,6 +418,7 @@ class Orchestrator:
             Orchestrator._retriever_loading = True
 
             from app.rag.loader import ResearchLoader
+            from app.rag.pdf_loader import PDFLoader
             from app.rag.chunker import chunk_documents
             from app.rag.embeddings import EmbeddingClient
             from app.rag.qdrant_store import QdrantStore
@@ -425,19 +426,38 @@ class Orchestrator:
 
             project_root = Path(__file__).resolve().parent.parent.parent
             research_dir = project_root / "knowledge" / "workersaathi" / "json"
+            pdf_dir = project_root / "knowledge" / "workersaathi" / "pdfs"
+            qdrant_dir = project_root / "data" / "qdrant"
 
             if not research_dir.exists():
                 print("  [orchestrator] Research data not found")
                 return None
 
+            # 1. Load JSON knowledge items
             loader = ResearchLoader(str(research_dir))
             loader.load()
             docs = loader.to_rag_documents()
+
+            # 2. Load PDF documents
+            if pdf_dir.exists():
+                pdf_loader = PDFLoader(str(pdf_dir))
+                pdf_docs = pdf_loader.load()
+                docs.extend(pdf_docs)
+                print(f"  [orchestrator] Combined: {len(docs)} total documents (JSON + PDF)")
+
+            # 3. Chunk all documents together
             chunks = chunk_documents(docs)
 
             embedder = EmbeddingClient()
-            # Use in-memory Qdrant — avoids file lock conflicts between sessions
-            qdrant = QdrantStore(path=None)
+
+            # 4. Use pre-embedded Qdrant from disk if available
+            if qdrant_dir.exists():
+                qdrant = QdrantStore(path=str(qdrant_dir))
+                print(f"  [orchestrator] Using pre-embedded Qdrant from {qdrant_dir}")
+            else:
+                # Fall back to in-memory (will re-embed on first use)
+                qdrant = QdrantStore(path=None)
+                print("  [orchestrator] No pre-built index found, using in-memory")
 
             Orchestrator._shared_retriever = HybridRetriever(
                 qdrant=qdrant,
