@@ -1,46 +1,90 @@
-# Python
+# ─── Python ──────────────────────────────────────────────────────────
 __pycache__/
 *.py[cod]
 *$py.class
 *.so
 *.egg-info/
+*.egg
+.eggs/
 dist/
 build/
-*.egg
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.manifest
+*.spec
 
-# Virtual environments
+# ─── Virtual Environments ──────────────────────────────────────────
 venv/
 .venv/
 env/
+.env_venv/
+ENV/
+env.bak/
+venv.bak/
 
-# Environment variables
+# ─── Environment Variables & Secrets ───────────────────────────────
 .env
+.env.*
+!.env.example
+*.pem
+*.key
+*.cert
+*.crt
+client_secret.json
 
-# IDE
+# ─── IDEs & Editors ────────────────────────────────────────────────
 .vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
 .idea/
 *.swp
 *.swo
 *~
-
-# OS
+*.bak
+*.tmp
 .DS_Store
 Thumbs.db
 desktop.ini
 
-# Data (generated at runtime)
+# ─── Data & Databases ──────────────────────────────────────────────
 data/
 *.db
 *.sqlite3
+*.sqlite
+.chroma/
+chroma_db/
+vectorstore/
 
-# Generated artifacts
-output/
-*.pdf
-
-# Logs
+# ─── Logs & Caches ─────────────────────────────────────────────────
 *.log
-
-# Testing
+logs/
 .pytest_cache/
 htmlcov/
 .coverage
+.coverage.*
+coverage.xml
+.tox/
+.mypy_cache/
+.ruff_cache/
+.hypothesis/
+
+# ─── Generated Artifacts ───────────────────────────────────────────
+output/
+*.pdf
+*.docx
+*.csv
+docs/_build/
+site/
+
+# ─── Agent AI / Assistant Tools ────────────────────────────────────
+.gemini/
+.cursor/
+brain/
+scratch/
