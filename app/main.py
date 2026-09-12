@@ -1,12 +1,15 @@
 """
 FastAPI application entry point + voice agent runner.
 
-Phase 1: Two modes of operation:
-  1. `python app/main.py`        -- Run the voice agent directly (microphone)
-  2. `uvicorn app.main:app`      -- Run the FastAPI server (health check only)
+Two modes of operation:
+  1. `uvicorn app.main:app`           -- Run the FastAPI server (full REST API)
+  2. `python app/main.py --voice`     -- Run the voice agent directly (microphone)
 
-The voice agent connects directly from your PC to AssemblyAI.
-No browser needed for Phase 1.
+The FastAPI server provides:
+  - REST API at /api/v1/
+  - WebSocket voice proxy at /api/v1/voice/{session_id}
+  - Swagger docs at /docs
+  - Health check at /api/v1/health
 """
 
 import asyncio
@@ -21,6 +24,7 @@ if _project_root not in sys.path:
     sys.path.insert(0, _project_root)
 
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
 from app.config import settings
@@ -35,6 +39,7 @@ async def lifespan(app: FastAPI):
     print("  WorkerSaathi starting up")
     print(f"  Environment : {settings.app_env}")
     print(f"  Listening on: {settings.app_host}:{settings.app_port}")
+    print(f"  Docs at     : http://{settings.app_host}:{settings.app_port}/docs")
     print("=" * 60)
 
     if not settings.assemblyai_api_key or settings.assemblyai_api_key == "your_key_here":
@@ -44,7 +49,9 @@ async def lifespan(app: FastAPI):
 
     yield  # App runs here
 
-    # Shutdown
+    # Shutdown — cleanup sessions
+    from app.api.session import session_manager
+    session_manager.cleanup_all()
     print("WorkerSaathi shutting down.")
 
 
@@ -56,16 +63,77 @@ app = FastAPI(
         "Voice-first Indian worker rights navigator. "
         "AssemblyAI handles real-time voice; FastAPI backend provides "
         "deterministic legal tools, RAG retrieval, case management, "
-        "safety escalation, and evidence generation."
+        "safety escalation, and evidence generation.\n\n"
+        "## API Overview\n"
+        "- **Sessions**: Create/manage conversation sessions\n"
+        "- **Tools**: Execute backend tools (update_case_info, retrieve_rights, etc.)\n"
+        "- **Case**: View case state, missing fields, next question\n"
+        "- **Knowledge**: Browse indexed legal sources\n"
+        "- **Voice**: WebSocket proxy for browser-based voice\n"
     ),
     version="0.1.0",
     lifespan=lifespan,
 )
 
 
-@app.get("/health")
-async def health():
-    """Basic liveness probe."""
+# ── CORS Middleware ───────────────────────────────────────────────────────────
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://localhost:3000",
+        "http://localhost:5173",
+        "http://localhost:8080",
+        "http://127.0.0.1:3000",
+        "http://127.0.0.1:5173",
+        "http://127.0.0.1:8080",
+        "*",  # Allow all for hackathon demo
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+
+# ── Mount API routers ────────────────────────────────────────────────────────
+
+from app.api.routes import router as api_router
+from app.api.knowledge import router as knowledge_router
+from app.api.ws import router as ws_router
+
+app.include_router(api_router, prefix="/api/v1")
+app.include_router(knowledge_router, prefix="/api/v1")
+app.include_router(ws_router, prefix="/api/v1")
+
+
+# ── Voice agent page ─────────────────────────────────────────────────────────
+
+from fastapi.responses import FileResponse
+from pathlib import Path
+
+STATIC_DIR = Path(__file__).parent / "static"
+
+
+@app.get("/voice", include_in_schema=False)
+async def voice_page():
+    """Serve the browser-based voice agent UI."""
+    return FileResponse(STATIC_DIR / "voice.html")
+
+
+# ── Root redirect to docs ────────────────────────────────────────────────────
+
+@app.get("/", include_in_schema=False)
+async def root():
+    """Redirect to API docs."""
+    from fastapi.responses import RedirectResponse
+    return RedirectResponse(url="/docs")
+
+
+# ── Legacy health endpoint (backwards compatibility) ──────────────────────────
+
+@app.get("/health", include_in_schema=False)
+async def legacy_health():
+    """Legacy health endpoint. Use /api/v1/health instead."""
     return JSONResponse(
         content={
             "status": "ok",
@@ -99,7 +167,7 @@ async def run_voice_agent():
     print()
     print("=" * 50)
     print("  WorkerSaathi Voice Agent")
-    print("  Phase 1 -- Direct Microphone Mode")
+    print("  Direct Microphone Mode")
     print()
     print("  USE HEADPHONES to prevent echo!")
     print("  Press Ctrl+C to stop.")
@@ -129,5 +197,15 @@ async def run_voice_agent():
 # ── Direct execution ──────────────────────────────────────────────────────────
 
 if __name__ == "__main__":
-    # When run directly, start the voice agent (not the web server)
-    asyncio.run(run_voice_agent())
+    if "--voice" in sys.argv:
+        # Voice agent mode (direct microphone)
+        asyncio.run(run_voice_agent())
+    else:
+        # FastAPI server mode (default)
+        import uvicorn
+        uvicorn.run(
+            "app.main:app",
+            host=settings.app_host,
+            port=settings.app_port,
+            reload=True,
+        )

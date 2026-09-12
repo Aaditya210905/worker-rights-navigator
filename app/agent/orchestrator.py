@@ -58,6 +58,26 @@ class Orchestrator:
         self._retriever = None  # Lazy-loaded
         self._last_evidence = None  # Cache for generate_evidence
 
+    @property
+    def case(self):
+        """Convenience access to the underlying CaseState."""
+        return self.case_manager.case
+
+    def get_initial_prompt(self) -> str:
+        """Build the initial system prompt with current case context."""
+        context = self.case_manager.get_case_context()
+        return build_system_prompt(context)
+
+    def process_transcript(self, text: str):
+        """Record a user transcript line and increment turn count."""
+        if text.strip():
+            self._transcript_history.append(text.strip())
+            self.case_manager.case.turn_count += 1
+            if not self.case_manager.case.raw_description:
+                self.case_manager.case.raw_description = text.strip()
+            else:
+                self.case_manager.case.raw_description += " | " + text.strip()
+
     def handle_tool_call(self, tool_name: str, arguments: dict) -> dict:
         """
         Process a tool call from the voice agent.
@@ -165,16 +185,25 @@ class Orchestrator:
             "case_status": self.case_manager.case.status.value,
         }
 
-        if next_question:
+        # RETRIEVAL takes priority over asking more questions
+        if self.case_manager.is_ready_for_retrieval():
+            result["MUST_CALL_NEXT"] = "retrieve_rights"
+            result["instruction"] = (
+                "IMPORTANT: You have all the information needed. "
+                "You MUST immediately call the retrieve_rights tool now. "
+                "DO NOT just say you will check — actually call the tool. "
+                "Use a query like: '{worker_type} {issue_category} rights India'. "
+                "Say a brief message like 'Main aapke rights check karta hoon' "
+                "and CALL retrieve_rights."
+            ).format(
+                worker_type=self.case_manager.case.worker_type.value,
+                issue_category=self.case_manager.case.issue_category.value,
+            )
+        elif next_question:
             result["next_question"] = next_question
             result["instruction"] = (
                 "Ask this question naturally in the worker's language. "
                 "Do NOT repeat information already collected."
-            )
-        elif self.case_manager.is_ready_for_retrieval():
-            result["instruction"] = (
-                "All required information collected. Tell the worker you "
-                "will now check their rights. Then call retrieve_rights."
             )
 
         return self._success_result(result, changed)
@@ -371,12 +400,23 @@ class Orchestrator:
 
     # ── Helper methods ───────────────────────────────────────────────────────
 
+    # Class-level shared retriever — knowledge base is read-only,
+    # so all sessions can safely share one instance.
+    _shared_retriever = None
+    _retriever_loading = False
+
     def _get_retriever(self):
-        """Lazy-load the RAG retriever."""
-        if self._retriever is not None:
-            return self._retriever
+        """Lazy-load the RAG retriever (shared across all sessions)."""
+        if Orchestrator._shared_retriever is not None:
+            return Orchestrator._shared_retriever
+
+        if Orchestrator._retriever_loading:
+            # Another session is already loading — wait
+            return None
 
         try:
+            Orchestrator._retriever_loading = True
+
             from app.rag.loader import ResearchLoader
             from app.rag.chunker import chunk_documents
             from app.rag.embeddings import EmbeddingClient
@@ -385,7 +425,6 @@ class Orchestrator:
 
             project_root = Path(__file__).resolve().parent.parent.parent
             research_dir = project_root / "knowledge" / "workersaathi" / "json"
-            qdrant_path = project_root / "data" / "qdrant"
 
             if not research_dir.exists():
                 print("  [orchestrator] Research data not found")
@@ -397,21 +436,24 @@ class Orchestrator:
             chunks = chunk_documents(docs)
 
             embedder = EmbeddingClient()
-            qdrant = QdrantStore(path=str(qdrant_path))
+            # Use in-memory Qdrant — avoids file lock conflicts between sessions
+            qdrant = QdrantStore(path=None)
 
-            self._retriever = HybridRetriever(
+            Orchestrator._shared_retriever = HybridRetriever(
                 qdrant=qdrant,
                 embedder=embedder,
                 documents=chunks,
                 gaps=loader.gaps,
                 conflicts=loader.conflicts,
             )
-            print("  [orchestrator] RAG retriever loaded")
-            return self._retriever
+            print("  [orchestrator] RAG retriever loaded (shared)")
+            return Orchestrator._shared_retriever
 
         except Exception as e:
             print(f"  [orchestrator] Failed to load retriever: {e}")
             return None
+        finally:
+            Orchestrator._retriever_loading = False
 
     def _get_evidence_instruction(self, evidence) -> str:
         """Build instruction based on evidence coverage."""

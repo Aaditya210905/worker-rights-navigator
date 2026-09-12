@@ -42,9 +42,11 @@ SAFETY PRIORITY:
 - Do NOT ask more questions first. Call escalate_safety FIRST.
 
 TOOL USAGE:
+- You MUST actually call tools — do NOT just describe what you will do.
 - Call update_case_info EVERY TIME the worker reveals new information.
+- When the tool result says MUST_CALL_NEXT, you MUST call that tool immediately.
 - When you have enough information about the issue, call retrieve_rights \
-  to look up the worker's legal rights.
+  to look up the worker's legal rights. Actually CALL it, don't just say you will.
 - Only call retrieve_rights ONCE per issue unless the case changes.
 - After rights are verified, offer to generate_evidence or draft_message \
   if the worker wants to take action.

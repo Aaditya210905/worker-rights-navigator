@@ -78,6 +78,37 @@ class HybridRetriever:
         tokenized_docs = [_tokenize(doc.text) for doc in documents]
         self._bm25 = BM25Okapi(tokenized_docs)
 
+        # Index documents into Qdrant (required for in-memory mode)
+        self._ensure_indexed()
+
+    def _ensure_indexed(self):
+        """Create Qdrant collection and index documents if not already done."""
+        try:
+            collections = [
+                c.name for c in self._qdrant._client.get_collections().collections
+            ]
+            if self._qdrant._collection in collections:
+                return  # Already indexed
+
+            # Get embedding dimension
+            dimension = self._embedder.dimension
+
+            # Create collection
+            self._qdrant.create_collection(dimension)
+
+            # Embed all documents in batch
+            texts = [doc.text for doc in self._documents]
+            vectors = self._embedder.embed_texts(texts)
+
+            # Index into Qdrant
+            self._qdrant.upsert_documents(self._documents, vectors)
+            print(f"  [retriever] Indexed {len(self._documents)} documents into Qdrant")
+
+        except Exception as e:
+            print(f"  [retriever] Indexing error: {e}")
+            import traceback
+            traceback.print_exc()
+
     def retrieve_for_case(self, case) -> LegalEvidence:
         """
         Retrieve evidence using a CaseState object.
