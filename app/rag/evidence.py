@@ -48,14 +48,18 @@ class EvidenceAssembler:
             for f in findings[:2]
         )
 
-        if conflicts:
-            coverage = RetrievalCoverage.CONFLICT
+        # Determine coverage — findings take priority.
+        # Conflicts are additive notes, NOT a reason to hide findings.
+        if findings and not findings_describe_gaps:
+            if gaps:
+                coverage = RetrievalCoverage.PARTIAL
+            else:
+                coverage = RetrievalCoverage.FULL
         elif gaps and (not findings or findings_describe_gaps):
             coverage = RetrievalCoverage.GAP
-        elif findings and gaps:
-            coverage = RetrievalCoverage.PARTIAL
-        elif findings:
-            coverage = RetrievalCoverage.FULL
+        elif conflicts and not findings:
+            # Only mark CONFLICT if we have NO usable findings
+            coverage = RetrievalCoverage.CONFLICT
         else:
             coverage = RetrievalCoverage.NONE
 

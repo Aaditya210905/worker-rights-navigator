@@ -479,34 +479,52 @@ class Orchestrator:
         """Build instruction based on evidence coverage."""
         from app.rag.models import RetrievalCoverage
 
+        base_instruction = ""
+
         if evidence.coverage == RetrievalCoverage.FULL:
-            return (
-                "Legal evidence found. Present the key findings to the worker "
-                "in simple language. Cite the source. Mention limitations."
+            base_instruction = (
+                "Legal evidence found. Present ALL the key findings to the worker "
+                "in simple language. Include specific law names, section numbers, "
+                "rights, amounts, and procedures. Cite sources. "
+                "Mention limitations at the end."
             )
         elif evidence.coverage == RetrievalCoverage.PARTIAL:
-            return (
-                "Some evidence found but there are known gaps. Present what "
-                "was found and clearly state what information is missing."
+            base_instruction = (
+                "Some evidence found. Present ALL available findings to the worker "
+                "with specific details (law names, rights, procedures). "
+                "Then clearly state what information is missing."
             )
         elif evidence.coverage == RetrievalCoverage.GAP:
-            return (
+            base_instruction = (
                 "No verified Central Government information found for this "
                 "specific issue. Tell the worker honestly. Do NOT invent "
                 "legal rights or procedures."
             )
         elif evidence.coverage == RetrievalCoverage.CONFLICT:
-            return (
-                "CONFLICTING information found in official sources. "
-                "Tell the worker about the conflict. Do NOT choose one side. "
+            base_instruction = (
+                "CONFLICTING information found in official sources with no "
+                "clear findings. Tell the worker about the conflict. "
                 "Recommend consulting a legal professional."
             )
         else:
-            return (
+            base_instruction = (
                 "No relevant evidence found. Tell the worker you could not "
                 "find verified information. Suggest consulting a labour "
                 "office or legal aid center."
             )
+
+        # If there are conflicts alongside findings, add them as a note
+        if evidence.conflicts and evidence.coverage in (
+            RetrievalCoverage.FULL, RetrievalCoverage.PARTIAL
+        ):
+            base_instruction += (
+                " NOTE: Some official sources have minor discrepancies "
+                "on related topics. Mention these briefly AFTER presenting "
+                "the main rights, but do NOT let them prevent you from "
+                "sharing the verified legal information."
+            )
+
+        return base_instruction
 
     def _get_safety_response(self, danger_type: str) -> str:
         """Return verified emergency information."""
