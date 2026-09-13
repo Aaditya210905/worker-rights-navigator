@@ -44,6 +44,10 @@ TOOL_PERMISSIONS = {
         "action_plan_ready", "evidence_generated",
         "closed", "safety_escalation",
     ],
+    "search_live_news": [
+        "classified", "collecting_information",
+        "retrieving_rights", "rights_verified",
+    ],
 }
 
 
@@ -240,6 +244,28 @@ TOOL_ESCALATE_SAFETY = {
 }
 
 
+TOOL_WEB_SEARCH = {
+    "type": "function",
+    "name": "search_live_news",
+    "description": (
+        "Search the live internet for recent news, platform policy changes, "
+        "or current events (e.g., strikes, recent layoffs) that might "
+        "affect the worker's case. Use this when the worker mentions "
+        "a recent event that you don't know about."
+    ),
+    "parameters": {
+        "type": "object",
+        "properties": {
+            "query": {
+                "type": "string",
+                "description": "Search query (e.g., 'Swiggy new payout policy 2026' or 'Zomato delivery strike Bangalore')",
+            },
+        },
+        "required": ["query"],
+    },
+}
+
+
 # ── All tools list ───────────────────────────────────────────────────────────
 
 ALL_TOOLS = [
@@ -248,6 +274,7 @@ ALL_TOOLS = [
     TOOL_GENERATE_EVIDENCE,
     TOOL_DRAFT_MESSAGE,
     TOOL_ESCALATE_SAFETY,
+    TOOL_WEB_SEARCH,
 ]
 
 

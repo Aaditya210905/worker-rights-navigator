@@ -130,9 +130,11 @@ async def voice_proxy(ws: WebSocket, session_id: str):
                             if text.strip():
                                 orch.process_transcript(text)
 
-                        # Debug: log agent delta events to see payload structure
-                        if event_type == "transcript.agent.delta":
-                            print(f"  [ws] transcript.agent.delta: {json.dumps(event, ensure_ascii=False)[:200]}")
+                        # Track agent final transcripts
+                        if event_type == "transcript.agent":
+                            text = event.get("text", "")
+                            if text.strip():
+                                orch.process_agent_transcript(text)
 
                         # Accumulate tool calls
                         if event_type == "tool.call":

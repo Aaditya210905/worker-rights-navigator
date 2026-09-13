@@ -119,10 +119,12 @@ app.add_middleware(
 from app.api.routes import router as api_router
 from app.api.knowledge import router as knowledge_router
 from app.api.ws import router as ws_router
+from app.api.lemur import router as lemur_router
 
 app.include_router(api_router, prefix="/api/v1")
 app.include_router(knowledge_router, prefix="/api/v1")
 app.include_router(ws_router, prefix="/api/v1")
+app.include_router(lemur_router, prefix="/api/v1")
 
 
 # ── Voice agent page ─────────────────────────────────────────────────────────

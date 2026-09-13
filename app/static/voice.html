@@ -493,24 +493,18 @@
         }
 
         /* Waveform bars — sit behind the mic button */
-        .waveform-container {
+        .waveform-canvas {
             position: absolute;
-            inset: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 3px;
-            opacity: 0;
-            transition: opacity var(--transition-slow);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
             pointer-events: none;
-        }
-
-        .waveform-bar {
-            width: 3px;
-            height: 12px;
-            background: var(--saffron);
-            border-radius: 2px;
-            opacity: 0.5;
+            z-index: 1;
+            opacity: 0;
+            transition: opacity 0.3s ease;
         }
 
         /* Animated rings */
@@ -535,61 +529,12 @@
         }
 
         /* When recording, show waveform + rings */
-        .mic-area:has(.mic-btn.stop) .waveform-container {
+        .mic-area:has(.mic-btn.stop) .waveform-canvas {
             opacity: 1;
         }
 
-        .mic-area:has(.mic-btn.stop) .waveform-bar {
-            animation: waveformBounce 0.8s ease-in-out infinite alternate;
-        }
-
-        .mic-area:has(.mic-btn.stop) .waveform-bar:nth-child(1) {
-            animation-delay: 0s;
-        }
-
-        .mic-area:has(.mic-btn.stop) .waveform-bar:nth-child(2) {
-            animation-delay: 0.08s;
-        }
-
-        .mic-area:has(.mic-btn.stop) .waveform-bar:nth-child(3) {
-            animation-delay: 0.16s;
-        }
-
-        .mic-area:has(.mic-btn.stop) .waveform-bar:nth-child(4) {
-            animation-delay: 0.24s;
-        }
-
-        .mic-area:has(.mic-btn.stop) .waveform-bar:nth-child(5) {
-            animation-delay: 0.32s;
-        }
-
-        .mic-area:has(.mic-btn.stop) .waveform-bar:nth-child(6) {
-            animation-delay: 0.08s;
-        }
-
-        .mic-area:has(.mic-btn.stop) .waveform-bar:nth-child(7) {
-            animation-delay: 0.16s;
-        }
-
-        .mic-area:has(.mic-btn.stop) .waveform-bar:nth-child(8) {
-            animation-delay: 0.24s;
-        }
-
-        .mic-area:has(.mic-btn.stop) .waveform-bar:nth-child(9) {
-            animation-delay: 0.12s;
-        }
-
-        .mic-area:has(.mic-btn.stop) .waveform-bar:nth-child(10) {
-            animation-delay: 0.2s;
-        }
-
-        .mic-area:has(.mic-btn.stop) .waveform-bar:nth-child(11) {
-            animation-delay: 0.28s;
-        }
-
-        .mic-area:has(.mic-btn.stop) .waveform-bar:nth-child(12) {
-            animation-delay: 0.04s;
-        }
+        .mic-area:has(.mic-btn.stop) .waveform-bar:nth-child(11) { animation-delay: 0.28s; }
+        .mic-area:has(.mic-btn.stop) .waveform-bar:nth-child(12) { animation-delay: 0.04s; }
 
         @keyframes waveformBounce {
             0% {
@@ -1143,6 +1088,124 @@
                 width: 360px;
             }
         }
+
+        /* ─── Modal Styles ────────────────────────────────────────── */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            backdrop-filter: blur(4px);
+        }
+
+        .modal-content {
+            background: var(--bg-secondary);
+            border-radius: var(--radius-lg);
+            width: 90%;
+            max-width: 700px;
+            max-height: 85vh;
+            display: flex;
+            flex-direction: column;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--border);
+            animation: modalFadeIn 0.3s ease-out;
+        }
+
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .modal-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border-light);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h2 {
+            font-size: 1.25rem;
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-muted);
+            transition: color var(--transition);
+        }
+
+        .close-btn:hover {
+            color: var(--text-primary);
+        }
+
+        .modal-body {
+            padding: 1.5rem;
+            overflow-y: auto;
+            flex-grow: 1;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: var(--text-primary);
+            white-space: pre-wrap; /* For Markdown text formatting */
+        }
+
+        .loading-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 3rem 0;
+            color: var(--text-muted);
+            gap: 1rem;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid var(--border-light);
+            border-top-color: var(--saffron);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .modal-footer {
+            padding: 1rem 1.5rem;
+            border-top: 1px solid var(--border-light);
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius-sm);
+            font-weight: 500;
+            cursor: pointer;
+            border: none;
+            transition: all var(--transition);
+        }
+
+        .btn.primary {
+            background: var(--saffron);
+            color: white;
+        }
+
+        .btn.primary:disabled {
+            background: var(--border-light);
+            color: var(--text-muted);
+            cursor: not-allowed;
+        }
+
     </style>
 </head>
 
@@ -1195,22 +1258,9 @@
                         </svg>
                     </button>
 
-                    <div class="mic-visual-wrapper">
-                        <!-- Waveform bars (decorative) -->
-                        <div class="waveform-container" aria-hidden="true">
-                            <div class="waveform-bar"></div>
-                            <div class="waveform-bar"></div>
-                            <div class="waveform-bar"></div>
-                            <div class="waveform-bar"></div>
-                            <div class="waveform-bar"></div>
-                            <div class="waveform-bar"></div>
-                            <div class="waveform-bar"></div>
-                            <div class="waveform-bar"></div>
-                            <div class="waveform-bar"></div>
-                            <div class="waveform-bar"></div>
-                            <div class="waveform-bar"></div>
-                            <div class="waveform-bar"></div>
-                        </div>
+                <div class="mic-visual-wrapper">
+                    <!-- Web Audio API Visualizer Canvas -->
+                    <canvas id="audioVisualizer" class="waveform-canvas" aria-hidden="true"></canvas>
 
                         <!-- Pulse rings (decorative) -->
                         <div class="mic-ring mic-ring-3" aria-hidden="true"></div>
@@ -1323,18 +1373,38 @@
                 </div>
             </div>
 
-            <!-- Tool Calls Card — PRESERVED: toolLog ID and structure -->
-            <div class="card">
-                <div class="card-header">
-                    <div class="card-header-icon tools" aria-hidden="true">🔧</div>
-                    <h3>Tool Calls</h3>
-                </div>
-                <div class="tool-log" id="toolLog">
-                    <div class="tool-entry" style="color:var(--text-muted)">No tool calls yet</div>
-                </div>
+        <!-- Tool Calls Card — PRESERVED: toolLog ID and structure -->
+        <div class="card">
+            <div class="card-header">
+                <div class="card-header-icon tools" aria-hidden="true">🔧</div>
+                <h3>Tool Calls</h3>
+            </div>
+            <div class="tool-log" id="toolLog">
+                <div class="tool-entry" style="color:var(--text-muted)">No tool calls yet</div>
             </div>
         </div>
+
     </div>
+</main>
+
+<!-- Action Plan Modal -->
+<div id="actionPlanModal" class="modal-overlay" style="display: none;">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>Generated Legal Action Plan</h2>
+            <button id="closeModalBtn" class="close-btn">&times;</button>
+        </div>
+        <div class="modal-body" id="actionPlanBody">
+            <div class="loading-state">
+                <div class="spinner"></div>
+                <p>Generating action plan with LeMUR...</p>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button id="downloadPdfBtn" class="btn primary" disabled>Download PDF</button>
+        </div>
+    </div>
+</div>
 
     <!-- ─── Application Logic — COMPLETELY UNTOUCHED ────────────────── -->
     <script>
@@ -1562,9 +1632,57 @@
                     return;
                 }
 
-                const micCtx = new AudioContext({ sampleRate: 16000 });
-                const source = micCtx.createMediaStreamSource(micStream);
-                scriptProcessor = micCtx.createScriptProcessor(4096, 1, 1);
+        const micCtx = new AudioContext({ sampleRate: 16000 });
+        const source = micCtx.createMediaStreamSource(micStream);
+        
+        // ── Visualizer setup ──────────────────────────────────────────
+        const analyser = micCtx.createAnalyser();
+        analyser.fftSize = 256;
+        source.connect(analyser);
+        const bufferLength = analyser.frequencyBinCount;
+        const dataArray = new Uint8Array(bufferLength);
+        
+        const canvas = document.getElementById('audioVisualizer');
+        const canvasCtx = canvas.getContext('2d');
+        
+        // Match canvas logical size to physical CSS size
+        canvas.width = 140;
+        canvas.height = 140;
+        
+        function drawVisualizer() {
+            if (!isRunning) return; // Stop animation loop when session ends
+            requestAnimationFrame(drawVisualizer);
+            
+            analyser.getByteFrequencyData(dataArray);
+            
+            // Calculate average volume
+            let sum = 0;
+            for(let i = 0; i < bufferLength; i++) {
+                sum += dataArray[i];
+            }
+            let average = sum / bufferLength;
+            
+            canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Draw circle that scales with volume
+            let radius = 35 + (average / 255) * 30; // base radius 35, max 65
+            
+            canvasCtx.beginPath();
+            canvasCtx.arc(canvas.width/2, canvas.height/2, radius, 0, 2 * Math.PI, false);
+            canvasCtx.fillStyle = 'rgba(224, 122, 47, 0.5)'; // Saffron tint
+            canvasCtx.fill();
+            
+            // Optionally, draw a second inner circle
+            canvasCtx.beginPath();
+            canvasCtx.arc(canvas.width/2, canvas.height/2, radius * 0.7, 0, 2 * Math.PI, false);
+            canvasCtx.fillStyle = 'rgba(224, 122, 47, 0.8)';
+            canvasCtx.fill();
+        }
+        
+        drawVisualizer();
+        // ──────────────────────────────────────────────────────────────
+
+        scriptProcessor = micCtx.createScriptProcessor(4096, 1, 1);
 
                 scriptProcessor.onaudioprocess = (e) => {
                     if (!isRunning || !ws || ws.readyState !== 1) return;
@@ -1686,8 +1804,11 @@
             addToolEntry(event.name, '⏳ executing...');
         }
         else if (type === 'session.ended') {
-            addMsg('system', 'Session ended');
+            addMsg('system', 'Session ended. Generating action plan...');
             stopSession();
+            if (sessionId) {
+                fetchActionPlan(sessionId);
+            }
         }
         else if (type === 'error') {
             addMsg('system', '⚠️ ' + (event.message || 'Unknown error'));
@@ -1713,33 +1834,40 @@
             };
         }
 
-        function stopSession() {
-            isRunning = false;
-            isMuted = false;
-            if (ws && ws.readyState === 1) {
-                try { ws.send(JSON.stringify({ type: 'session.end' })); } catch (e) { }
-                ws.close();
-            }
-            ws = null;
-            if (micStream) {
-                micStream.getTracks().forEach(t => t.stop());
-                micStream = null;
-            }
-            if (scriptProcessor) {
-                scriptProcessor.disconnect();
-                scriptProcessor = null;
-            }
-            flushAudio();
-            micBtn.className = 'mic-btn start';
-            micBtn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm-1-9c0-.55.45-1 1-1s1 .45 1 1v6c0 .55-.45 1-1 1s-1-.45-1-1V5z"/><path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/></svg>';
-            micHint.textContent = 'Click to start';
-            setStatus('disconnected', 'Disconnected');
-            // Hide mute button and reset mute state
-            muteBtn.classList.remove('visible', 'muted');
-            muteIndicator.classList.remove('visible');
-            micArea.classList.remove('is-muted');
-            updateMuteUI();
-        }
+function stopSession() {
+    isRunning = false;
+    isMuted = false;
+    if (ws && ws.readyState === 1) {
+        try { ws.send(JSON.stringify({ type: 'session.end' })); } catch(e) {}
+        ws.close();
+    }
+    ws = null;
+    if (micStream) {
+        micStream.getTracks().forEach(t => t.stop());
+        micStream = null;
+    }
+    if (scriptProcessor) {
+        scriptProcessor.disconnect();
+        scriptProcessor = null;
+    }
+    
+    const canvas = document.getElementById('audioVisualizer');
+    if (canvas) {
+        const ctx = canvas.getContext('2d');
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+    
+    flushAudio();
+    micBtn.className = 'mic-btn start';
+    micBtn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm-1-9c0-.55.45-1 1-1s1 .45 1 1v6c0 .55-.45 1-1 1s-1-.45-1-1V5z"/><path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/></svg>';
+    micHint.textContent = 'Click to start';
+    setStatus('disconnected', 'Disconnected');
+    // Hide mute button and reset mute state
+    muteBtn.classList.remove('visible', 'muted');
+    muteIndicator.classList.remove('visible');
+    micArea.classList.remove('is-muted');
+    updateMuteUI();
+}
 
         // ── Mute / Unmute (keeps session alive) ───────────────────────
 
@@ -1816,14 +1944,58 @@
                 }
             });
 
-            // Handle safety_escalation — highlight all steps as paused
-            if (normalizedStatus === 'safety_escalation') {
-                steps.forEach(step => {
-                    step.classList.remove('active', 'completed');
-                });
-            }
+    // Handle safety_escalation — highlight all steps as paused
+    if (normalizedStatus === 'safety_escalation') {
+        steps.forEach(step => {
+            step.classList.remove('active', 'completed');
+        });
+    }
+}
+
+// ── LeMUR Action Plan fetching ───────────────────────────────────
+
+async function fetchActionPlan(sid) {
+    const modal = document.getElementById('actionPlanModal');
+    const modalBody = document.getElementById('actionPlanBody');
+    const downloadBtn = document.getElementById('downloadPdfBtn');
+    const closeBtn = document.getElementById('closeModalBtn');
+
+    modal.style.display = 'flex';
+    modalBody.innerHTML = `
+        <div class="loading-state">
+            <div class="spinner"></div>
+            <p>Analyzing conversation with LeMUR...<br><span style="font-size: 0.8em; opacity: 0.7;">This may take 10-20 seconds.</span></p>
+        </div>
+    `;
+    
+    closeBtn.onclick = () => { modal.style.display = 'none'; };
+
+    try {
+        const response = await fetch(`/api/v1/sessions/${sid}/action-plan`, {
+            method: 'POST'
+        });
+        
+        if (!response.ok) {
+            throw new Error('Failed to generate action plan');
         }
-    </script>
+
+        const data = await response.json();
+        // Simple markdown parsing to HTML (newlines and bold)
+        let htmlText = data.plan
+            .replace(/</g, "&lt;").replace(/>/g, "&gt;")
+            .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+            .replace(/\n/g, '<br>');
+
+        modalBody.innerHTML = `<div>${htmlText}</div>`;
+        downloadBtn.disabled = false;
+        downloadBtn.onclick = () => {
+            alert("Action Plan ready! In a full implementation, this would trigger a PDF download.");
+        };
+    } catch (e) {
+        modalBody.innerHTML = `<p style="color: red;">Error: ${e.message}</p>`;
+    }
+}
+</script>
 
 </body>
 
