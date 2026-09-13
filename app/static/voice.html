@@ -1472,14 +1472,35 @@ async function startSession() {
             }
         }
         else if (type === 'transcript.agent') {
-            // Final complete transcript — replace streaming bubble with text
+            // Final complete transcript — replace "Speaking..." with actual text
             const text = event.text;
             const interrupted = event.interrupted;
 
-            if (streamingBubble && streamingTextNode) {
-                if (text && text.trim()) streamingTextNode.textContent = text;
-                if (interrupted) streamingBubble.classList.add('interrupted');
-                finalizeStreamingBubble();
+            // Try JS reference first, then fallback to DOM lookup
+            let bubble = streamingBubble;
+            let textNode = streamingTextNode;
+
+            if (!bubble) {
+                // Find the last "Speaking..." bubble in the DOM
+                const allAgentMsgs = chatEl.querySelectorAll('.msg.agent');
+                for (let i = allAgentMsgs.length - 1; i >= 0; i--) {
+                    const span = allAgentMsgs[i].querySelector('.streaming-text');
+                    if (span && span.textContent === 'Speaking...') {
+                        bubble = allAgentMsgs[i];
+                        textNode = span;
+                        break;
+                    }
+                }
+            }
+
+            if (bubble && textNode && text && text.trim()) {
+                textNode.textContent = text;
+                if (interrupted) bubble.classList.add('interrupted');
+                bubble.classList.remove('streaming');
+                const cursor = bubble.querySelector('.typing-cursor');
+                if (cursor) cursor.remove();
+                streamingBubble = null;
+                streamingTextNode = null;
             } else if (text && text.trim()) {
                 const el = addMsg('agent', text);
                 if (interrupted) el.classList.add('interrupted');
@@ -1495,8 +1516,11 @@ async function startSession() {
             if (event.data) playAudioChunk(event.data);
         }
         else if (type === 'reply.done') {
-            finalizeStreamingBubble();
-            if (event.status === 'interrupted') flushAudio();
+            // Don't finalize streaming bubble here — transcript.agent will do it
+            if (event.status === 'interrupted') {
+                finalizeStreamingBubble();
+                flushAudio();
+            }
             pollCase();  // refresh side panel
         }
         else if (type === 'tool.call') {
