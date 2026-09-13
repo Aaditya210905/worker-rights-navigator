@@ -71,12 +71,21 @@ class Orchestrator:
     def process_transcript(self, text: str):
         """Record a user transcript line and increment turn count."""
         if text.strip():
-            self._transcript_history.append(text.strip())
+            self._transcript_history.append(f"Worker: {text.strip()}")
             self.case_manager.case.turn_count += 1
             if not self.case_manager.case.raw_description:
                 self.case_manager.case.raw_description = text.strip()
             else:
                 self.case_manager.case.raw_description += " | " + text.strip()
+
+    def process_agent_transcript(self, text: str):
+        """Record an agent transcript line."""
+        if text.strip():
+            self._transcript_history.append(f"WorkerSaathi: {text.strip()}")
+
+    def get_full_transcript(self) -> str:
+        """Return the full formatted conversation transcript for LeMUR."""
+        return "\n".join(self._transcript_history)
 
     def handle_tool_call(self, tool_name: str, arguments: dict) -> dict:
         """
@@ -118,6 +127,7 @@ class Orchestrator:
             "generate_evidence": self._handle_generate_evidence,
             "draft_message": self._handle_draft_message,
             "escalate_safety": self._handle_escalate_safety,
+            "search_live_news": self._handle_web_search,
         }
 
         handler = handlers.get(tool_name)
@@ -554,6 +564,40 @@ class Orchestrator:
         lines.append("Do NOT share any numbers not listed above.")
 
         return "\n".join(lines)
+
+    def _handle_web_search(self, arguments: dict) -> dict:
+        """Search the live web using duckduckgo-search."""
+        query = arguments.get("query", "")
+        if not query:
+            return self._error_result(ToolError.INVALID_ARGUMENT, "Missing query")
+
+        try:
+            from duckduckgo_search import DDGS
+            with DDGS() as ddgs:
+                # Get top 3 news or general search results
+                results = list(ddgs.text(query, max_results=3))
+            
+            if not results:
+                result_text = f"No recent news found for query: {query}"
+            else:
+                formatted = []
+                for r in results:
+                    title = r.get("title", "")
+                    body = r.get("body", "")
+                    formatted.append(f"- {title}: {body}")
+                result_text = f"Live Search Results for '{query}':\n" + "\n".join(formatted)
+
+            # Update context to include this knowledge
+            return self._success_result(
+                {"status": "success", "results": result_text},
+                changed=["web_search"],
+                evidence_prompt=result_text
+            )
+        except Exception as e:
+            return self._error_result(
+                "SEARCH_ERROR",
+                f"Web search failed: {str(e)}"
+            )
 
     def _resolve_state(self, state_str: str) -> IndianState:
         if not state_str:

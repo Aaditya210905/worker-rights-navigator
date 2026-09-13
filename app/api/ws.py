@@ -126,6 +126,12 @@ async def voice_proxy(ws: WebSocket, session_id: str):
                             if text.strip():
                                 orch.process_transcript(text)
 
+                        # Track agent final transcripts
+                        if event_type == "transcript.agent":
+                            text = event.get("text", "")
+                            if text.strip():
+                                orch.process_agent_transcript(text)
+
                         # Accumulate tool calls
                         if event_type == "tool.call":
                             # AssemblyAI sends arguments as a JSON string
