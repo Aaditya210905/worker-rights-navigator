@@ -47,6 +47,25 @@ async def lifespan(app: FastAPI):
     else:
         print("  [ok] AssemblyAI API key loaded")
 
+    # Pre-warm the RAG retriever in a background thread so the first
+    # voice session doesn't block for 30-60s while documents load.
+    import threading
+
+    def _prewarm_retriever():
+        try:
+            from app.agent.orchestrator import Orchestrator
+            orch = Orchestrator()
+            retriever = orch._get_retriever()
+            if retriever:
+                print("  [startup] RAG retriever pre-warmed successfully")
+            else:
+                print("  [startup] RAG retriever not available (data missing?)")
+        except Exception as e:
+            print(f"  [startup] RAG pre-warm failed (non-fatal): {e}")
+
+    print("  [startup] Pre-warming RAG retriever in background...")
+    threading.Thread(target=_prewarm_retriever, daemon=True).start()
+
     yield  # App runs here
 
     # Shutdown — cleanup sessions

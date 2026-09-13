@@ -1276,9 +1276,14 @@ async function pollCase() {
 // AssemblyAI outputs PCM16 mono at 24kHz
 const AAI_SAMPLE_RATE = 24000;
 let nextPlayTime = 0;
+// Small lookahead buffer (50ms) to smooth out jitter from network delays
+const AUDIO_BUFFER_MS = 0.05;
 
 function playAudioChunk(base64) {
     if (!audioCtx) return;
+    // Resume audio context if suspended (browser autoplay policy)
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+
     // Decode base64 safely (no spread operator — avoids stack overflow)
     const binaryStr = atob(base64);
     const bytes = new Uint8Array(binaryStr.length);
@@ -1293,13 +1298,14 @@ function playAudioChunk(base64) {
     const buf = audioCtx.createBuffer(1, floats.length, AAI_SAMPLE_RATE);
     buf.getChannelData(0).set(floats);
 
-    // Schedule gapless playback
+    // Schedule gapless playback with a small lookahead to prevent choppy speech
     const src = audioCtx.createBufferSource();
     src.buffer = buf;
     src.connect(audioCtx.destination);
 
     const now = audioCtx.currentTime;
-    if (nextPlayTime < now) nextPlayTime = now;
+    // If we've fallen behind, re-anchor with a tiny buffer for smoothness
+    if (nextPlayTime < now) nextPlayTime = now + AUDIO_BUFFER_MS;
     src.start(nextPlayTime);
     nextPlayTime += buf.duration;
 }
@@ -1428,15 +1434,22 @@ async function startSession() {
         }
     };
 
-    ws.onclose = () => {
+    ws.onclose = (e) => {
         if (isRunning) {
-            addMsg('system', 'Connection closed');
+            // Detect keepalive timeout (1011) vs normal close
+            if (e.code === 1011 || e.code === 1006) {
+                addMsg('system', '⚠️ Connection timed out — the server may be processing a heavy request. Try starting a new session.');
+            } else if (e.code !== 1000) {
+                addMsg('system', `Connection closed (code: ${e.code})`);
+            } else {
+                addMsg('system', 'Connection closed');
+            }
             stopSession();
         }
     };
 
     ws.onerror = (e) => {
-        addMsg('system', '⚠️ WebSocket error');
+        addMsg('system', '⚠️ WebSocket error — check your network connection');
     };
 }
 

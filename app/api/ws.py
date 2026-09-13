@@ -72,8 +72,8 @@ async def voice_proxy(ws: WebSocket, session_id: str):
         async with websockets.connect(
             AAI_WS_URL,
             additional_headers=headers,
-            ping_interval=20,
-            ping_timeout=10,
+            ping_interval=30,
+            ping_timeout=60,
         ) as aai_ws:
 
             # Send initial session configuration

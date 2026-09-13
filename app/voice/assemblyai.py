@@ -79,8 +79,8 @@ class AssemblyAIAgent:
             async with websockets.connect(
                 WS_URL,
                 additional_headers=headers,
-                ping_interval=20,
-                ping_timeout=10,
+                ping_interval=30,
+                ping_timeout=60,
             ) as ws:
                 self._ws = ws
                 self._running = True
