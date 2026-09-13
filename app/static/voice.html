@@ -1471,6 +1471,22 @@ async function startSession() {
                 addMsg('user', text);
             }
         }
+        else if (type === 'transcript.agent.delta') {
+            // Stream the text as it is generated!
+            const textChunk = event.delta || event.text || "";
+            if (textChunk) {
+                if (!streamingBubble) {
+                    startStreamingBubble();
+                    streamingTextNode.textContent = "";
+                }
+                // If it currently says "Speaking...", clear it before appending
+                if (streamingTextNode.textContent === 'Speaking...') {
+                    streamingTextNode.textContent = "";
+                }
+                streamingTextNode.textContent += textChunk;
+                chatEl.scrollTop = chatEl.scrollHeight;
+            }
+        }
         else if (type === 'transcript.agent') {
             // Final complete transcript — replace "Speaking..." with actual text
             const text = event.text;
