@@ -314,6 +314,23 @@
             color: var(--red);
         }
 
+        /* ─── Streaming Agent Bubble ───────────────────────────── */
+        .msg.agent.streaming {
+            border-left-color: var(--saffron);
+        }
+
+        .typing-cursor {
+            display: inline;
+            color: var(--saffron);
+            font-weight: 700;
+            animation: blink-cursor 0.8s step-end infinite;
+            margin-left: 2px;
+        }
+
+        @keyframes blink-cursor {
+            50% { opacity: 0; }
+        }
+
         /* ─── Mic Area — Voice Hero ─────────────────────────────── */
         .mic-area {
             padding: 1.75rem 1.5rem;
@@ -1233,6 +1250,54 @@ function addMsg(type, text) {
     return div;
 }
 
+// ── Streaming agent bubble ────────────────────────────────────
+let streamingBubble = null;
+let streamingTextNode = null;
+
+function startStreamingBubble() {
+    finalizeStreamingBubble();
+    const emptyState = document.getElementById('emptyState');
+    if (emptyState) emptyState.style.display = 'none';
+
+    const div = document.createElement('div');
+    div.className = 'msg agent streaming';
+    const label = document.createElement('div');
+    label.className = 'label';
+    label.textContent = 'WorkerSaathi';
+    div.appendChild(label);
+
+    streamingTextNode = document.createElement('span');
+    streamingTextNode.className = 'streaming-text';
+    div.appendChild(streamingTextNode);
+
+    const cursor = document.createElement('span');
+    cursor.className = 'typing-cursor';
+    cursor.textContent = '▍';
+    div.appendChild(cursor);
+
+    chatEl.appendChild(div);
+    streamingBubble = div;
+    chatEl.scrollTop = chatEl.scrollHeight;
+}
+
+function updateStreamingBubble(text) {
+    if (!streamingBubble || !streamingTextNode) {
+        startStreamingBubble();
+    }
+    streamingTextNode.textContent = text;
+    chatEl.scrollTop = chatEl.scrollHeight;
+}
+
+function finalizeStreamingBubble() {
+    if (streamingBubble) {
+        streamingBubble.classList.remove('streaming');
+        const cursor = streamingBubble.querySelector('.typing-cursor');
+        if (cursor) cursor.remove();
+        streamingBubble = null;
+        streamingTextNode = null;
+    }
+}
+
 function addToolEntry(name, status) {
     if (toolLog.children.length === 1 && toolLog.children[0].textContent === 'No tool calls yet') {
         toolLog.innerHTML = '';
@@ -1393,26 +1458,44 @@ async function startSession() {
         const event = JSON.parse(e.data);
         const type = event.type;
 
+        // Debug: log all events to see what AssemblyAI sends
+        if (type !== 'reply.audio') console.log('[ws]', type, event);
+
         if (type === 'session.ready') {
             addMsg('system', 'WorkerSaathi is ready. Speak now!');
         }
         else if (type === 'transcript.user') {
             const text = event.text;
-            if (text && text.trim()) addMsg('user', text);
+            if (text && text.trim()) {
+                finalizeStreamingBubble();
+                addMsg('user', text);
+            }
         }
         else if (type === 'transcript.agent') {
+            // Final complete transcript — replace streaming bubble with text
             const text = event.text;
             const interrupted = event.interrupted;
-            if (text && text.trim()) {
+
+            if (streamingBubble && streamingTextNode) {
+                if (text && text.trim()) streamingTextNode.textContent = text;
+                if (interrupted) streamingBubble.classList.add('interrupted');
+                finalizeStreamingBubble();
+            } else if (text && text.trim()) {
                 const el = addMsg('agent', text);
                 if (interrupted) el.classList.add('interrupted');
             }
             if (interrupted) flushAudio();
         }
         else if (type === 'reply.audio') {
+            // Agent is speaking — show streaming bubble with speaking indicator
+            if (!streamingBubble) {
+                startStreamingBubble();
+                updateStreamingBubble('Speaking...');
+            }
             if (event.data) playAudioChunk(event.data);
         }
         else if (type === 'reply.done') {
+            finalizeStreamingBubble();
             if (event.status === 'interrupted') flushAudio();
             pollCase();  // refresh side panel
         }
