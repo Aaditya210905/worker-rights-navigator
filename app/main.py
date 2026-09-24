@@ -141,13 +141,13 @@ async def voice_page():
     return FileResponse(STATIC_DIR / "voice.html")
 
 
-# ── Root redirect to docs ────────────────────────────────────────────────────
+# ── Root redirect to voice UI ────────────────────────────────────────────────
 
 @app.get("/", include_in_schema=False)
 async def root():
-    """Redirect to API docs."""
+    """Redirect to voice agent UI."""
     from fastapi.responses import RedirectResponse
-    return RedirectResponse(url="/docs")
+    return RedirectResponse(url="/voice")
 
 
 # ── Legacy health endpoint (backwards compatibility) ──────────────────────────

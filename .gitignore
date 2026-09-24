@@ -78,7 +78,6 @@ coverage.xml
 # ─── Generated Artifacts ───────────────────────────────────────────
 output/
 *.pdf
-!knowledge/**/*.pdf
 *.docx
 *.csv
 docs/_build/
