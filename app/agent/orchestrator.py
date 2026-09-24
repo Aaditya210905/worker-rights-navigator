@@ -195,19 +195,23 @@ class Orchestrator:
             "case_status": self.case_manager.case.status.value,
         }
 
-        # RETRIEVAL takes priority over asking more questions
-        if self.case_manager.is_ready_for_retrieval():
+        case = self.case_manager.case
+        has_description = bool(case.raw_description)
+        has_issue = case.issue_category != IssueCategory.UNKNOWN
+        has_worker = case.worker_type != WorkerType.UNKNOWN
+
+        # ALWAYS suggest retrieve_rights if user has described any problem
+        if has_description and (has_issue or has_worker):
+            wt = case.worker_type.value if has_worker else "worker"
+            ic = case.issue_category.value if has_issue else "rights"
             result["MUST_CALL_NEXT"] = "retrieve_rights"
             result["instruction"] = (
-                "IMPORTANT: You have all the information needed. "
+                "IMPORTANT: The worker has described their problem. "
                 "You MUST immediately call the retrieve_rights tool now. "
                 "DO NOT just say you will check — actually call the tool. "
-                "Use a query like: '{worker_type} {issue_category} rights India'. "
-                "Say a brief message like 'Main aapke rights check karta hoon' "
-                "and CALL retrieve_rights."
-            ).format(
-                worker_type=self.case_manager.case.worker_type.value,
-                issue_category=self.case_manager.case.issue_category.value,
+                f"Use query: '{wt} {ic} rights India'. "
+                "Say a brief 'Main aapke rights check karta hoon' "
+                "and CALL retrieve_rights RIGHT NOW."
             )
         elif next_question:
             result["next_question"] = next_question
@@ -654,19 +658,3 @@ class Orchestrator:
             "needs_prompt_update": False,
         }
 
-    def process_transcript(self, text: str):
-        """Log user transcript."""
-        if text and text.strip():
-            self._transcript_history.append(text)
-            self.case_manager.case.turn_count += 1
-            if self.case_manager.case.raw_description is None:
-                self.case_manager.case.raw_description = text
-
-    def get_initial_prompt(self) -> str:
-        """Get the system prompt for initial session."""
-        context = self.case_manager.get_case_context()
-        return build_system_prompt(context)
-
-    @property
-    def case(self):
-        return self.case_manager.case

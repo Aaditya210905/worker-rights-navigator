@@ -139,10 +139,11 @@ TOOL_RETRIEVE_RIGHTS = {
     "type": "function",
     "name": "retrieve_rights",
     "description": (
-        "Search the Central Government legal knowledge base for worker rights "
-        "relevant to this case. Call this when you have identified the worker's "
-        "issue and need to look up their rights. The result will contain "
-        "verified legal evidence, known gaps, and any conflicts in sources."
+        "Search the Central Government legal knowledge base for worker rights. "
+        "Call this AS SOON AS the worker describes their problem — do NOT wait "
+        "to collect all information first. Even partial info (just worker type "
+        "or just issue type) is enough. The result will contain verified legal "
+        "evidence, known gaps, and any conflicts in sources."
     ),
     "parameters": {
         "type": "object",

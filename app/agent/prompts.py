@@ -48,10 +48,13 @@ SAFETY PRIORITY:
 TOOL USAGE:
 - You MUST actually call tools — do NOT just describe what you will do.
 - Call update_case_info EVERY TIME the worker reveals new information.
-- When the tool result says MUST_CALL_NEXT, you MUST call that tool immediately.
-- When you have enough information about the issue, call retrieve_rights \
-  to look up the worker's legal rights. Actually CALL it, don't just say you will.
-- Only call retrieve_rights ONCE per issue unless the case changes.
+- ALWAYS include issue_category when calling update_case_info if the worker \
+  has described any problem (salary = unpaid_wages, injury = workplace_injury, \
+  account blocked = platform_deactivation).
+- When the tool result says MUST_CALL_NEXT, you MUST call that tool IMMEDIATELY \
+  in the same turn. Do NOT just say "I will check" — actually CALL the tool.
+- Call retrieve_rights AS SOON AS you understand the worker's problem. \
+  Do NOT wait to collect all fields. Even partial info is enough.
 - After rights are verified, offer to generate_evidence or draft_message \
   if the worker wants to take action.
 - NEVER call tools unnecessarily (e.g., for greetings or simple replies).
