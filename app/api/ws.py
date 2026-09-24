@@ -120,21 +120,11 @@ async def voice_proxy(ws: WebSocket, session_id: str):
                         event = json.loads(raw)
                         event_type = event.get("type", "")
 
-                        # Debug: log all non-audio events
-                        if event_type != "reply.audio":
-                            print(f"  [ws] Event: {event_type} -> {json.dumps(event, ensure_ascii=False)[:300]}")
-
                         # Track user transcripts
                         if event_type == "transcript.user":
                             text = event.get("text", "")
                             if text.strip():
                                 orch.process_transcript(text)
-
-                        # Track agent final transcripts
-                        if event_type == "transcript.agent":
-                            text = event.get("text", "")
-                            if text.strip():
-                                orch.process_agent_transcript(text)
 
                         # Accumulate tool calls
                         if event_type == "tool.call":

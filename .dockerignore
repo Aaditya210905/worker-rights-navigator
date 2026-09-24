@@ -1,0 +1,44 @@
+# ── Docker Ignore — WorkerSaathi ────────────────────────────────
+# Keep the image small by excluding dev-only files.
+
+# Version control
+.git
+.gitignore
+
+# Virtual environments
+venv/
+.venv/
+env/
+ENV/
+
+# IDE
+.vscode/
+.idea/
+.cursor/
+.gemini/
+
+# Python caches
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Dev files
+*.md
+!knowledge/**/*.md
+tests/
+brain/
+scratch/
+*.log
+
+# Environment (secrets set via Render dashboard)
+.env
+.env.*
+!.env.example
+
+# Temporary
+*.tmp
+*.bak
+*.swp

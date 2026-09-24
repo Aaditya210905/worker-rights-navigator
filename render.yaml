@@ -1,0 +1,39 @@
+# ── Render Blueprint — WorkerSaathi ─────────────────────────────
+# Deploy with: https://render.com/deploy
+#
+# This file defines the infrastructure for one-click deployment.
+# Connect your GitHub repo and Render will auto-detect this file.
+
+services:
+  - type: web
+    name: workersaathi
+    runtime: docker
+    region: oregon  # Closest to India with free tier
+    plan: free      # Free tier (512 MB RAM, shared CPU)
+    
+    # Docker configuration
+    dockerfilePath: ./Dockerfile
+    
+    # Environment variables (set these in Render dashboard)
+    envVars:
+      - key: ASSEMBLYAI_API_KEY
+        sync: false  # Must be set manually in dashboard
+      - key: HF_TOKEN
+        sync: false  # Must be set manually in dashboard
+      - key: APP_ENV
+        value: production
+      - key: APP_HOST
+        value: "0.0.0.0"
+      - key: APP_PORT
+        value: "8000"
+      - key: EMBEDDING_BACKEND
+        value: huggingface
+      - key: PYTHONUNBUFFERED
+        value: "1"
+    
+    # Health check
+    healthCheckPath: /health
+    
+    # Auto-deploy on push to main
+    autoDeploy: true
+    branch: main
