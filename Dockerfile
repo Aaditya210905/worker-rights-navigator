@@ -28,8 +28,8 @@ COPY app/ ./app/
 COPY knowledge/ ./knowledge/
 COPY scripts/ ./scripts/
 
-# ── Ensure data directory exists for SQLite ─────────────────────
-RUN mkdir -p /app/data
+# ── Pre-built vector store (Qdrant embeddings) ─────────────────
+COPY data/qdrant/ ./data/qdrant/
 
 # ── Default environment (overridden by Render env vars) ─────────
 ENV APP_ENV=production \

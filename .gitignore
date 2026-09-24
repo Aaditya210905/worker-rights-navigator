@@ -88,3 +88,8 @@ site/
 .cursor/
 brain/
 scratch/
+
+# --- Qdrant vector store (pre-built embeddings) -------------------
+!data/qdrant/
+!data/qdrant/**
+!data/qdrant/**/*.sqlite
