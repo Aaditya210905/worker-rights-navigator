@@ -27,7 +27,6 @@ RUN pip install --no-cache-dir --upgrade pip && \
 COPY app/ ./app/
 COPY knowledge/ ./knowledge/
 COPY scripts/ ./scripts/
-COPY data/ ./data/ 2>/dev/null || true
 
 # ── Ensure data directory exists for SQLite ─────────────────────
 RUN mkdir -p /app/data
