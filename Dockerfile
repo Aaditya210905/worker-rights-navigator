@@ -1,5 +1,5 @@
 # ── WorkerSaathi — Production Dockerfile ─────────────────────────
-# Optimised for Render.com free tier (512MB RAM)
+# Compatible with Railway / Render / any Docker host
 #
 # Build:   docker build -t workersaathi .
 # Run:     docker run -p 8000:8000 --env-file .env workersaathi
@@ -41,7 +41,7 @@ EXPOSE 8000
 
 # ── Health check ────────────────────────────────────────────────
 HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
-    CMD python -c "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')" || exit 1
+    CMD python -c "import os; import urllib.request; urllib.request.urlopen(f'http://localhost:{os.environ.get(\"PORT\", 8000)}/health')" || exit 1
 
-# ── Start ────────────────────────────────────────────────────────
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--workers", "1", "--timeout-keep-alive", "120"]
+# ── Start (PORT env var is set by Railway/Render) ─────────────────
+CMD sh -c "uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8000} --workers 1 --timeout-keep-alive 120"
