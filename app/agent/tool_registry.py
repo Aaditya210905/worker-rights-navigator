@@ -26,7 +26,7 @@ TOOL_PERMISSIONS = {
         "retrieving_rights",
     ],
     "retrieve_rights": [
-        "classified", "collecting_information",
+        "new", "listening", "classified", "collecting_information",
         "retrieving_rights", "rights_verified",
     ],
     "generate_evidence": [
@@ -45,7 +45,7 @@ TOOL_PERMISSIONS = {
         "closed", "safety_escalation",
     ],
     "search_live_news": [
-        "classified", "collecting_information",
+        "new", "listening", "classified", "collecting_information",
         "retrieving_rights", "rights_verified",
     ],
 }
