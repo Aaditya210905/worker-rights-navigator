@@ -1,12 +1,10 @@
 /*
- * 04-responsive.css — Reduced-motion and responsive breakpoints.
- * WorkerSaathi voice client. Split out of the original single-file voice.html;
- * cascade order is fixed by the numeric filename prefix and the order of the
- * <link> tags in index.html.
+ * 04-responsive.css — Responsive layout breakpoints and accessibility.
+ * WorkerSaathi — Modern Indian Legal Tech Platform.
  */
+
 /* ─── Reduced Motion ────────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
-
     *,
     *::before,
     *::after {
@@ -16,138 +14,113 @@
     }
 }
 
-/* ─── Responsive — Tablet ───────────────────────────────── */
-@media (max-width: 1024px) {
-    .side-panel {
-        width: 280px;
-    }
-
-    .header-subtitle {
-        display: none;
-    }
-}
-
-/* ─── Responsive — Mobile ───────────────────────────────── */
-@media (max-width: 768px) {
+/* ─── Tablet & Laptop Breakpoints (≤ 1180px) ─────────────── */
+@media (max-width: 1180px) {
     .header {
-        padding: 0 1rem;
-        height: 56px;
+        padding: 0 1.25rem;
     }
 
-    .header h1 {
-        font-size: 1rem;
+    .top-nav {
+        overflow-x: auto;
+        scrollbar-width: none;
+        max-width: 100%;
+    }
+
+    .top-nav::-webkit-scrollbar {
+        display: none;
+    }
+
+    .nav-tab {
+        padding: 0.45rem 0.75rem;
+        font-size: 0.78rem;
+    }
+
+    .two-col-grid {
+        grid-template-columns: 1fr;
+        gap: 1.25rem;
+    }
+
+    .two-col-grid.voice-layout {
+        grid-template-columns: 1fr;
+        height: auto;
+        min-height: unset;
+    }
+}
+
+/* ─── Tablet Breakpoints (≤ 900px) ───────────────────────── */
+@media (max-width: 900px) {
+    .header {
+        height: auto;
+        padding: 0.75rem 1rem;
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+
+    .header-left, .header-right {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .top-nav {
+        width: 100%;
+        max-width: 100%;
+        justify-content: flex-start;
+    }
+
+    .page-view {
+        padding: 1rem 1rem 2rem 1rem;
+    }
+
+    .page-hero-banner {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.75rem;
+    }
+
+    .hero-badges {
+        flex-wrap: wrap;
+    }
+
+    .authority-select-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ─── Mobile Breakpoints (≤ 600px) ───────────────────────── */
+@media (max-width: 600px) {
+    .brand-text h1 {
+        font-size: 1.1rem;
+    }
+
+    .header-subtitle {
+        display: none;
     }
 
     .lang-indicator {
         display: none;
     }
 
-    .main {
-        flex-direction: column;
-        padding: 0.75rem;
-        gap: 0.75rem;
-        max-height: none;
-        overflow-y: auto;
+    .session-chip {
+        display: none;
     }
 
-    .chat-panel {
-        order: 2;
-        min-height: 0;
-        flex: 1;
-    }
-
-    /* On mobile, voice area floats at top */
-    .chat-panel .mic-area {
-        order: -1;
-        border-top: none;
-        border-bottom: 1px solid var(--border);
-        padding: 1.25rem 1rem;
-    }
-
-    .chat-messages {
+    .card {
         padding: 1rem;
-        min-height: 200px;
     }
 
-    .msg {
-        max-width: 88%;
+    .complaint-preview-box {
+        padding: 1.25rem;
     }
 
-    .side-panel {
-        width: 100%;
-        order: 3;
-        flex-direction: row;
-        flex-wrap: wrap;
-        gap: 0.75rem;
-    }
-
-    .side-panel .card {
-        flex: 1 1 280px;
-        min-width: 0;
-    }
-
-    .mic-visual-wrapper {
-        width: 100px;
-        height: 100px;
-    }
-
-    .mic-btn {
-        width: 64px;
-        height: 64px;
-    }
-
-    .mic-btn svg {
-        width: 26px;
-        height: 26px;
-    }
-
-    .mute-btn {
-        width: 42px;
-        height: 42px;
-    }
-
-    .mute-btn svg {
-        width: 18px;
-        height: 18px;
-    }
-}
-
-/* ─── Responsive — Small Mobile ─────────────────────────── */
-@media (max-width: 480px) {
-    .main {
-        padding: 0.5rem;
-    }
-
-    .side-panel {
+    .complaint-actions-row {
         flex-direction: column;
     }
 
-    .side-panel .card {
-        flex: 1 1 auto;
+    .wage-hero-amount {
+        font-size: 2rem;
     }
 
-    .header-logo {
-        width: 30px;
-        height: 30px;
-        font-size: 1rem;
-    }
-}
-
-/* ─── Desktop ≥ 1200px ──────────────────────────────────── */
-@media (min-width: 1200px) {
-    .header-subtitle {
-        display: inline;
-        font-size: 0.78rem;
-        color: rgba(255, 255, 255, 0.4);
-        font-weight: 400;
-        margin-left: 0.5rem;
-    }
-
-    .lang-indicator {
-        display: block;
-    }
-
-    .side-panel {
-        width: 360px;
+    .case-fields-grid {
+        grid-template-columns: repeat(2, 1fr);
     }
 }

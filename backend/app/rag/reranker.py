@@ -35,15 +35,17 @@ def rerank(
     candidates: list[dict],
     worker_type: str = None,
     issue: str = None,
+    state: str = None,
     top_k: int = 5,
 ) -> list[dict]:
     """
-    Rerank retrieval candidates by composite score.
+    Rerank retrieval candidates by composite score (authority, status, worker type, issue, and state).
 
     Args:
         candidates: list of {score, payload} dicts from retriever
         worker_type: target worker type for specificity scoring
         issue: target issue for specificity scoring
+        state: target Indian state for state-law boost
         top_k: number of results to return
 
     Returns:
@@ -55,7 +57,7 @@ def rerank(
         payload = candidate.get("payload", {})
         retrieval_score = candidate.get("score", 0.0)
 
-        # Authority score
+        # Authority score (Acts & Rules > Explanatory > Secondary)
         evidence_level = payload.get("evidence_level", "secondary")
         authority_score = AUTHORITY_WEIGHTS.get(evidence_level, 0.1)
 
@@ -87,13 +89,27 @@ def rerank(
             else:
                 issue_score = 0.2
 
+        # State specificity
+        state_score = 0.5  # default
+        doc_jurisdiction = payload.get("jurisdiction", "central")
+        doc_state = payload.get("state")
+        if state:
+            target_state = state.lower().strip()
+            if doc_state and doc_state.lower().strip() == target_state:
+                state_score = 1.0  # exact state match (e.g. Rajasthan Gig Act in Rajasthan)
+            elif doc_jurisdiction == "central":
+                state_score = 0.7  # Central law applies everywhere in India
+            else:
+                state_score = 0.1  # Different state's local board
+
         # Composite score
         composite = (
             retrieval_score * 3.0      # retrieval relevance is primary
-            + authority_score * 1.5     # authority matters significantly
+            + authority_score * 1.5     # authority matters significantly (Acts > blogs)
             + status_score * 1.0        # legal status is important
             + worker_score * 0.8        # worker match helps
             + issue_score * 0.8         # issue match helps
+            + state_score * 0.8         # state legislation match helps
         )
 
         scored.append({
@@ -101,6 +117,7 @@ def rerank(
             "composite_score": composite,
             "authority_score": authority_score,
             "status_score": status_score,
+            "state_score": state_score,
             "payload": payload,
         })
 

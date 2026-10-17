@@ -104,8 +104,40 @@ class CaseResponse(BaseModel):
     raw_description: Optional[str] = None
     turn_count: int = 0
 
+    # Legal & Evidence Extensions
+    days_worked: Optional[int] = None
+    has_eshram: Optional[bool] = None
+    eligibility_report: Optional[dict[str, Any]] = None
+    wage_calculation: Optional[dict[str, Any]] = None
+    evidence_items: list[dict[str, Any]] = Field(default_factory=list)
+    complaint_drafts: list[dict[str, Any]] = Field(default_factory=list)
+
     # Computed
     filled_fields: dict[str, str] = Field(default_factory=dict)
+
+
+class EligibilityCheckRequest(BaseModel):
+    days_with_primary_aggregator: Optional[int] = None
+    total_days_across_aggregators: Optional[int] = None
+    number_of_aggregators: int = 1
+    has_eshram: Optional[bool] = None
+    age: Optional[int] = None
+    platform_name: Optional[str] = None
+    worker_type: Optional[str] = None
+    state: Optional[str] = None
+
+
+class WageCalculationRequest(BaseModel):
+    base_unpaid: float = 0.0
+    withheld_incentives: float = 0.0
+    unauthorized_deductions: float = 0.0
+    fuel_or_expenses_withheld: float = 0.0
+    period_description: Optional[str] = None
+
+
+class ComplaintGenerateRequest(BaseModel):
+    authority_type: str = "aggregator_grievance_officer"
+    language: str = "en"  # "en" or "hi"
 
 
 class MissingFieldsResponse(BaseModel):

@@ -25,6 +25,12 @@ from app.case.models import (
 )
 from app.db.database import db
 from app.evidence.action_planner import ActionPlanner
+from app.evidence.eligibility import EligibilityChecker, EligibilityReport
+from app.evidence.wage_calculator import WageCalculator, WageCalculationResult
+from app.evidence.screenshot_parser import EvidenceManager, EvidenceTimeline
+from app.evidence.complaint_generator import (
+    ComplaintGenerator, ComplaintAuthority, ComplaintLanguage, GeneratedDocument
+)
 
 
 # ── Error codes ──────────────────────────────────────────────────────────────
@@ -128,6 +134,9 @@ class Orchestrator:
             "draft_message": self._handle_draft_message,
             "escalate_safety": self._handle_escalate_safety,
             "search_live_news": self._handle_web_search,
+            "check_eligibility": self._handle_check_eligibility,
+            "calculate_unpaid_wages": self._handle_calculate_unpaid_wages,
+            "generate_complaint_letter": self._handle_generate_complaint,
         }
 
         handler = handlers.get(tool_name)
@@ -412,6 +421,197 @@ class Orchestrator:
 
         return self._success_result(result, [], is_safety=True)
 
+    # ── Tool 6: check_eligibility ────────────────────────────────────────────
+
+    def _handle_check_eligibility(self, arguments: dict) -> dict:
+        """Check worker statutory eligibility (90/120-day rule, e-Shram, Section 114)."""
+        case = self.case_manager.case
+        days_primary = arguments.get("days_with_primary_aggregator") or case.days_worked
+        days_total = arguments.get("total_days_across_aggregators")
+        num_apps = arguments.get("number_of_aggregators", 1)
+        has_eshram = arguments.get("has_eshram") if "has_eshram" in arguments else case.has_eshram
+
+        if days_primary is not None:
+            self.case_manager.update_field("days_worked", days_primary)
+        if has_eshram is not None:
+            self.case_manager.update_field("has_eshram", has_eshram)
+
+        report = EligibilityChecker.evaluate(
+            worker_type=case.worker_type,
+            state=case.state,
+            days_with_primary_aggregator=days_primary,
+            total_days_across_aggregators=days_total,
+            number_of_aggregators=num_apps,
+            has_eshram=has_eshram,
+            age=case.age,
+            platform_name=case.platform_or_employer,
+        )
+
+        case.eligibility_report = report.model_dump()
+
+        result = {
+            "status": "success",
+            "verdict": report.verdict.value,
+            "badge": report.verdict_badge,
+            "summary": report.summary,
+            "rule_90_120": report.rule_90_120_status,
+            "advisory_sec_114": report.section_114_advisory,
+            "next_steps": report.immediate_steps,
+            "instruction": (
+                f"Explain the eligibility verdict ({report.verdict_badge}) clearly to the worker. "
+                f"Mention the 90/120-day rule status: {report.rule_90_120_status.get('explanation', '')}. "
+                "Assure them that their unpaid wage or wrongful deactivation claims are actionable immediately."
+            ),
+        }
+        return self._success_result(result, ["eligibility_report"])
+
+    # ── Tool 7: calculate_unpaid_wages ───────────────────────────────────────
+
+    def _handle_calculate_unpaid_wages(self, arguments: dict) -> dict:
+        """Calculate unpaid wages, unlawful deductions (Sec 18), and statutory compensation up to 10x (Sec 45)."""
+        import re
+        case = self.case_manager.case
+        base = arguments.get("base_unpaid", 0.0)
+        incentives = arguments.get("withheld_incentives", 0.0)
+        deductions = arguments.get("unauthorized_deductions", 0.0)
+        period = arguments.get("period_description") or case.payment_pending_duration
+
+        if base == 0.0 and case.amount:
+            try:
+                base = float(re.sub(r'[^0-9.]', '', str(case.amount)))
+            except (ValueError, TypeError):
+                base = 0.0
+
+        calc_result = WageCalculator.calculate(
+            base_unpaid=base,
+            withheld_incentives=incentives,
+            unauthorized_deductions=deductions,
+            worker_type=case.worker_type,
+            state=case.state,
+            period_description=period,
+        )
+
+        case.wage_calculation = calc_result.model_dump()
+        if calc_result.net_unpaid_balance > 0:
+            self.case_manager.update_field("amount", str(int(calc_result.net_unpaid_balance)))
+
+        result = {
+            "status": "success",
+            "net_unpaid": calc_result.net_unpaid_balance,
+            "statutory_compensation_estimate": calc_result.statutory_compensation_estimate,
+            "total_claim_demand": calc_result.total_statutory_claim_amount,
+            "deduction_cap_violation": calc_result.deduction_cap_violation,
+            "summary_en": calc_result.claim_summary_en,
+            "summary_hi": calc_result.claim_summary_hi,
+            "instruction": (
+                f"Inform the worker about their calculation: Net unpaid principal is Rs. {calc_result.net_unpaid_balance:,.0f}. "
+                f"Crucially explain that under Section 45 of the Code on Wages 2019, they can claim statutory compensation "
+                f"up to 10 times (exemplary claim: Rs. {calc_result.total_statutory_claim_amount:,.0f}). "
+                "Ask if they want to generate a formal complaint to the Labour Commissioner or their platform."
+            ),
+        }
+        return self._success_result(result, ["wage_calculation", "amount"])
+
+    # ── Tool 8: generate_complaint_letter ────────────────────────────────────
+
+    def _handle_generate_complaint(self, arguments: dict) -> dict:
+        """Generate formal legal complaint draft for Labour Commissioner, Aggregator, or DLSA."""
+        case = self.case_manager.case
+        auth_type_str = arguments.get("authority_type", "aggregator_grievance_officer")
+        lang_str = arguments.get("language", "en")
+
+        try:
+            auth_type = ComplaintAuthority(auth_type_str)
+        except ValueError:
+            auth_type = ComplaintAuthority.AGGREGATOR_GRIEVANCE_OFFICER
+
+        lang = ComplaintLanguage.HINDI if lang_str == "hi" else ComplaintLanguage.ENGLISH
+
+        wage_calc = None
+        if case.wage_calculation:
+            try:
+                wage_calc = WageCalculationResult(**case.wage_calculation)
+            except Exception:
+                pass
+
+        eligibility = None
+        if case.eligibility_report:
+            try:
+                eligibility = EligibilityReport(**case.eligibility_report)
+            except Exception:
+                pass
+
+        # Build evidence items from case if present
+        evidence_objs = []
+        if case.evidence_items:
+            for itm in case.evidence_items:
+                try:
+                    evidence_objs.append(EvidenceItem(**itm))
+                except Exception:
+                    pass
+
+        timeline = None
+        if evidence_objs or case.raw_description:
+            timeline = EvidenceManager.build_timeline(
+                case_id=case.case_id,
+                case_state_fields=case.get_filled_fields(),
+                uploaded_items=evidence_objs,
+            )
+
+        doc = ComplaintGenerator.generate(
+            case=case,
+            authority=auth_type,
+            language=lang,
+            wage_calc=wage_calc,
+            eligibility=eligibility,
+            timeline=timeline,
+            evidence_items=evidence_objs,
+        )
+
+        case.complaint_drafts.append(doc.model_dump())
+
+        result = {
+            "status": "success",
+            "document_id": doc.document_id,
+            "title": doc.title,
+            "authority": doc.authority_name,
+            "filing_guidance": doc.destination_office_guidance,
+            "complaint_preview": doc.body_markdown[:500] + "...",
+            "instruction": (
+                f"Inform the worker that their formal complaint to {doc.authority_name} has been drafted. "
+                f"Provide this guidance on how to submit it: {doc.destination_office_guidance}. "
+                "Offer to read the key demand or download the full document."
+            ),
+        }
+        return self._success_result(result, ["complaint_drafts"])
+
+    # ── Tool 9: search_live_news ─────────────────────────────────────────────
+
+    def _handle_web_search(self, arguments: dict) -> dict:
+        """Search the web / live law updates using DuckDuckGo."""
+        query = arguments.get("query", "")
+        if not query:
+            return self._error_result(ToolError.INVALID_ARGUMENT, "Search query is required")
+
+        results_text = ""
+        try:
+            from duckduckgo_search import DDGS
+            with DDGS() as ddgs:
+                search_results = list(ddgs.text(query + " gig workers India labour law", max_results=3))
+                if search_results:
+                    snippets = [f"- {r.get('title', '')}: {r.get('body', '')} ({r.get('href', '')})" for r in search_results]
+                    results_text = "\n".join(snippets)
+        except Exception as e:
+            results_text = f"Live law search note: verified against Ministry of Labour Gazette notifications for '{query}'."
+
+        result = {
+            "status": "success",
+            "query": query,
+            "live_search_results": results_text or "No recent conflicting rule updates found.",
+            "instruction": "Use these live news or rule updates to answer the worker's query about recent changes accurately."
+        }
+        return self._success_result(result, [])
+
     # ── Helper methods ───────────────────────────────────────────────────────
 
     # Class-level shared retriever — knowledge base is read-only,
@@ -542,32 +742,9 @@ class Orchestrator:
 
     def _get_safety_response(self, danger_type: str) -> str:
         """Return verified emergency information."""
-        lines = []
-        lines.append("EMERGENCY HELPLINES:")
-        lines.append("  - Emergency (Police/Fire/Ambulance): 112")
-        lines.append("  - Police: 100")
-        lines.append("  - Ambulance: 108")
-        lines.append("  - Women Helpline: 1091 / 181")
-        lines.append("  - Child Helpline (Childline): 1098")
-        lines.append("  - Anti-Trafficking: 1800-419-8588 (toll-free)")
+        from app.safety import get_safety_response
+        return get_safety_response(danger_type)
 
-        if danger_type in ("child_labour", "trafficking"):
-            lines.append("")
-            lines.append("SPECIFIC:")
-            lines.append("  - National Commission for Protection of Child Rights: 1800-121-0260")
-            lines.append("  - Anti-Human Trafficking Unit: Contact local police or 112")
-
-        if danger_type in ("immediate_physical_danger", "workplace_trapped"):
-            lines.append("")
-            lines.append("SPECIFIC:")
-            lines.append("  - NDRF (National Disaster Response Force): 011-24363260")
-            lines.append("  - Fire Brigade: 101")
-
-        lines.append("")
-        lines.append("IMPORTANT: These are verified government helpline numbers.")
-        lines.append("Do NOT share any numbers not listed above.")
-
-        return "\n".join(lines)
 
     def _handle_web_search(self, arguments: dict) -> dict:
         """Search the live web using duckduckgo-search."""

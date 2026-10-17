@@ -18,6 +18,14 @@ async function pollCase() {
         updateCaseField('fAmount', c.amount ? '₹' + c.amount : null);
         updateCaseField('fSafety', c.safety_level);
 
+        // Auto-sync legal hub widgets if active
+        if (c.eligibility_report && typeof renderEligibilityReport === 'function') {
+            renderEligibilityReport(c.eligibility_report);
+        }
+        if (c.wage_calculation && typeof renderWageResults === 'function') {
+            renderWageResults(c.wage_calculation);
+        }
+
         // Update progress tracker (presentation-only)
         updateProgressTracker(c.status);
     } catch (e) { }
@@ -39,6 +47,7 @@ async function createSession() {
         const data = await r.json();
         sessionId = data.session_id;
         addMsg('system', `Session ${sessionId} created`);
+        if (typeof updateSessionDisplay === 'function') updateSessionDisplay();
         return true;
     } catch (e) {
         setStatus('disconnected', 'Connection Failed');
@@ -59,8 +68,9 @@ async function fetchActionPlan(sid) {
     modalBody.innerHTML = `
         <div class="loading-state">
             <div class="spinner"></div>
-            <p>Analyzing conversation with LeMUR...<br><span style="font-size: 0.8em; opacity: 0.7;">This may take 10-20 seconds.</span></p>
+            <p>Synthesizing evidence-backed Indian Legal Action Plan...<br><span style="font-size: 0.8em; opacity: 0.7;">This may take a few seconds.</span></p>
         </div>
+
     `;
 
     closeBtn.onclick = () => { modal.style.display = 'none'; };

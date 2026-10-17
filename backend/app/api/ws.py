@@ -158,15 +158,14 @@ async def voice_proxy(ws: WebSocket, session_id: str):
                                 for tc in pending_tool_calls:
                                     print(f"  [ws] Executing tool: {tc['name']}({json.dumps(tc['arguments'], ensure_ascii=False)[:100]})")
 
-                                    # Run in executor to avoid blocking async loop (RAG can take seconds)
-                                    import asyncio
-                                    loop = asyncio.get_event_loop()
-                                    result = await loop.run_in_executor(
-                                        None,
+                                    # Run in thread executor to avoid blocking async event loop
+                                    result = await asyncio.to_thread(
                                         orch.handle_tool_call,
-                                        tc["name"], tc["arguments"]
+                                        tc["name"],
+                                        tc["arguments"],
                                     )
                                     print(f"  [ws] Tool {tc['name']} completed")
+
 
                                     is_error = False
                                     try:

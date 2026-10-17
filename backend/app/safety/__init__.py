@@ -1,13 +1,16 @@
 """
-safety/ — Critical safety logic.
+safety/ — Critical safety, escalation, and privacy safeguards.
 
-Responsibilities:
-  - Danger detection (violence, trafficking, child labour, etc.)
-  - Risk classification (HIGH / MEDIUM / LOW)
-  - Emergency escalation routing (112 / 181 / 1098 / 15100)
-  - PII redaction (Aadhaar, PAN, phone, bank)
-  - Safety policy enforcement
-
-IMPORTANT: Safety escalation can interrupt ANY conversation state.
-It always takes priority over the rights-mapping flow.
+Exports:
+  - get_safety_response: official emergency helpline routing
+  - redact_sensitive_pii: PII sanitization (Aadhaar, bank, OTPs)
 """
+
+from app.safety.emergency import get_safety_response, EMERGENCY_HELPLINES
+from app.safety.redaction import redact_sensitive_pii
+
+__all__ = [
+    "get_safety_response",
+    "EMERGENCY_HELPLINES",
+    "redact_sensitive_pii",
+]

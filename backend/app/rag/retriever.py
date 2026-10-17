@@ -74,6 +74,11 @@ class HybridRetriever:
         self._gaps = gaps or []
         self._conflicts = conflicts or []
 
+        # Align embedder dimension with existing Qdrant collection if present
+        existing_dim = self._qdrant.get_vector_size()
+        if existing_dim:
+            self._embedder.dimension = existing_dim
+
         # Build BM25 index
         tokenized_docs = [_tokenize(doc.text) for doc in documents]
         self._bm25 = BM25Okapi(tokenized_docs)
@@ -148,22 +153,30 @@ class HybridRetriever:
     ) -> LegalEvidence:
         """Execute the full retrieval pipeline."""
 
-        # ── 1. Semantic search via Qdrant ────────────────────────
-        query_vector = self._embedder.embed_query(rq.semantic_query)
-
         # Use the primary worker type and issue for Qdrant filter
         primary_worker = rq.worker_types[0] if rq.worker_types else None
         primary_issue = rq.issue_categories[0] if rq.issue_categories else None
 
-        semantic_results = self._qdrant.search(
-            query_vector=query_vector,
-            limit=top_k * 3,
-            jurisdiction=rq.jurisdiction,
-            worker_type=primary_worker,
-            issue_category=primary_issue,
-        )
+        # ── 1. Semantic search via Qdrant ────────────────────────
+        semantic_results = []
+        try:
+            query_vector = self._embedder.embed_query(rq.semantic_query)
+            coll_dim = self._qdrant.get_vector_size()
+            if coll_dim and query_vector and len(query_vector) != coll_dim:
+                print(f"  [retriever] Warning: query vector dim ({len(query_vector)}) != Qdrant collection ({coll_dim}). Bypassing semantic search, falling back to BM25.")
+            elif query_vector:
+                semantic_results = self._qdrant.search(
+                    query_vector=query_vector,
+                    limit=top_k * 3,
+                    jurisdiction=rq.jurisdiction,
+                    worker_type=primary_worker,
+                    issue_category=primary_issue,
+                )
+        except Exception as e:
+            print(f"  [retriever] Semantic search warning: {e}. Falling back to BM25 keyword search.")
 
         # ── 2. BM25 keyword search ──────────────────────────────
+
         query_tokens = _tokenize(rq.semantic_query)
         bm25_scores = self._bm25.get_scores(query_tokens)
 
@@ -214,6 +227,7 @@ class HybridRetriever:
             candidates,
             worker_type=primary_worker,
             issue=primary_issue,
+            state=state,
             top_k=top_k,
         )
 

@@ -164,3 +164,17 @@ class QdrantStore:
             return info.points_count
         except Exception:
             return 0
+
+    def get_vector_size(self) -> Optional[int]:
+        """Return vector dimension of the active collection, if created."""
+        try:
+            info = self._client.get_collection(self._collection)
+            vectors_config = info.config.params.vectors
+            if hasattr(vectors_config, "size"):
+                return vectors_config.size
+            if isinstance(vectors_config, dict) and "size" in vectors_config:
+                return vectors_config["size"]
+            return None
+        except Exception:
+            return None
+

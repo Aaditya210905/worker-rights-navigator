@@ -87,12 +87,15 @@ function addToolEntry(name, status) {
 }
 
 function updateCaseField(id, val) {
-    const el = document.getElementById(id);
-    if (!el) return;
-    if (val && val !== 'unknown' && val !== 'Unknown') {
-        el.textContent = val.replace(/_/g, ' ');
-        el.className = 'field-val';
-    }
+    const els = document.querySelectorAll(`[id="${id}"], .${id}`);
+    if (!els.length) return;
+    els.forEach(el => {
+        if (val && val !== 'unknown' && val !== 'Unknown') {
+            el.textContent = val.replace(/_/g, ' ');
+            el.classList.remove('empty');
+            el.classList.add('field-val');
+        }
+    });
 }
 
 // ── Case progress tracker ────────────────────────────────────────

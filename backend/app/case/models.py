@@ -19,8 +19,10 @@ class WorkerType(str, Enum):
     GIG_WORKER = "gig_worker"
     CONSTRUCTION_WORKER = "construction_worker"
     DOMESTIC_WORKER = "domestic_worker"
+    FACTORY_WORKER = "factory_worker"
     OTHER = "other"
     UNKNOWN = "unknown"
+
 
 
 class IssueCategory(str, Enum):
@@ -241,6 +243,15 @@ class CaseState(BaseModel):
     # ── Safety ───────────────────────────────────────────────────
     safety_level: SafetyLevel = SafetyLevel.UNKNOWN
 
+    # ── Legal & Evidence Extensions ──────────────────────────────
+    days_worked: Optional[int] = None
+    has_eshram: Optional[bool] = None
+    age: Optional[int] = None
+    eligibility_report: Optional[dict] = None
+    wage_calculation: Optional[dict] = None
+    evidence_items: list[dict] = Field(default_factory=list)
+    complaint_drafts: list[dict] = Field(default_factory=list)
+
     # ── Conversation metadata ────────────────────────────────────
     turn_count: int = 0
     raw_description: Optional[str] = None
@@ -253,6 +264,7 @@ class CaseState(BaseModel):
             "platform_or_employer", "incident_date",
             "payment_due_date", "amount", "deactivation_reason",
             "injury_details", "payment_pending_duration",
+            "days_worked", "has_eshram",
         ]:
             val = getattr(self, field_name)
             if val is not None and val not in (
