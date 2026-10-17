@@ -1,5 +1,5 @@
 /*
- * 04-responsive.css — Responsive layout breakpoints and accessibility.
+ * 04-responsive.css — Responsive layout breakpoints for vertical sidebar architecture.
  * WorkerSaathi — Modern Indian Legal Tech Platform.
  */
 
@@ -14,25 +14,14 @@
     }
 }
 
-/* ─── Tablet & Laptop Breakpoints (≤ 1180px) ─────────────── */
+/* ─── Tablet & Narrow Laptop Breakpoints (≤ 1180px) ──────── */
 @media (max-width: 1180px) {
-    .header {
-        padding: 0 1.25rem;
+    .sidebar-nav {
+        width: 250px;
     }
 
-    .top-nav {
-        overflow-x: auto;
-        scrollbar-width: none;
-        max-width: 100%;
-    }
-
-    .top-nav::-webkit-scrollbar {
-        display: none;
-    }
-
-    .nav-tab {
-        padding: 0.45rem 0.75rem;
-        font-size: 0.78rem;
+    .page-view {
+        padding: 1.5rem 1.5rem 2rem 1.5rem;
     }
 
     .two-col-grid {
@@ -47,24 +36,31 @@
     }
 }
 
-/* ─── Tablet Breakpoints (≤ 900px) ───────────────────────── */
+/* ─── Mobile & Tablet Breakpoints (≤ 900px) ──────────────── */
 @media (max-width: 900px) {
-    .header {
-        height: auto;
-        padding: 0.75rem 1rem;
-        flex-direction: column;
-        gap: 0.75rem;
+    .mobile-menu-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 
-    .header-left, .header-right {
-        width: 100%;
-        justify-content: space-between;
+    .sidebar-nav {
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        width: 280px;
+        transform: translateX(-100%);
+        transition: transform var(--transition);
+        box-shadow: 10px 0 30px rgba(0, 0, 0, 0.4);
     }
 
-    .top-nav {
-        width: 100%;
-        max-width: 100%;
-        justify-content: flex-start;
+    .sidebar-nav.mobile-open {
+        transform: translateX(0);
+    }
+
+    .top-header-bar {
+        padding: 0 1rem;
     }
 
     .page-view {
@@ -86,21 +82,9 @@
     }
 }
 
-/* ─── Mobile Breakpoints (≤ 600px) ───────────────────────── */
+/* ─── Small Mobile Breakpoints (≤ 600px) ─────────────────── */
 @media (max-width: 600px) {
-    .brand-text h1 {
-        font-size: 1.1rem;
-    }
-
-    .header-subtitle {
-        display: none;
-    }
-
-    .lang-indicator {
-        display: none;
-    }
-
-    .session-chip {
+    .breadcrumb-area .brand-crumb {
         display: none;
     }
 

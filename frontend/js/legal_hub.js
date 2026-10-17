@@ -70,12 +70,35 @@ async function navigateToPage(pageId) {
         await ensureSession();
     }
 
+    // Update breadcrumb title
+    const crumbTitle = document.getElementById('activePageCrumb');
+    if (crumbTitle) {
+        const titles = {
+            'voice': '🎙️ Voice Saathi AI',
+            'eligibility': '🛡️ Statutory Eligibility Navigator',
+            'wages': '💰 Forensic Wage & 10x Claim Calculator',
+            'evidence': '📁 Evidence Locker & Timeline',
+            'complaint': '⚖️ Courtroom Legal Petition Studio',
+            'action-plan': '📋 Case Dossier & Strategic Action Plan'
+        };
+        crumbTitle.textContent = titles[pageId] || 'Legal Workspace';
+    }
+
+    // Close mobile drawer if open
+    const sidebar = document.getElementById('sidebarNav');
+    if (sidebar) sidebar.classList.remove('mobile-open');
+
     // Page-specific lazy loaders
     if (pageId === 'evidence') {
         loadEvidenceTimeline();
     } else if (pageId === 'action-plan') {
         if (typeof pollCase === 'function') pollCase();
     }
+}
+
+function toggleMobileSidebar() {
+    const sidebar = document.getElementById('sidebarNav');
+    if (sidebar) sidebar.classList.toggle('mobile-open');
 }
 
 function switchHubTab(tabName) {
