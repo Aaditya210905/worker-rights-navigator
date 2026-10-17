@@ -23,7 +23,7 @@ _project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 if _project_root not in sys.path:
     sys.path.insert(0, _project_root)
 
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
@@ -127,18 +127,32 @@ app.include_router(ws_router, prefix="/api/v1")
 app.include_router(lemur_router, prefix="/api/v1")
 
 
-# ── Voice agent page ─────────────────────────────────────────────────────────
+# ── Frontend (voice web client) ──────────────────────────────────────────────
 
 from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
 from pathlib import Path
 
-STATIC_DIR = Path(__file__).parent / "static"
+# frontend/ lives next to the backend/ folder, at the repository root.
+PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
+FRONTEND_DIR = PROJECT_ROOT / "frontend"
+INDEX_HTML = FRONTEND_DIR / "index.html"
+
+if FRONTEND_DIR.is_dir():
+    # index.html loads `css/…` and `js/…` relatively, so those folders are
+    # exposed at the site root (the page itself is served from /voice).
+    app.mount("/css", StaticFiles(directory=FRONTEND_DIR / "css"), name="css")
+    app.mount("/js", StaticFiles(directory=FRONTEND_DIR / "js"), name="js")
+else:
+    print(f"  [!] Frontend folder not found at {FRONTEND_DIR} -- /voice will return 404")
 
 
 @app.get("/voice", include_in_schema=False)
 async def voice_page():
     """Serve the browser-based voice agent UI."""
-    return FileResponse(STATIC_DIR / "voice.html")
+    if not INDEX_HTML.is_file():
+        raise HTTPException(status_code=404, detail="Frontend not found")
+    return FileResponse(INDEX_HTML)
 
 
 # ── Root redirect to voice UI ────────────────────────────────────────────────

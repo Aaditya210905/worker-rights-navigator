@@ -54,7 +54,7 @@ Thumbs.db
 desktop.ini
 
 # ─── Data & Databases ──────────────────────────────────────────────
-data/
+backend/data/
 *.db
 *.sqlite3
 *.sqlite
@@ -90,6 +90,6 @@ brain/
 scratch/
 
 # --- Qdrant vector store (pre-built embeddings) -------------------
-!data/qdrant/
-!data/qdrant/**
-!data/qdrant/**/*.sqlite
+!backend/data/qdrant/
+!backend/data/qdrant/**
+!backend/data/qdrant/**/*.sqlite

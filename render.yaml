@@ -11,8 +11,9 @@ services:
     region: oregon  # Closest to India with free tier
     plan: free      # Free tier (512 MB RAM, shared CPU)
     
-    # Docker configuration
-    dockerfilePath: ./Dockerfile
+    # Docker configuration (Dockerfile lives in backend/, context is the repo root)
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: .
     
     # Environment variables (set these in Render dashboard)
     envVars:

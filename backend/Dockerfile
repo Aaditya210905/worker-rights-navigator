@@ -1,8 +1,11 @@
 # ── WorkerSaathi — Production Dockerfile ─────────────────────────
 # Compatible with Railway / Render / any Docker host
 #
-# Build:   docker build -t workersaathi .
-# Run:     docker run -p 8000:8000 --env-file .env workersaathi
+# The build context is the REPOSITORY ROOT (this file lives in backend/),
+# because the image bundles both the backend code and the frontend assets.
+#
+# Build:   docker build -f backend/Dockerfile -t workersaathi .
+# Run:     docker run -p 8000:8000 --env-file backend/.env workersaathi
 
 FROM python:3.11-slim AS base
 
@@ -19,17 +22,20 @@ RUN apt-get update && \
     && rm -rf /var/lib/apt/lists/*
 
 # ── Python deps (cached layer) ──────────────────────────────────
-COPY requirements-deploy.txt ./requirements.txt
+COPY backend/requirements-deploy.txt ./requirements.txt
 RUN pip install --no-cache-dir --upgrade pip && \
     pip install --no-cache-dir -r requirements.txt
 
-# ── Application code ────────────────────────────────────────────
-COPY app/ ./app/
-COPY knowledge/ ./knowledge/
-COPY scripts/ ./scripts/
+# ── Backend application code ────────────────────────────────────
+COPY backend/app/ ./app/
+COPY backend/knowledge/ ./knowledge/
+COPY backend/scripts/ ./scripts/
+
+# ── Frontend web client (served by FastAPI at /voice) ───────────
+COPY frontend/ ./frontend/
 
 # ── Pre-built vector store (Qdrant embeddings) ─────────────────
-COPY data/qdrant/ ./data/qdrant/
+COPY backend/data/qdrant/ ./data/qdrant/
 
 # ── Default environment (overridden by Render env vars) ─────────
 ENV APP_ENV=production \

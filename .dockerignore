@@ -11,6 +11,9 @@ venv/
 env/
 ENV/
 
+# Frontend dev tooling (none required — served as static files)
+frontend/node_modules/
+
 # IDE
 .vscode/
 .idea/
@@ -27,8 +30,8 @@ __pycache__/
 
 # Dev files
 *.md
-!knowledge/**/*.md
-tests/
+!backend/knowledge/**/*.md
+backend/tests/
 brain/
 scratch/
 *.log

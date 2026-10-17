@@ -183,7 +183,7 @@ graph TD
     classDef external fill:#4A5578,stroke:#2D3A5C,stroke-width:2px,color:#fff
     classDef safety fill:#DC2626,stroke:#991B1B,stroke-width:2px,color:#fff
 
-    User["👤 Worker"]:::client -->|Speaks| Browser["🎙️ Voice Web Client<br/>(voice.html)"]
+    User["👤 Worker"]:::client -->|Speaks| Browser["🎙️ Voice Web Client<br/>(frontend/)"]
     
     Browser:::client <-->|"WebSocket<br/>PCM16 Audio"| Proxy["FastAPI WS Proxy<br/>/api/v1/voice/{id}"]
     
@@ -248,7 +248,7 @@ graph TD
 | Layer | Technology | Purpose |
 |-------|-----------|---------|
 | **Voice Transport** | AssemblyAI Universal-2 | Real-time STT/TTS with tool-calling over WebSocket |
-| **Web Interface** | Single-file HTML/CSS/JS | Zero-dependency voice client with waveform animations |
+| **Web Interface** | Static HTML/CSS/JS (no build step) | Zero-dependency voice client with waveform animations, split into `frontend/` |
 | **API Gateway** | FastAPI + Uvicorn (ASGI) | Async HTTP/WS server with auto-generated Swagger docs |
 | **Orchestration** | Python + Pydantic | Deterministic tool dispatch with permission gating |
 | **Vector Search** | Qdrant (on-disk/in-memory) | Dense embedding search with metadata filtering |
@@ -348,6 +348,7 @@ The browser sends raw PCM16 audio. FastAPI proxies to AssemblyAI, **intercepts `
 ### Mode 2: Direct Microphone (CLI)
 
 ```bash
+cd backend
 python app/main.py --voice
 ```
 
@@ -494,16 +495,20 @@ venv\Scripts\activate
 source venv/bin/activate
 
 # Install all dependencies
-pip install -r requirements.txt
+pip install -r backend/requirements.txt
 ```
+
+> The repo is split into `backend/` (FastAPI + RAG engine) and `frontend/`
+> (static voice client). Every backend command below runs **from `backend/`**.
 
 ### 2️⃣ Configure Environment
 
 ```bash
+cd backend
 cp .env.example .env
 ```
 
-Edit `.env`:
+Edit `backend/.env`:
 ```env
 # AssemblyAI — Required for voice features
 ASSEMBLYAI_API_KEY=your_production_key_here
@@ -519,6 +524,8 @@ APP_HOST=0.0.0.0
 If you want to rebuild the legal knowledge index:
 
 ```bash
+cd backend
+
 # Install Ollama and pull the embedding model
 ollama pull qwen3-embedding:8b
 
@@ -537,8 +544,11 @@ python -m app.rag.pipeline --test
       <h4>🌐 Web Server (Recommended)</h4>
 
 ```bash
+cd backend
 uvicorn app.main:app --reload
 ```
+
+The server also serves the frontend, so no separate frontend process is needed.
 
 **Access:**
 | Interface | URL |
@@ -552,6 +562,7 @@ uvicorn app.main:app --reload
   <h4>🎙️ Direct Microphone (CLI)</h4>
 
 ```bash
+cd backend
 python app/main.py --voice
 ```
 
@@ -614,89 +625,119 @@ WorkerSaathi exposes a fully documented REST + WebSocket API. Interactive docs a
 ## 📁 Project Structure
 
 ```
-worker-rights-navigator/
+worker-rights-navigator/                  # repository root
 │
-├── 📂 app/                          # Application source code
-│   ├── __init__.py                  # Package metadata (v0.1.0)
-│   ├── main.py                      # FastAPI entrypoint + CLI voice runner
-│   ├── config.py                    # Pydantic settings from .env
+├── 📂 backend/                           # 🐍 FastAPI backend + legal knowledge engine
+│   ├── 📂 app/                           # Application source code
+│   │   ├── __init__.py                   # Package metadata (v0.1.0)
+│   │   ├── main.py                      # FastAPI entrypoint + CLI voice runner
+│   │   ├── config.py                    # Pydantic settings from .env
+│   │   │
+│   │   ├── 📂 agent/                    # 🧠 AI Orchestration Layer
+│   │   │   ├── orchestrator.py          # Central tool dispatcher (611 LOC)
+│   │   │   ├── prompts.py               # System prompt with dynamic case injection
+│   │   │   ├── classifier.py            # LLM-based entity extraction schemas
+│   │   │   ├── tool_registry.py         # Tool definitions + permission matrix
+│   │   │   ├── conversation.py          # Conversation state tracking
+│   │   │   ├── test_orchestrator.py     # Orchestrator unit tests
+│   │   │   └── test_scenarios.py        # End-to-end scenario simulations
+│   │   │
+│   │   ├── 📂 api/                      # 🌐 Transport Layer
+│   │   │   ├── routes.py                # RESTful API endpoints (240 LOC)
+│   │   │   ├── ws.py                    # WebSocket voice proxy (228 LOC)
+│   │   │   ├── schemas.py               # Pydantic request/response models
+│   │   │   ├── session.py               # In-memory session manager
+│   │   │   ├── knowledge.py             # Knowledge base API endpoints
+│   │   │   └── lemur.py                 # Post-call LeMUR action-plan endpoint
+│   │   │
+│   │   ├── 📂 case/                     # 📋 State Management
+│   │   │   ├── models.py                # Enums (WorkerType, IssueCategory, 36 IndianStates)
+│   │   │   ├── state.py                 # CaseManager with field tracking + next-question logic
+│   │   │   └── fields.py                # Field definitions and validation
+│   │   │
+│   │   ├── 📂 rag/                      # 📚 Legal Knowledge Engine (15 modules)
+│   │   │   ├── pipeline.py              # End-to-end data pipeline runner
+│   │   │   ├── loader.py                # JSON research package loader
+│   │   │   ├── pdf_loader.py            # Government PDF extraction (PyMuPDF)
+│   │   │   ├── chunker.py               # Semantic document chunking
+│   │   │   ├── embeddings.py            # Ollama / HuggingFace embedding client
+│   │   │   ├── qdrant_store.py          # Vector DB interface
+│   │   │   ├── retriever.py             # Hybrid BM25 + semantic retriever
+│   │   │   ├── query_builder.py         # Structured query expansion
+│   │   │   ├── reranker.py              # Authority-based reranking
+│   │   │   ├── validator.py             # Legal status + applicability checks
+│   │   │   ├── evidence.py              # LegalEvidence assembly
+│   │   │   ├── models.py                # RAG data models (8.6KB)
+│   │   │   ├── matrix.py                # Rights coverage matrix builder
+│   │   │   └── sources.py               # Source registry management
+│   │   │
+│   │   ├── 📂 voice/                    # 🎤 Voice I/O
+│   │   │   ├── assemblyai.py            # AssemblyAI WebSocket client (376 LOC)
+│   │   │   └── audio.py                 # PyAudio microphone/speaker wrappers
+│   │   │
+│   │   ├── 📂 evidence/                 # 📦 Action Planning
+│   │   │   └── action_planner.py        # Source-backed action step generation
+│   │   │
+│   │   ├── 📂 db/                       # 💾 Persistence
+│   │   │   └── database.py              # SQLite: cases, events, action plans, evidence
+│   │   │
+│   │   └── 📂 safety/                   # 🛡️ Emergency Protocols
+│   │       └── __init__.py              # Safety guardrail definitions
 │   │
-│   ├── 📂 agent/                    # 🧠 AI Orchestration Layer
-│   │   ├── orchestrator.py          # Central tool dispatcher (611 LOC)
-│   │   ├── prompts.py               # System prompt with dynamic case injection
-│   │   ├── classifier.py            # LLM-based entity extraction schemas
-│   │   ├── tool_registry.py         # Tool definitions + permission matrix
-│   │   ├── conversation.py          # Conversation state tracking
-│   │   ├── test_orchestrator.py     # Orchestrator unit tests
-│   │   └── test_scenarios.py        # End-to-end scenario simulations
+│   ├── 📂 knowledge/                    # 📖 Legal Knowledge Base
+│   │   ├── links.txt                    # Curated government source URLs
+│   │   ├── sources.json                 # Parsed source registry (26KB)
+│   │   ├── rights_matrix.json           # Worker-type × Issue coverage matrix (2MB)
+│   │   └── 📂 workersaathi/             # Research data
+│   │       ├── 📂 json/                 # Structured legal knowledge items
+│   │       ├── 📂 raw_sources/          # Extracted government source text
+│   │       └── 📂 docs/                 # Supporting documentation
 │   │
-│   ├── 📂 api/                      # 🌐 Transport Layer
-│   │   ├── routes.py                # RESTful API endpoints (240 LOC)
-│   │   ├── ws.py                    # WebSocket voice proxy (228 LOC)
-│   │   ├── schemas.py               # Pydantic request/response models
-│   │   ├── session.py               # In-memory session manager
-│   │   └── knowledge.py             # Knowledge base API endpoints
+│   ├── 📂 data/                         # 💾 Runtime data (gitignored)
+│   │   ├── worker_cases.db              # SQLite database
+│   │   └── 📂 qdrant/                   # Pre-built Qdrant vector store (committed)
 │   │
-│   ├── 📂 case/                     # 📋 State Management
-│   │   ├── models.py                # Enums (WorkerType, IssueCategory, 36 IndianStates)
-│   │   ├── state.py                 # CaseManager with field tracking + next-question logic
-│   │   └── fields.py                # Field definitions and validation
+│   ├── 📂 scripts/                      # 🔧 Utilities
+│   │   ├── embed.py                     # Standalone embedding script
+│   │   └── check_env.py                 # Environment validation
 │   │
-│   ├── 📂 rag/                      # 📚 Legal Knowledge Engine (15 modules)
-│   │   ├── pipeline.py              # End-to-end data pipeline runner
-│   │   ├── loader.py                # JSON research package loader
-│   │   ├── pdf_loader.py            # Government PDF extraction (PyMuPDF)
-│   │   ├── chunker.py               # Semantic document chunking
-│   │   ├── embeddings.py            # Ollama embedding client
-│   │   ├── qdrant_store.py          # Vector DB interface
-│   │   ├── retriever.py             # Hybrid BM25 + semantic retriever
-│   │   ├── query_builder.py         # Structured query expansion
-│   │   ├── reranker.py              # Authority-based reranking
-│   │   ├── validator.py             # Legal status + applicability checks
-│   │   ├── evidence.py              # LegalEvidence assembly
-│   │   ├── models.py                # RAG data models (8.6KB)
-│   │   ├── matrix.py                # Rights coverage matrix builder
-│   │   └── sources.py               # Source registry management
+│   ├── 📂 tests/                        # 🧪 Test Suite
+│   │   └── __init__.py
 │   │
-│   ├── 📂 voice/                    # 🎤 Voice I/O
-│   │   ├── assemblyai.py            # AssemblyAI WebSocket client (376 LOC)
-│   │   └── audio.py                 # PyAudio microphone/speaker wrappers
-│   │
-│   ├── 📂 evidence/                 # 📦 Action Planning
-│   │   └── action_planner.py        # Source-backed action step generation
-│   │
-│   ├── 📂 db/                       # 💾 Persistence
-│   │   └── database.py              # SQLite: cases, events, action plans, evidence
-│   │
-│   ├── 📂 safety/                   # 🛡️ Emergency Protocols
-│   │   └── __init__.py              # Safety guardrail definitions
-│   │
-│   └── 📂 static/                   # 🖥️ Web Client
-│       └── voice.html               # Single-file voice UI (1372 LOC, zero deps)
+│   ├── Dockerfile                       # Production image (build context: repo root)
+│   ├── requirements.txt                 # Local dev dependencies (includes PyAudio)
+│   ├── requirements-deploy.txt          # Production dependencies (no PyAudio, + assemblyai)
+│   ├── .env.example                     # Environment template
+│   └── README.md                        # Backend notes
 │
-├── 📂 knowledge/                    # 📖 Legal Knowledge Base
-│   ├── links.txt                    # Curated government source URLs
-│   ├── sources.json                 # Parsed source registry (26KB)
-│   ├── rights_matrix.json           # Worker-type × Issue coverage matrix (2MB)
-│   └── 📂 workersaathi/             # Research data
-│       ├── 📂 json/                 # Structured legal knowledge items
-│       ├── 📂 pdfs/                 # Government PDF documents
-│       └── 📂 docs/                 # Supporting documentation
+├── 📂 frontend/                          # 🖥️ Voice web client (static, zero build step)
+│   ├── index.html                       # Markup / page shell
+│   ├── 📂 css/                          # Styles split by responsibility
+│   │   ├── 01-base.css                  # Design tokens + reset
+│   │   ├── 02-layout.css                # Header, main grid, chat + side panels
+│   │   ├── 03-components.css            # Bubbles, mic hero, mute, waveform, progress, tool log
+│   │   ├── 04-responsive.css            # Reduced motion + breakpoints
+│   │   └── 05-modal.css                 # Action-plan modal
+│   ├── 📂 js/                           # Logic split by responsibility (classic scripts)
+│   │   ├── config.js                    # API/WS endpoints + constants
+│   │   ├── state.js                     # Session state + DOM references
+│   │   ├── ui.js                        # Chat, status, progress rendering
+│   │   ├── audio.js                     # Mic capture, playback, visualizer
+│   │   ├── api.js                       # Session / case / action-plan REST calls
+│   │   ├── voice.js                     # WebSocket session lifecycle
+│   │   └── main.js                      # Entry point: wire DOM events
+│   └── README.md                        # Frontend notes
 │
-├── 📂 data/                         # 💾 Runtime Data (gitignored)
-│   └── worker_cases.db              # SQLite database
-│
-├── 📂 scripts/                      # 🔧 Utilities
-│   ├── embed.py                     # Standalone embedding script
-│   └── check_env.py                 # Environment validation
-│
-├── 📂 tests/                        # 🧪 Test Suite
-│   └── __init__.py
-│
-├── .env.example                     # Environment template
-├── .gitignore                       # Comprehensive Python/ML gitignore
-└── requirements.txt                 # Dependency manifest
+├── .env.example / .gitignore / .dockerignore
+├── render.yaml                          # Render blueprint (dockerfilePath: backend/Dockerfile)
+├── railway.toml                         # Railway config
+└── README.md                            # This file
 ```
+
+> **Serving model:** FastAPI serves the frontend directly — `GET /voice` returns
+> `frontend/index.html`, and the `frontend/css` + `frontend/js` folders are mounted at
+> `/css` and `/js`. There is no frontend build step (plain HTML/CSS/JS).
+
 
 <br/>
 
@@ -725,6 +766,9 @@ Given the sensitive nature of employment disputes, WorkerSaathi is built with **
 ## 🧪 Testing
 
 ```bash
+# Run from backend/
+cd backend
+
 # Run orchestrator unit tests
 python -m app.agent.test_orchestrator
 
