@@ -30,14 +30,18 @@
     }
 
     .two-col-grid.voice-layout {
-        grid-template-columns: 1fr;
-        height: auto;
-        min-height: unset;
+        grid-template-columns: 1.15fr 0.85fr;
+        gap: 1.25rem;
     }
 }
 
 /* ─── Mobile & Tablet Breakpoints (≤ 900px) ──────────────── */
 @media (max-width: 900px) {
+    .two-col-grid.voice-layout {
+        grid-template-columns: 1fr;
+        height: auto;
+        min-height: unset;
+    }
     .mobile-menu-btn {
         display: flex;
         align-items: center;

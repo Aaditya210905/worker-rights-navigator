@@ -215,16 +215,82 @@
                             </div>
                         </div>
 
-                        <!-- Right: Command Stage, Live Extraction & Quick Navigators -->
-                        <div style="display:flex;flex-direction:column;gap:1.25rem;">
-                            <!-- Live Fact Extraction Card -->
+                        <!-- Right: Live Case Progress & Real-Time Case Facts Matrix -->
+                        <div style="display:flex;flex-direction:column;gap:1.25rem;overflow-y:auto;padding-right:2px;">
+                            
+                            <!-- Card 1: Case Progress Tracker (Live Speech Milestones) -->
+                            <div class="card">
+                                <div class="card-header">
+                                    <div class="card-header-title">
+                                        <div class="card-header-icon progress">📊</div>
+                                        <div>
+                                            <h3>Case Progress Tracker</h3>
+                                            <div class="card-header-desc">Live milestone tracking from speech intake to legal relief</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="progress-tracker" id="progressTracker">
+                                    <div class="progress-step active" data-status="new,listening">
+                                        <div class="progress-dot-col">
+                                            <div class="progress-dot"></div>
+                                            <div class="progress-line"></div>
+                                        </div>
+                                        <span class="progress-label">Listening</span>
+                                    </div>
+                                    <div class="progress-step" data-status="classified">
+                                        <div class="progress-dot-col">
+                                            <div class="progress-dot"></div>
+                                            <div class="progress-line"></div>
+                                        </div>
+                                        <span class="progress-label">Issue identified</span>
+                                    </div>
+                                    <div class="progress-step" data-status="collecting_information,safety_check">
+                                        <div class="progress-dot-col">
+                                            <div class="progress-dot"></div>
+                                            <div class="progress-line"></div>
+                                        </div>
+                                        <span class="progress-label">Gathering details</span>
+                                    </div>
+                                    <div class="progress-step" data-status="retrieving_rights">
+                                        <div class="progress-dot-col">
+                                            <div class="progress-dot"></div>
+                                            <div class="progress-line"></div>
+                                        </div>
+                                        <span class="progress-label">Checking rights</span>
+                                    </div>
+                                    <div class="progress-step" data-status="rights_verified">
+                                        <div class="progress-dot-col">
+                                            <div class="progress-dot"></div>
+                                            <div class="progress-line"></div>
+                                        </div>
+                                        <span class="progress-label">Rights verified</span>
+                                    </div>
+                                    <div class="progress-step" data-status="action_plan_ready">
+                                        <div class="progress-dot-col">
+                                            <div class="progress-dot"></div>
+                                            <div class="progress-line"></div>
+                                        </div>
+                                        <span class="progress-label">Action plan ready</span>
+                                    </div>
+                                    <div class="progress-step" data-status="evidence_generated">
+                                        <div class="progress-dot-col">
+                                            <div class="progress-dot"></div>
+                                            <div class="progress-line"></div>
+                                        </div>
+                                        <span class="progress-label">Evidence ready</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Card 2: Live Case Facts Matrix -->
                             <div class="card">
                                 <div class="card-header">
                                     <div class="card-header-title">
                                         <div class="card-header-icon case">📋</div>
                                         <div>
-                                            <h3>Real-Time Case Extraction</h3>
-                                            <div class="card-header-desc">Automatic NLP entity identification from your conversation</div>
+                                            <h3>Case Facts Matrix</h3>
+                                            <div class="card-header-desc">Automatic NLP entity identification from conversation</div>
                                         </div>
                                     </div>
                                 </div>
@@ -261,49 +327,6 @@
                                 </div>
                             </div>
 
-                            <!-- Quick Legal Modules Launchpad -->
-                            <div class="card">
-                                <div class="card-header">
-                                    <div class="card-header-title">
-                                        <div class="card-header-icon" style="background:#E0E7FF;color:#4338CA;">⚡</div>
-                                        <div>
-                                            <h3>Instant Legal Workbenches</h3>
-                                            <div class="card-header-desc">Dedicated full-screen analysis modules</div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div style="display:flex;flex-direction:column;gap:0.75rem;">
-                                    <button class="auth-pill" onclick="navigateToPage('eligibility')">
-                                        <span class="material-symbols-outlined" style="color:#10B981;">verified</span>
-                                        <div>
-                                            <strong>90/120-Day Eligibility Navigator</strong>
-                                            <div style="font-size:0.72rem;color:var(--text-muted);">Check Code on Social Security statutory coverage</div>
-                                        </div>
-                                    </button>
-                                    <button class="auth-pill" onclick="navigateToPage('wages')">
-                                        <span class="material-symbols-outlined" style="color:#F59E0B;">payments</span>
-                                        <div>
-                                            <strong>Salary & 10x Claim Calculator</strong>
-                                            <div style="font-size:0.72rem;color:var(--text-muted);">Calculate Section 18 caps & Section 45 damages</div>
-                                        </div>
-                                    </button>
-                                    <button class="auth-pill" onclick="navigateToPage('evidence')">
-                                        <span class="material-symbols-outlined" style="color:#4F46E5;">folder_shared</span>
-                                        <div>
-                                            <strong>Evidence Locker & PII Shield</strong>
-                                            <div style="font-size:0.72rem;color:var(--text-muted);">Upload earnings screenshots with auto-redaction</div>
-                                        </div>
-                                    </button>
-                                    <button class="auth-pill" onclick="navigateToPage('complaint')">
-                                        <span class="material-symbols-outlined" style="color:#EF4444;">gavel</span>
-                                        <div>
-                                            <strong>Courtroom Petition Studio</strong>
-                                            <div style="font-size:0.72rem;color:var(--text-muted);">Draft official complaints for Labour Commissioner</div>
-                                        </div>
-                                    </button>
-                                </div>
-                            </div>
                         </div>
 
                     </div>
@@ -738,111 +761,42 @@
                         </div>
                     </div>
 
-                    <!-- Case Progress Stepper -->
+                    <!-- Statutory Authority Escalation Directory -->
                     <div class="card">
                         <div class="card-header">
                             <div class="card-header-title">
-                                <div class="card-header-icon progress">📊</div>
+                                <div class="card-header-icon" style="background:#ECFDF5;color:#10B981;">🏛️</div>
                                 <div>
-                                    <h3>Case Progress Tracker</h3>
-                                    <div class="card-header-desc">Statutory milestone tracking from voice intake to evidence submission</div>
+                                    <h3>Statutory Authority Escalation Directory</h3>
+                                    <div class="card-header-desc">Standard legal remedies & grievance forums under Central & State labour legislation</div>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="progress-tracker" id="progressTracker" style="display:grid;grid-template-columns:repeat(auto-fit, minmax(140px, 1fr));gap:0.75rem;">
-                            <div class="progress-step active" data-status="new,listening">
-                                <div class="progress-dot-col">
-                                    <div class="progress-dot"></div>
-                                    <div class="progress-line"></div>
-                                </div>
-                                <span class="progress-label">Listening</span>
+                        <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));gap:1rem;">
+                            <div class="field-stat-card" style="padding:1rem;">
+                                <strong style="color:var(--navy);font-size:0.9rem;display:flex;align-items:center;gap:0.4rem;margin-bottom:0.35rem;">
+                                    <span>🏛️</span> Office of Labour Commissioner
+                                </strong>
+                                <span style="font-size:0.78rem;color:var(--text-secondary);line-height:1.45;">
+                                    File formal dispute under Section 114 of Code on Social Security (2020) and Industrial Disputes Act (1947). Central Samadhan Portal: <em>samadhan.labour.gov.in</em>
+                                </span>
                             </div>
-                            <div class="progress-step" data-status="classified">
-                                <div class="progress-dot-col">
-                                    <div class="progress-dot"></div>
-                                    <div class="progress-line"></div>
-                                </div>
-                                <span class="progress-label">Issue identified</span>
+                            <div class="field-stat-card" style="padding:1rem;">
+                                <strong style="color:var(--navy);font-size:0.9rem;display:flex;align-items:center;gap:0.4rem;margin-bottom:0.35rem;">
+                                    <span>🏢</span> Platform Nodal Grievance Redressal
+                                </strong>
+                                <span style="font-size:0.78rem;color:var(--text-secondary);line-height:1.45;">
+                                    Serve 14-day statutory grievance notice for unlawful app deactivation or unauthorized deductions exceeding the 50% legal cap under Code on Wages (2019) § 18(3).
+                                </span>
                             </div>
-                            <div class="progress-step" data-status="collecting_information,safety_check">
-                                <div class="progress-dot-col">
-                                    <div class="progress-dot"></div>
-                                    <div class="progress-line"></div>
-                                </div>
-                                <span class="progress-label">Gathering details</span>
-                            </div>
-                            <div class="progress-step" data-status="retrieving_rights">
-                                <div class="progress-dot-col">
-                                    <div class="progress-dot"></div>
-                                    <div class="progress-line"></div>
-                                </div>
-                                <span class="progress-label">Checking rights</span>
-                            </div>
-                            <div class="progress-step" data-status="rights_verified">
-                                <div class="progress-dot-col">
-                                    <div class="progress-dot"></div>
-                                    <div class="progress-line"></div>
-                                </div>
-                                <span class="progress-label">Rights verified</span>
-                            </div>
-                            <div class="progress-step" data-status="action_plan_ready">
-                                <div class="progress-dot-col">
-                                    <div class="progress-dot"></div>
-                                    <div class="progress-line"></div>
-                                </div>
-                                <span class="progress-label">Action plan</span>
-                            </div>
-                            <div class="progress-step" data-status="evidence_generated">
-                                <div class="progress-dot-col">
-                                    <div class="progress-dot"></div>
-                                    <div class="progress-line"></div>
-                                </div>
-                                <span class="progress-label">Evidence ready</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Case Snapshot Fact Matrix -->
-                    <div class="card">
-                        <div class="card-header">
-                            <div class="card-header-title">
-                                <div class="card-header-icon case">📋</div>
-                                <div>
-                                    <h3>Case Facts Matrix</h3>
-                                    <div class="card-header-desc">Verified forensic details of the worker dispute</div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="case-fields-grid">
-                            <div class="field-stat-card">
-                                <span class="field-key">Status</span>
-                                <span class="field-val empty fStatus">—</span>
-                            </div>
-                            <div class="field-stat-card">
-                                <span class="field-key">Worker Type</span>
-                                <span class="field-val empty fWorkerType">—</span>
-                            </div>
-                            <div class="field-stat-card">
-                                <span class="field-key">Issue</span>
-                                <span class="field-val empty fIssue">—</span>
-                            </div>
-                            <div class="field-stat-card">
-                                <span class="field-key">State</span>
-                                <span class="field-val empty fState">—</span>
-                            </div>
-                            <div class="field-stat-card">
-                                <span class="field-key">Employer / Platform</span>
-                                <span class="field-val empty fEmployer">—</span>
-                            </div>
-                            <div class="field-stat-card">
-                                <span class="field-key">Disputed Amount</span>
-                                <span class="field-val empty fAmount">—</span>
-                            </div>
-                            <div class="field-stat-card">
-                                <span class="field-key">Safety Level</span>
-                                <span class="field-val empty fSafety">—</span>
+                            <div class="field-stat-card" style="padding:1rem;">
+                                <strong style="color:var(--navy);font-size:0.9rem;display:flex;align-items:center;gap:0.4rem;margin-bottom:0.35rem;">
+                                    <span>⚖️</span> DLSA Free Legal Aid Panel
+                                </strong>
+                                <span style="font-size:0.78rem;color:var(--text-secondary);line-height:1.45;">
+                                    Free advocate representation through District Legal Services Authority for workers earning below the statutory income ceiling. NALSA National Helpline: <strong>15100</strong>
+                                </span>
                             </div>
                         </div>
                     </div>
