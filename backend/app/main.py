@@ -44,6 +44,12 @@ async def lifespan(app: FastAPI):
     else:
         print("  [ok] Sarvam AI API key loaded (Saaras v4 STT + Bulbul v3 TTS)")
 
+    if not settings.llm_api_key:
+        print("  [!] LLM_API_KEY not set -- agent reasoning will use rule-based fallback.")
+    else:
+        print(f"  [ok] LLM reasoning enabled: {settings.llm_model} ({settings.llm_base_url})")
+
+
     # Pre-warm the RAG retriever in a background thread so the first
     # voice session doesn't block for 30-60s while documents load.
     import threading
