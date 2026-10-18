@@ -1,21 +1,28 @@
 """
 voice_routes.py — REST API for the Sarvam-powered voice pipeline.
 
-voice_routes.py — REST API for the Sarvam-powered voice pipeline.
-that separate STT, TTS, and conversation into independent steps.
-
 Endpoints:
   POST /api/v1/voice/stt          — Audio → Transcript
   POST /api/v1/voice/tts          — Text → Audio
   POST /api/v1/voice/converse     — Full turn: Audio in → response text + audio out
   GET  /api/v1/voice/languages    — List supported languages
   GET  /api/v1/voice/speakers     — List available TTS speakers
+
+Agent architecture (converse endpoint):
+  Sarvam STT → transcript
+  → LLM (Groq/OpenAI-compatible) with tool schemas
+  → LLM calls tools (update_case_info, retrieve_rights, escalate_safety …)
+  → Orchestrator executes tools, returns results
+  → LLM generates final spoken response
+  → Sarvam TTS → audio
+
+If LLM_API_KEY is not set, falls back to a minimal rule-based response
+so the app still runs (STT + TTS always work).
 """
 
 import json
 import base64
 from fastapi import APIRouter, HTTPException, UploadFile, File, Form
-from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
 from typing import Optional
 
@@ -23,6 +30,8 @@ from app.api.session import session_manager
 from app.voice.stt import get_stt_service
 from app.voice.tts import get_tts_service
 from app.agent.orchestrator import Orchestrator
+from app.agent.tool_registry import get_tools_for_status
+from app.agent.llm import run_agent_turn, get_llm_client
 
 
 router = APIRouter(prefix="/voice", tags=["Voice (Sarvam)"])
@@ -112,14 +121,8 @@ async def speech_to_text(
     language_code: str = Form(default="auto", description="BCP-47 language code or 'auto'"),
     mode: str = Form(default="transcribe", description="transcribe|translate|codemix|verbatim"),
 ):
-    """
-    Transcribe audio to text using Sarvam Saaras v4.
-
-    Supports 22 Indian languages + English. Use language_code='auto'
-    for automatic detection, or 'hi-IN', 'en-IN', etc.
-    """
+    """Transcribe audio to text using Sarvam Saaras v4."""
     stt = get_stt_service()
-
     audio_data = await audio.read()
     if not audio_data:
         raise HTTPException(status_code=400, detail="Empty audio file")
@@ -127,11 +130,7 @@ async def speech_to_text(
     result = await stt.transcribe(audio_data, language_code, mode)
 
     if result.error:
-        return STTResponse(
-            transcript="",
-            error=result.error,
-            provider=result.provider,
-        )
+        return STTResponse(transcript="", error=result.error, provider=result.provider)
 
     return STTResponse(
         transcript=result.transcript,
@@ -144,13 +143,8 @@ async def speech_to_text(
 
 @router.post("/tts", response_model=TTSResponse)
 async def text_to_speech(req: TTSRequest):
-    """
-    Convert text to speech using Sarvam Bulbul v3.
-
-    Supports 10 Indian languages + English. Returns base64-encoded audio.
-    """
+    """Convert text to speech using Sarvam Bulbul v3."""
     tts = get_tts_service()
-
     result = await tts.synthesize(
         text=req.text,
         language_code=req.language_code,
@@ -169,7 +163,7 @@ async def text_to_speech(req: TTSRequest):
     )
 
 
-# ── Converse endpoint (full turn) ────────────────────────────────────────────
+# ── Converse endpoint (full agentic turn) ────────────────────────────────────
 
 @router.post("/converse", response_model=ConverseResponse)
 async def converse(req: ConverseRequest):
@@ -179,13 +173,9 @@ async def converse(req: ConverseRequest):
     Flow:
       1. Decode base64 audio
       2. Sarvam STT → transcript
-      3. Feed transcript to the session's Orchestrator
-      4. Run a simple LLM-free response based on the orchestrator's state
-      5. Sarvam TTS → spoken response
-      6. Return everything
-
-    The orchestrator handles tool dispatch, case state, and legal retrieval.
-    The LLM reasoning happens through the tool calls, not in this endpoint.
+      3. LLM agentic loop (tool calls via orchestrator)
+      4. Sarvam TTS → spoken response
+      5. Return everything
     """
     # 1. Validate session
     session = session_manager.get_session(req.session_id)
@@ -212,22 +202,30 @@ async def converse(req: ConverseRequest):
 
     response.user_transcript = stt_result.transcript
     response.detected_language = stt_result.language_code
+    print(f"\n  [stt] Transcribed: {stt_result.transcript}")
 
-    # 4. Feed transcript to orchestrator
+    # 4. Record transcript in orchestrator
     orch.process_transcript(stt_result.transcript)
 
-    # 5. Generate agent response using the orchestrator's case context
-    agent_response = _generate_agent_response(orch, stt_result.transcript)
-    response.agent_text = agent_response["text"]
+    # 5. Run LLM agent turn
+    agent_result = await _run_llm_turn(orch, stt_result.transcript)
+    response.agent_text = agent_result["text"]
     response.case_status = orch.case.status.value
-    response.tool_calls_made = agent_response.get("tools_called", [])
+    response.tool_calls_made = agent_result.get("tools_called", [])
 
-    # 6. TTS on the agent response
+    if agent_result.get("error"):
+        response.agent_error = agent_result["error"]
+
+    # Record agent response in transcript history
+    if response.agent_text:
+        orch.process_agent_transcript(response.agent_text)
+
+    # 6. TTS
     if response.agent_text:
         tts = get_tts_service()
         tts_lang = req.tts_language
 
-        # Auto-detect: if user spoke Hindi, respond in Hindi
+        # Mirror the worker's detected language for the response
         if stt_result.language_code in ("hi-IN", "hi"):
             tts_lang = "hi-IN"
         elif stt_result.language_code in ("en-IN", "en"):
@@ -252,18 +250,11 @@ async def converse(req: ConverseRequest):
 
 @router.get("/languages", response_model=LanguagesResponse)
 async def get_languages():
-    """
-    List all languages supported by WorkerSaathi.
-
-    Shows both STT and TTS support per language.
-    """
+    """List all languages supported by WorkerSaathi."""
     stt = get_stt_service()
     tts = get_tts_service()
-
-    stt_langs = {l.code for l in stt.get_supported_languages()}
     tts_langs = {l.code for l in tts.get_supported_languages()}
 
-    # Merge unique languages
     all_langs = {}
     for lang in stt.get_supported_languages():
         all_langs[lang.code] = LanguageItem(
@@ -288,274 +279,102 @@ async def get_speakers(language_code: str = "hi-IN"):
     return SpeakersResponse(speakers=speakers, language_code=language_code)
 
 
-# ── Agent response generation ────────────────────────────────────────────────
+# ── LLM agentic turn ─────────────────────────────────────────────────────────
 
-def _generate_agent_response(orch: Orchestrator, user_text: str) -> dict:
+async def _run_llm_turn(orch: Orchestrator, user_text: str) -> dict:
     """
-    Generate a conversational response based on the current case state.
+    Run one full agent turn through the LLM.
 
-    This uses the orchestrator's deterministic case state machine to
-    decide what to say next. It automatically calls tools when the case
-    state requires it (e.g., retrieve_rights when enough info is gathered).
+    If LLM_API_KEY is set → full LLM reasoning with tool calls.
+    If not set            → minimal rule-based fallback (STT/TTS still work).
 
-    Returns:
-        {"text": "...", "tools_called": [...]}
+    Returns: {"text": "...", "tools_called": [...], "error": "..." (optional)}
+    """
+    client = get_llm_client()
+
+    if client is None:
+        # No LLM key — use minimal fallback so the app still runs
+        print("  [llm] No LLM key set — using rule-based fallback")
+        return _rule_based_fallback(orch, user_text)
+
+    # Get the system prompt with live case context
+    system_prompt = orch.get_initial_prompt()
+
+    # Get tools available for the current case status
+    tools = get_tools_for_status(orch.case.status.value)
+
+    # Build conversation history from transcript
+    history = _build_history(orch)
+
+    # Define the tool executor (wraps orchestrator)
+    def execute_tool(tool_name: str, args: dict) -> dict:
+        return orch.handle_tool_call(tool_name, args)
+
+    result = await run_agent_turn(
+        system_prompt=system_prompt,
+        user_message=user_text,
+        tools=tools,
+        tool_executor=execute_tool,
+        conversation_history=history,
+    )
+
+    # If LLM returned nothing, fall back
+    if not result.get("text"):
+        fallback = _rule_based_fallback(orch, user_text)
+        fallback["tools_called"] = result.get("tools_called", []) + fallback.get("tools_called", [])
+        return fallback
+
+    return result
+
+
+def _build_history(orch: Orchestrator) -> list[dict]:
+    """
+    Convert the orchestrator's transcript history into OpenAI message format.
+    Keeps only the last 6 turns to limit context window usage.
+    """
+    messages = []
+    for line in orch._transcript_history[-12:]:
+        if line.startswith("Worker: "):
+            messages.append({"role": "user", "content": line[8:]})
+        elif line.startswith("WorkerSaathi: "):
+            messages.append({"role": "assistant", "content": line[14:]})
+    # Remove the last user message — it will be sent as the current turn
+    if messages and messages[-1]["role"] == "user":
+        messages = messages[:-1]
+    return messages
+
+
+# ── Rule-based fallback (used when LLM key is missing) ──────────────────────
+
+def _rule_based_fallback(orch: Orchestrator, user_text: str) -> dict:
+    """
+    Minimal fallback that keeps the app functional without an LLM key.
+    Uses the case state machine to decide what to say.
+    Does NOT do keyword classification — just asks the next question.
     """
     case = orch.case
     cm = orch.case_manager
-    tools_called = []
-
-    # Step 1: Try to auto-classify from the transcript
-    # (The LLM normally does this, but for text mode we do it heuristically)
-    _auto_classify(orch, user_text)
-
-    # Step 2: Check if safety escalation is needed
-    safety_keywords = [
-        "injury", "hurt", "accident", "chot", "dard", "mar", "pit",
-        "zakhmi", "hospital", "blood", "khoon", "trapped", "banda",
-        "child", "bachcha", "trafficking", "threat", "dhamki",
-    ]
-    lower_text = user_text.lower()
-    for kw in safety_keywords:
-        if kw in lower_text:
-            result = orch.handle_tool_call("escalate_safety", {
-                "danger_type": "ongoing_injury" if kw in ("injury", "hurt", "chot", "zakhmi", "hospital") else "other_emergency",
-                "description": user_text,
-            })
-            tools_called.append("escalate_safety")
-            safety_resp = json.loads(result["tool_result"])
-            return {
-                "text": (
-                    "🚨 Aapki suraksha sabse pehle hai. "
-                    "Agar aap kisi khatre mein hain, toh turant 112 par call karein. "
-                    + safety_resp.get("safety_response", "")
-                ),
-                "tools_called": tools_called,
-            }
-
-    # Step 3: Check case state and determine response
-    filled = case.get_filled_fields()
     next_q = cm.get_next_question()
 
-    # If we have enough info, auto-trigger rights retrieval
-    if cm.is_ready_for_retrieval() and case.status.value in (
-        "classified", "collecting_information", "retrieving_rights"
-    ):
-        # Build query from case info
-        wt = case.worker_type.value if case.worker_type.value != "unknown" else "worker"
-        ic = case.issue_category.value if case.issue_category.value != "unknown" else "rights"
-        query = f"{wt} {ic} rights India"
-        if case.state and case.state.value != "Unknown":
-            query += f" {case.state.value}"
-
-        result = orch.handle_tool_call("retrieve_rights", {"query": query})
-        tools_called.append("retrieve_rights")
-
-        parsed = json.loads(result["tool_result"])
-        evidence = parsed.get("legal_evidence", "")
-
-        if evidence:
-            # Summarize the evidence for spoken response
-            response_text = _build_rights_response(case, evidence)
-            return {"text": response_text, "tools_called": tools_called}
-
-    # If we need more info, ask the next question
     if next_q:
-        # Acknowledge what we know + ask next question
-        ack = _build_acknowledgment(case, filled)
-        return {
-            "text": f"{ack} {next_q}",
-            "tools_called": tools_called,
-        }
+        return {"text": next_q, "tools_called": []}
 
-    # Default: acknowledge and offer help
-    if not filled:
+    if not case.get_filled_fields():
         return {
             "text": (
                 "Namaste! Main WorkerSaathi hoon. "
                 "Aap mujhe apni kaam se judi problem bata sakte hain — "
                 "jaise payment nahi mili, account block ho gaya, ya koi aur issue."
             ),
-            "tools_called": tools_called,
+            "tools_called": [],
         }
 
     return {
         "text": (
-            "Main aapki problem samajh gaya hoon. "
-            "Kya aap aur koi jaankari dena chahte hain, "
-            "ya main aapke rights check karun?"
+            "Main aapki baat sun raha hoon. "
+            "Kripya apni problem detail mein batayein — "
+            "kya hua, kab hua, aur kitna amount involved hai."
         ),
-        "tools_called": tools_called,
+        "tools_called": [],
+        "error": "llm_key_not_configured",
     }
-
-
-def _auto_classify(orch: Orchestrator, text: str):
-    """
-    Heuristic auto-classification from transcript text.
-
-    Uses STATE_NAME_MAP, WorkerType, IssueCategory from case/models.py —
-    the single authoritative source. No duplicate maps here.
-    """
-    from app.case.models import STATE_NAME_MAP, WorkerType, IssueCategory
-
-    lower = text.lower()
-    updates = {}
-
-    # ── Issue classification ─────────────────────────────────────────────────
-    wage_keywords = [
-        "payment", "salary", "paise", "paisa", "rupees", "pending",
-        "nahi mili", "nahi diya", "wages", "pay", "tankhwah", "vetan",
-        "तनख्वाह", "वेतन", "पैसे", "भुगतान",
-    ]
-    injury_keywords = [
-        "injury", "hurt", "accident", "chot", "hadsa", "hospital",
-        "zakhmi", "gir gaya", "fell", "चोट", "दुर्घटना", "घायल",
-    ]
-    deact_keywords = [
-        "deactivat", "block", "suspend", "banned", "id band",
-        "account band", "login nahi", "app se nikal",
-        "खाता बंद", "अकाउंट बंद",
-    ]
-
-    def _match(keywords, txt, orig):
-        for kw in keywords:
-            search = orig if any(ord(c) > 0x0900 for c in kw) else txt
-            if kw in search:
-                return True
-        return False
-
-    if _match(wage_keywords, lower, text):
-        updates["issue_category"] = IssueCategory.UNPAID_WAGES.value
-    elif _match(injury_keywords, lower, text):
-        updates["issue_category"] = IssueCategory.WORKPLACE_INJURY.value
-    elif _match(deact_keywords, lower, text):
-        updates["issue_category"] = IssueCategory.PLATFORM_DEACTIVATION.value
-
-    # ── Worker type & platform name ──────────────────────────────────────────
-    # Check platforms (longest first to avoid "ola" matching "hola" etc.)
-    gig_platforms = {
-        "urban company": "Urban Company",
-        "shadowfax": "Shadowfax",
-        "blinkit": "Blinkit",
-        "rapido": "Rapido",
-        "swiggy": "Swiggy",
-        "zomato": "Zomato",
-        "porter": "Porter",
-        "zepto": "Zepto",
-        "dunzo": "Dunzo",
-        "borzo": "Borzo",
-        "uber": "Uber",
-        "ola": "Ola",
-        "delivery": None,
-        "driver": None,
-        "platform": None,
-    }
-    for kw, platform_name in gig_platforms.items():
-        if kw in lower:
-            updates["worker_type"] = WorkerType.GIG_WORKER.value
-            if platform_name:
-                updates["platform_or_employer"] = platform_name
-            break
-
-    if "worker_type" not in updates:
-        construction_kw = ["construction", "building", "mazdoor", "nirmaan",
-                           "labour", "site", "thekedar", "निर्माण", "मजदूर"]
-        if _match(construction_kw, lower, text):
-            updates["worker_type"] = WorkerType.CONSTRUCTION_WORKER.value
-
-    if "worker_type" not in updates:
-        domestic_kw = ["domestic", "maid", "ghar ka kaam", "helper",
-                       "cook", "nanny", "bai", "घरेलू", "घर का काम"]
-        if _match(domestic_kw, lower, text):
-            updates["worker_type"] = WorkerType.DOMESTIC_WORKER.value
-
-    # ── State — uses STATE_NAME_MAP from case/models.py ─────────────────────
-    # Longest match first to avoid "up" matching inside "cup" / "setup"
-    for name in sorted(STATE_NAME_MAP, key=len, reverse=True):
-        state_enum = STATE_NAME_MAP[name]
-        search = text if any(ord(c) > 0x0900 for c in name) else lower
-        if name in search:
-            updates["state"] = state_enum.value
-            break
-
-    # ── Amount extraction ────────────────────────────────────────────────────
-    import re
-    amount_patterns = [
-        r'(?:rs\.?|₹|rupees?|rupaiye?)\s*(\d[\d,]*)',
-        r'(\d[\d,]*)\s*(?:rs\.?|₹|rupees?|rupaiye?)',
-        r'(\d+)\s*(?:hazaar|hazar|thousand|हज़ार|हजार)',
-    ]
-    for pattern in amount_patterns:
-        m = re.search(pattern, lower)
-        if m:
-            amount = m.group(1).replace(",", "")
-            if any(w in lower for w in ("hazaar", "hazar", "thousand")):
-                amount = str(int(amount) * 1000)
-            updates["amount"] = amount
-            break
-
-    # ── Apply updates through the orchestrator ───────────────────────────────
-    if updates:
-        orch.handle_tool_call("update_case_info", {"confidence": "medium", **updates})
-
-
-
-
-def _build_acknowledgment(case, filled: dict) -> str:
-    """Build a brief spoken acknowledgment of what we know so far."""
-    parts = []
-
-    if case.worker_type.value != "unknown":
-        wt_map = {
-            "gig_worker": "delivery/platform worker",
-            "construction_worker": "construction worker",
-            "domestic_worker": "domestic worker",
-        }
-        parts.append(f"Aap ek {wt_map.get(case.worker_type.value, 'worker')} hain")
-
-    if case.platform_or_employer:
-        parts.append(f"{case.platform_or_employer} ke liye kaam karte hain")
-
-    if case.issue_category.value != "unknown":
-        ic_map = {
-            "unpaid_wages": "payment pending hai",
-            "workplace_injury": "kaam ke dauraan chot lagi",
-            "platform_deactivation": "account deactivate ho gaya",
-        }
-        parts.append(ic_map.get(case.issue_category.value, ""))
-
-    if case.amount:
-        parts.append(f"₹{case.amount} ka maamla hai")
-
-    if not parts:
-        return "Theek hai."
-
-    return "Main samajh raha hoon — " + ", ".join(p for p in parts if p) + "."
-
-
-def _build_rights_response(case, evidence: str) -> str:
-    """Build a spoken summary of legal rights from the evidence."""
-    # Keep it concise for voice — max 3-4 key points
-    lines = evidence.split("\n")
-    key_points = []
-    for line in lines:
-        stripped = line.strip()
-        if stripped and len(stripped) > 20 and not stripped.startswith("---"):
-            key_points.append(stripped)
-        if len(key_points) >= 5:
-            break
-
-    summary = " ".join(key_points[:5])
-
-    # Truncate for voice-friendly length
-    if len(summary) > 400:
-        summary = summary[:400] + "..."
-
-    response = (
-        f"Aapke case ke baare mein maine verified legal sources se jaankari nikali hai. "
-        f"{summary} "
-        f"Yeh information verified government sources se hai. "
-        f"Kya aap complaint draft karna chahte hain ya aur jaankari chahiye?"
-    )
-
-    return response

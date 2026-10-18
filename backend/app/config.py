@@ -28,8 +28,19 @@ class Settings(BaseSettings):
         extra="ignore",
     )
 
-    # --- AssemblyAI ---
-    assemblyai_api_key: str = ""
+
+    # --- Sarvam AI (voice: STT + TTS) ---
+    sarvam_api_key: str = ""
+
+    # --- LLM for agent reasoning (OpenAI-compatible endpoint) ---
+    # Default: Groq — fastest free-tier option for Indian language tasks
+    # Override in .env to use OpenAI, Ollama, or any other provider
+    llm_api_key: str = ""
+    llm_base_url: str = "https://api.groq.com/openai/v1"
+    llm_model: str = "llama-3.1-8b-instant"
+
+    # --- HuggingFace (for Qwen3 embeddings only) ---
+    huggingface_api_token: str = ""
 
     # --- Application ---
     app_env: str = "development"

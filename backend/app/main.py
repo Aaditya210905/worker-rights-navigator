@@ -115,13 +115,13 @@ app.add_middleware(
 
 from app.api.routes import router as api_router
 from app.api.knowledge import router as knowledge_router
-from app.api.lemur import router as lemur_router
 from app.api.voice_routes import router as voice_router
+from app.api.action_plan import router as action_plan_router
 
 app.include_router(api_router, prefix="/api/v1")
 app.include_router(knowledge_router, prefix="/api/v1")
-app.include_router(lemur_router, prefix="/api/v1")
 app.include_router(voice_router, prefix="/api/v1")
+app.include_router(action_plan_router, prefix="/api/v1")
 
 
 # ── Frontend (voice web client) ──────────────────────────────────────────────
