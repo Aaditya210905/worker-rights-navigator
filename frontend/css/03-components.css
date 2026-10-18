@@ -132,13 +132,13 @@
 
 /* ─── Mic Area — Voice Hero ─────────────────────────────── */
 .mic-area {
-    padding: 1.75rem 1.5rem;
+    padding: 0.65rem 1.25rem 0.45rem 1.25rem;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 0.75rem;
-    border-top: 1px solid var(--border);
-    background: linear-gradient(to top, rgba(245, 243, 238, 0.5), transparent);
+    gap: 0.35rem;
+    border-top: 1px solid var(--border-light);
+    background: var(--bg-card);
     position: relative;
 }
 
@@ -248,8 +248,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 120px;
-    height: 120px;
+    width: 84px;
+    height: 84px;
 }
 
 /* Waveform bars — sit behind the mic button */
@@ -258,8 +258,8 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 140px;
-    height: 140px;
+    width: 104px;
+    height: 104px;
     border-radius: 50%;
     pointer-events: none;
     z-index: 1;
@@ -338,8 +338,8 @@
 }
 
 .mic-btn {
-    width: 76px;
-    height: 76px;
+    width: 62px;
+    height: 62px;
     border-radius: 50%;
     border: none;
     cursor: pointer;
@@ -601,4 +601,361 @@
 
 ::-webkit-scrollbar-thumb:hover {
     background: var(--text-muted);
+}
+
+/* ─── Formatted Message Layout ─────────────────────────── */
+.msg.agent {
+    max-width: 86%;
+}
+
+.msg-lead {
+    font-size: 0.92rem;
+    font-weight: 500;
+    line-height: 1.6;
+    color: var(--text-primary);
+    margin-bottom: 0.85rem;
+}
+
+.msg-paragraph {
+    margin-bottom: 0.75rem;
+    line-height: 1.6;
+    color: var(--text-primary);
+}
+
+.msg-paragraph:last-child {
+    margin-bottom: 0;
+}
+
+/* ─── Schemes & Numbered Cards Stack ───────────────────── */
+.msg-schemes-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin: 0.85rem 0;
+}
+
+.scheme-card {
+    background: #F8FAFC;
+    border: 1px solid #E2E8F0;
+    border-radius: 10px;
+    padding: 0.85rem 1rem;
+    transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+}
+
+.scheme-card:hover {
+    background: #FFFFFF;
+    border-color: #FDBA74;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(234, 88, 12, 0.1);
+}
+
+.scheme-card-header {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    margin-bottom: 0.4rem;
+}
+
+.scheme-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #EA580C 0%, #F59E0B 100%);
+    color: #FFFFFF;
+    font-size: 0.75rem;
+    font-weight: 800;
+    flex-shrink: 0;
+    box-shadow: 0 2px 6px rgba(234, 88, 12, 0.3);
+}
+
+.scheme-title {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #0F172A;
+    letter-spacing: -0.01em;
+}
+
+.scheme-body {
+    font-size: 0.84rem;
+    line-height: 1.58;
+    color: #334155;
+    padding-left: 2rem;
+}
+
+/* ─── Bulleted lists ───────────────────────────────────── */
+.msg-bullet-list {
+    margin: 0.65rem 0 0.75rem 0;
+    padding: 0;
+    list-style-type: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.msg-bullet-item {
+    position: relative;
+    padding-left: 1.35rem;
+    font-size: 0.85rem;
+    line-height: 1.55;
+    color: var(--text-primary);
+}
+
+.msg-bullet-item::before {
+    content: "•";
+    position: absolute;
+    left: 0.15rem;
+    top: -2px;
+    color: var(--saffron);
+    font-size: 1.35rem;
+    line-height: 1;
+}
+
+/* ─── Statutory / Legal Disclaimer Card ─────────────────── */
+.msg-disclaimer {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.65rem;
+    background: #FFFBEB;
+    border: 1px solid #FDE68A;
+    border-left: 4px solid #F59E0B;
+    border-radius: 8px;
+    padding: 0.65rem 0.85rem;
+    margin: 0.85rem 0 0.5rem 0;
+    font-size: 0.78rem;
+    line-height: 1.5;
+    color: #92400E;
+}
+
+.disclaimer-icon {
+    font-size: 1rem;
+    flex-shrink: 0;
+    line-height: 1.2;
+}
+
+.disclaimer-text {
+    flex: 1;
+}
+
+/* ─── Concluding Question / Action Callout ─────────────── */
+.msg-prompt-card {
+    background: #F0FDF4;
+    border: 1px solid #BBF7D0;
+    border-left: 4px solid #10B981;
+    border-radius: 10px;
+    padding: 0.85rem 1rem;
+    margin-top: 0.85rem;
+    box-shadow: 0 2px 8px rgba(16, 185, 129, 0.08);
+}
+
+.prompt-header {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-size: 0.74rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #047857;
+    margin-bottom: 0.35rem;
+}
+
+.prompt-text {
+    font-size: 0.88rem;
+    font-weight: 600;
+    line-height: 1.5;
+    color: #064E3B;
+    margin-bottom: 0.65rem;
+}
+
+.quick-chips-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+}
+
+.quick-chip {
+    background: #FFFFFF;
+    border: 1px solid #A7F3D0;
+    color: #065F46;
+    padding: 0.35rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.76rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.quick-chip:hover {
+    background: #10B981;
+    color: #FFFFFF;
+    border-color: #10B981;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(16, 185, 129, 0.25);
+}
+
+/* ─── Highlights & Badges ──────────────────────────────── */
+.badge-amount {
+    display: inline-block;
+    background: rgba(16, 185, 129, 0.12);
+    color: #047857;
+    padding: 0.1rem 0.4rem;
+    border-radius: 4px;
+    font-weight: 700;
+    font-size: 0.9em;
+}
+
+.badge-citation {
+    display: inline-block;
+    background: rgba(79, 70, 229, 0.09);
+    color: #4338CA;
+    padding: 0.1rem 0.45rem;
+    border-radius: 4px;
+    font-weight: 600;
+    font-size: 0.85em;
+    border: 1px solid rgba(79, 70, 229, 0.2);
+}
+
+.msg-inline-code {
+    background: var(--bg-subtle);
+    color: var(--saffron);
+    padding: 0.1rem 0.35rem;
+    border-radius: 4px;
+    font-family: monospace;
+    font-size: 0.88em;
+}
+
+.helpline-chip {
+    background: #FEF2F2;
+    color: #DC2626;
+    border: 1px solid #FECACA;
+    padding: 0.15rem 0.5rem;
+    border-radius: 9999px;
+    font-weight: 700;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: 0.85em;
+}
+
+.helpline-chip:hover {
+    background: #DC2626;
+    color: #FFFFFF;
+}
+
+/* ─── Message Actions Toolbar ──────────────────────────── */
+.msg-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+    padding-top: 0.5rem;
+    border-top: 1px dashed var(--border);
+}
+
+.msg-action-btn {
+    background: transparent;
+    border: 1px solid transparent;
+    color: var(--text-muted);
+    font-size: 0.72rem;
+    font-weight: 600;
+    padding: 0.22rem 0.55rem;
+    border-radius: 6px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    transition: all 0.18s ease;
+}
+
+.msg-action-btn:hover {
+    background: var(--bg-subtle);
+    color: var(--text-primary);
+    border-color: var(--border);
+}
+
+.msg-action-btn.copied {
+    color: #059669;
+    border-color: #A7F3D0;
+    background: #ECFDF5;
+}
+
+/* ─── Chat Text Input Bar ──────────────────────────────── */
+.chat-input-bar {
+    padding: 0.75rem 1.25rem 1rem 1.25rem;
+    background: var(--bg-card);
+    border-top: 1px solid var(--border-light);
+}
+
+.chat-input-wrapper {
+    display: flex;
+    align-items: center;
+    background: var(--bg-subtle);
+    border: 1.5px solid var(--border);
+    border-radius: 9999px;
+    padding: 0.35rem 0.5rem 0.35rem 1rem;
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+}
+
+.chat-input-wrapper:focus-within {
+    border-color: var(--saffron);
+    background: #FFFFFF;
+    box-shadow: 0 0 0 3px rgba(234, 88, 12, 0.15);
+}
+
+.chat-input-icon {
+    color: var(--text-muted);
+    font-size: 1.2rem;
+    margin-right: 0.5rem;
+}
+
+.chat-text-input {
+    flex: 1;
+    border: none;
+    background: transparent;
+    font-size: 0.88rem;
+    color: var(--text-primary);
+    outline: none;
+    font-family: inherit;
+}
+
+.chat-text-input::placeholder {
+    color: var(--text-muted);
+}
+
+.chat-send-btn {
+    background: var(--saffron-gradient);
+    color: #FFFFFF;
+    border: none;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    flex-shrink: 0;
+    box-shadow: 0 2px 6px rgba(234, 88, 12, 0.3);
+}
+
+.chat-send-btn:hover {
+    transform: scale(1.06);
+    box-shadow: 0 4px 12px rgba(234, 88, 12, 0.45);
+}
+
+.chat-send-btn .material-symbols-outlined {
+    font-size: 18px;
+    margin-left: 2px;
 }

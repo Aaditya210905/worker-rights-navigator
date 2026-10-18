@@ -23,7 +23,8 @@ TOOL_PERMISSIONS = {
     "update_case_info": [
         "new", "listening", "classified",
         "collecting_information", "safety_check",
-        "retrieving_rights",
+        "retrieving_rights", "rights_verified",
+        "action_plan_ready", "evidence_generated",
     ],
     "retrieve_rights": [
         "new", "listening", "classified", "collecting_information",
@@ -260,17 +261,26 @@ TOOL_WEB_SEARCH = {
     "type": "function",
     "name": "search_live_news",
     "description": (
-        "Search the live internet for recent news, platform policy changes, "
-        "or current events (e.g., strikes, recent layoffs) that might "
-        "affect the worker's case. Use this when the worker mentions "
-        "a recent event that you don't know about."
+        "Search the live internet for recent government schemes, welfare programs, "
+        "labour law updates, platform policy changes, worker benefits, strikes, "
+        "or current events relevant to the worker's case. Use this when: "
+        "(1) the worker asks about recent government schemes or benefits, "
+        "(2) you need up-to-date information about a platform or policy, "
+        "(3) the worker mentions a recent event you don't know about, "
+        "(4) you want to find specific helpline numbers or filing procedures."
     ),
     "parameters": {
         "type": "object",
         "properties": {
             "query": {
                 "type": "string",
-                "description": "Search query (e.g., 'Swiggy new payout policy 2026' or 'Zomato delivery strike Bangalore')",
+                "description": (
+                    "Search query in English. Be specific. Examples: "
+                    "'e-Shram card benefits 2026', "
+                    "'Rajasthan gig worker welfare scheme', "
+                    "'Zomato delivery partner payment policy change', "
+                    "'labour commissioner complaint filing process Delhi'"
+                ),
             },
         },
         "required": ["query"],
@@ -285,7 +295,8 @@ TOOL_CHECK_ELIGIBILITY = {
         "Check worker eligibility under the Code on Social Security 2020 90/120-Day Rule, "
         "e-Shram registration, and State Gig Worker Acts (Rajasthan, Karnataka, etc.). "
         "Call this when the worker mentions how long they have worked, their platform(s), "
-        "or asks about their legal rights and eligibility."
+        "or asks about their legal rights and eligibility. "
+        "If the worker mentions their state or worker type, include those too."
     ),
     "parameters": {
         "type": "object",
@@ -305,6 +316,19 @@ TOOL_CHECK_ELIGIBILITY = {
             "has_eshram": {
                 "type": "boolean",
                 "description": "Whether the worker has an e-Shram UAN card.",
+            },
+            "state": {
+                "type": "string",
+                "description": "Indian state/UT the worker is in (e.g. 'Rajasthan', 'Karnataka').",
+            },
+            "worker_type": {
+                "type": "string",
+                "enum": ["gig_worker", "construction_worker", "domestic_worker", "factory_worker", "other"],
+                "description": "Type of worker.",
+            },
+            "platform_or_employer": {
+                "type": "string",
+                "description": "Platform or employer name.",
             },
         },
     },

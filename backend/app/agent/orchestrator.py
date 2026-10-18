@@ -442,6 +442,13 @@ class Orchestrator:
     def _handle_check_eligibility(self, arguments: dict) -> dict:
         """Check worker statutory eligibility (90/120-day rule, e-Shram, Section 114)."""
         case = self.case_manager.case
+
+        # Extract any case fields the LLM passed along (state, worker_type, etc.)
+        case_fields = ["state", "worker_type", "platform_or_employer"]
+        case_updates = {f: arguments[f] for f in case_fields if f in arguments and arguments[f]}
+        if case_updates:
+            self._handle_update_case({**case_updates, "confidence": "high"})
+
         days_primary = arguments.get("days_with_primary_aggregator") or case.days_worked
         days_total = arguments.get("total_days_across_aggregators")
         num_apps = arguments.get("number_of_aggregators", 1)
@@ -601,32 +608,89 @@ class Orchestrator:
         }
         return self._success_result(result, ["complaint_drafts"])
 
-    # ── Tool 9: search_live_news ─────────────────────────────────────────────
+    # ── Tool 9: search_live_news (Tavily) ──────────────────────────────────────
 
     def _handle_web_search(self, arguments: dict) -> dict:
-        """Search the web / live law updates using DuckDuckGo."""
+        """Search the live web for recent government schemes, policy changes, and news using Tavily."""
+        from app.config import settings
         query = arguments.get("query", "")
         if not query:
             return self._error_result(ToolError.INVALID_ARGUMENT, "Search query is required")
 
+        # Enrich query with worker/India context
+        enriched_query = query
+        case = self.case_manager.case
+        if "India" not in query and "indian" not in query.lower():
+            enriched_query += " India"
+        if case.worker_type and case.worker_type.value != "unknown" and case.worker_type.value not in query.lower():
+            enriched_query += f" {case.worker_type.value.replace('_', ' ')}"
+
+        print(f"\n  [search] Tavily query: {enriched_query}")
+
         results_text = ""
         try:
-            from duckduckgo_search import DDGS
-            with DDGS() as ddgs:
-                search_results = list(ddgs.text(query + " gig workers India labour law", max_results=3))
-                if search_results:
-                    snippets = [f"- {r.get('title', '')}: {r.get('body', '')} ({r.get('href', '')})" for r in search_results]
-                    results_text = "\n".join(snippets)
+            from tavily import TavilyClient
+
+            api_key = settings.tavily_api_key
+            if not api_key:
+                return self._error_result(
+                    ToolError.INVALID_ARGUMENT,
+                    "Tavily API key not configured. Set TAVILY_API_KEY in .env"
+                )
+
+            client = TavilyClient(api_key=api_key)
+            response = client.search(
+                query=enriched_query,
+                search_depth="advanced",
+                include_answer=True,
+                max_results=5,
+                topic="general",
+            )
+
+            # Build structured results
+            parts = []
+
+            # Tavily's AI-generated answer summary
+            if response.get("answer"):
+                parts.append(f"**Summary:** {response['answer']}")
+                parts.append("")
+
+            # Individual search results
+            for r in response.get("results", [])[:5]:
+                title = r.get("title", "")
+                content = r.get("content", "")
+                url = r.get("url", "")
+                # Truncate long content
+                if len(content) > 300:
+                    content = content[:300] + "..."
+                parts.append(f"- **{title}**: {content}")
+                if url:
+                    parts.append(f"  Source: {url}")
+
+            results_text = "\n".join(parts) if parts else f"No recent results found for: {query}"
+            print(f"  [search] Found {len(response.get('results', []))} results")
+
+        except ImportError:
+            return self._error_result(
+                ToolError.TOOL_TIMEOUT,
+                "Tavily search library not installed. Run: pip install tavily-python"
+            )
         except Exception as e:
-            results_text = f"Live law search note: verified against Ministry of Labour Gazette notifications for '{query}'."
+            print(f"  [search] Tavily error: {e}")
+            results_text = f"Search encountered an issue: {str(e)}"
 
         result = {
             "status": "success",
             "query": query,
-            "live_search_results": results_text or "No recent conflicting rule updates found.",
-            "instruction": "Use these live news or rule updates to answer the worker's query about recent changes accurately."
+            "live_search_results": results_text,
+            "instruction": (
+                "Use these search results to answer the worker's question accurately. "
+                "Present the most relevant information clearly in the worker's language. "
+                "Cite specific schemes, amounts, deadlines, and eligibility criteria. "
+                "If results mention government schemes or benefits, explain how the worker can apply."
+            ),
         }
-        return self._success_result(result, [])
+        return self._success_result(result, [], evidence_prompt=results_text)
 
     # ── Helper methods ───────────────────────────────────────────────────────
 
@@ -761,43 +825,6 @@ class Orchestrator:
         from app.safety import get_safety_response
         return get_safety_response(danger_type)
 
-
-    def _handle_web_search(self, arguments: dict) -> dict:
-        """Search the live web using duckduckgo-search."""
-        query = arguments.get("query", "")
-        if not query:
-            return self._error_result(ToolError.INVALID_ARGUMENT, "Missing query")
-
-        try:
-            try:
-                from ddgs import DDGS
-            except ImportError:
-                from duckduckgo_search import DDGS
-            with DDGS() as ddgs:
-                # Get top 3 news or general search results
-                results = list(ddgs.text(query, max_results=3))
-            
-            if not results:
-                result_text = f"No recent news found for query: {query}"
-            else:
-                formatted = []
-                for r in results:
-                    title = r.get("title", "")
-                    body = r.get("body", "")
-                    formatted.append(f"- {title}: {body}")
-                result_text = f"Live Search Results for '{query}':\n" + "\n".join(formatted)
-
-            # Update context to include this knowledge
-            return self._success_result(
-                {"status": "success", "results": result_text},
-                changed=["web_search"],
-                evidence_prompt=result_text
-            )
-        except Exception as e:
-            return self._error_result(
-                "SEARCH_ERROR",
-                f"Web search failed: {str(e)}"
-            )
 
     def _resolve_state(self, state_str: str) -> IndianState:
         if not state_str:

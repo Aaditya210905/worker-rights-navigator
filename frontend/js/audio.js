@@ -7,22 +7,57 @@
 
 // ── Agent audio playback ─────────────────────────────────────────
 
+// Keep track of the currently-playing voice so a new answer (or session
+// end) stops the old one instead of overlapping / sounding "cut off".
+let currentVoiceSource = null;
+
+function stopVoicePlayback() {
+    if (currentVoiceSource) {
+        try { currentVoiceSource.onended = null; currentVoiceSource.stop(0); }
+        catch (e) { /* already stopped */ }
+        currentVoiceSource = null;
+    }
+}
+
+// Decode a large base64 string in slices — a single atob() on a very
+// long stitched answer can throw or jank the UI thread.
+function base64ToBytes(base64) {
+    const SLICE = 32768;
+    const len = base64.length;
+    const bytes = new Uint8Array(len * 3 / 4 | 0);
+    let offset = 0;
+    for (let i = 0; i < len; i += SLICE) {
+        const chunk = base64.slice(i, i + SLICE);
+        const binaryStr = atob(chunk);
+        for (let j = 0; j < binaryStr.length; j++) {
+            if (offset < bytes.length) bytes[offset++] = binaryStr.charCodeAt(j);
+        }
+    }
+    return bytes.buffer.slice(0, offset);
+}
+
 function playAudioBase64(base64) {
+    stopVoicePlayback(); // never overlap two answers
     if (!audioCtx) {
         audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     }
     if (audioCtx.state === 'suspended') audioCtx.resume();
 
-    // Decode base64 safely
-    const binaryStr = atob(base64);
-    const bytes = new Uint8Array(binaryStr.length);
-    for (let i = 0; i < binaryStr.length; i++) bytes[i] = binaryStr.charCodeAt(i);
+    let pcmBuffer;
+    try {
+        pcmBuffer = base64ToBytes(base64);
+    } catch (e) {
+        console.warn('[audio] Failed to decode base64 audio:', e);
+        return;
+    }
 
     // Decode as WAV/MP3 (Sarvam returns full audio files)
-    audioCtx.decodeAudioData(bytes.buffer.slice(0), (buffer) => {
+    audioCtx.decodeAudioData(pcmBuffer, (buffer) => {
         const src = audioCtx.createBufferSource();
         src.buffer = buffer;
         src.connect(audioCtx.destination);
+        currentVoiceSource = src;
+        src.onended = () => { if (currentVoiceSource === src) currentVoiceSource = null; };
         src.start(0);
     }, (err) => {
         console.warn('[audio] Failed to decode audio:', err);
@@ -30,6 +65,7 @@ function playAudioBase64(base64) {
 }
 
 function flushAudio() {
+    stopVoicePlayback();
     nextPlayTime = 0;
 }
 

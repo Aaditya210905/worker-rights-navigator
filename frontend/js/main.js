@@ -24,17 +24,32 @@ if (langSelect) {
 }
 
 // ── Text input (send on Enter) ───────────────────────────────────
-if (textInput) {
-    textInput.addEventListener('keydown', (e) => {
+const textInputEl = document.getElementById('textInput');
+const sendTextBtnEl = document.getElementById('sendTextBtn');
+
+if (textInputEl) {
+    textInputEl.addEventListener('keydown', (e) => {
         if (e.key === 'Enter' && !e.shiftKey) {
             e.preventDefault();
             sendTextMessage();
         }
     });
 }
-if (sendTextBtn) {
-    sendTextBtn.addEventListener('click', sendTextMessage);
+if (sendTextBtnEl) {
+    sendTextBtnEl.addEventListener('click', sendTextMessage);
 }
+
+// ── Preset Government Schemes Quick Handler ──────────────────────
+window.handlePresetGovtSchemes = async function() {
+    const query = "Kya government ne gig aur unorganized workers ke liye koi important schemes nikali hain?";
+    const input = document.getElementById('textInput');
+    if (input) {
+        input.value = query;
+    }
+    if (typeof sendTextMessage === 'function') {
+        await sendTextMessage();
+    }
+};
 
 // ── End session button ───────────────────────────────────────────
 const endSessionBtn = document.getElementById('endSessionBtn');

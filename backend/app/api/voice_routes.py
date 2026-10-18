@@ -74,6 +74,24 @@ class ConverseRequest(BaseModel):
     tts_language: str = Field(default="hi-IN", description="TTS output language")
 
 
+class ChatTurnRequest(BaseModel):
+    """Request for a text conversation turn."""
+    session_id: str = Field(..., description="Session ID from /sessions")
+    message: str = Field(..., description="Worker's message text")
+    tts_speaker: str = Field(default="ritu", description="TTS voice")
+    tts_language: str = Field(default="hi-IN", description="TTS output language")
+    synthesize_speech: bool = Field(default=False, description="Whether to also generate TTS audio")
+
+
+class ChatTurnResponse(BaseModel):
+    """Response from a text conversation turn."""
+    agent_text: str = ""
+    case_status: str = ""
+    tool_calls_made: list[str] = Field(default_factory=list)
+    audio_base64: str = ""
+    error: Optional[str] = None
+
+
 class ConverseResponse(BaseModel):
     """Response from a full conversation turn."""
     # STT result
@@ -242,6 +260,52 @@ async def converse(req: ConverseRequest):
             response.audio_content_type = tts_result.content_type
         else:
             response.tts_error = tts_result.error
+
+    return response
+
+
+# ── Text chat endpoint (agentic turn from typed input) ───────────────────────
+
+@router.post("/chat", response_model=ChatTurnResponse)
+async def chat(req: ChatTurnRequest):
+    """
+    Run an agentic conversation turn for text input.
+    Executes tools (update_case_info, check_eligibility, retrieve_rights, Tavily search, etc.)
+    and returns structured agent response + case state + optional TTS audio.
+    """
+    session = session_manager.get_session(req.session_id)
+    if session is None:
+        raise HTTPException(status_code=404, detail="Session not found or expired")
+
+    orch = session.orchestrator
+    response = ChatTurnResponse()
+
+    # 1. Record user transcript
+    orch.process_transcript(req.message)
+
+    # 2. Run LLM agent turn with tools
+    agent_result = await _run_llm_turn(orch, req.message)
+    response.agent_text = agent_result.get("text", "")
+    response.case_status = orch.case.status.value
+    response.tool_calls_made = agent_result.get("tools_called", [])
+
+    if agent_result.get("error"):
+        response.error = agent_result["error"]
+
+    # 3. Record agent response
+    if response.agent_text:
+        orch.process_agent_transcript(response.agent_text)
+
+        # 4. Optional TTS synthesis
+        if req.synthesize_speech:
+            tts = get_tts_service()
+            tts_result = await tts.synthesize(
+                text=response.agent_text,
+                language_code=req.tts_language,
+                speaker=req.tts_speaker,
+            )
+            if tts_result.is_success and tts_result.audio_base64:
+                response.audio_base64 = tts_result.audio_base64
 
     return response
 

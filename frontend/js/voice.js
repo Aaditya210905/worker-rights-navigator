@@ -151,7 +151,7 @@ async function finishRecordingAndConverse() {
 
         // Show agent text response
         if (data.agent_text) {
-            addMsg('agent', data.agent_text);
+            addMsg('agent', data.agent_text, { audioBase64: data.audio_base64 });
         }
 
         // Update case status
@@ -211,7 +211,8 @@ function stopSession() {
 // ── Text input support ───────────────────────────────────────────
 
 async function sendTextMessage() {
-    if (!textInput || !textInput.value.trim()) return;
+    const input = textInput || document.getElementById('textInput');
+    if (!input || !input.value.trim()) return;
     if (!isRunning) {
         // Auto-start a session
         setStatus('connecting', 'Starting...');
@@ -219,35 +220,52 @@ async function sendTextMessage() {
         isRunning = true;
     }
 
-    const text = textInput.value.trim();
-    textInput.value = '';
+    const text = input.value.trim();
+    input.value = '';
     addMsg('user', text);
 
     isProcessing = true;
     setStatus('connected', '⏳ Thinking...');
 
     try {
-        await apiFetch(
-            sid => `${API_BASE}/sessions/${sid}/transcript`,
+        const resp = await apiFetch(
+            () => `${API_BASE}/voice/chat`,
             {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ text }),
+                body: JSON.stringify({
+                    session_id: sessionId,
+                    message: text,
+                    tts_speaker: selectedSpeaker,
+                    tts_language: selectedTTSLanguage,
+                    synthesize_speech: false,
+                }),
             }
         );
 
-        const response = await apiFetch(sid => `${API_BASE}/sessions/${sid}/case`);
-        const caseData = await response.json();
-        updateCaseField('fStatus', caseData.status);
-        updateCaseField('fWorkerType', caseData.worker_type);
-        updateCaseField('fIssue', caseData.issue_category);
-        updateCaseField('fState', caseData.state);
-        updateCaseField('fEmployer', caseData.platform_or_employer);
-        updateCaseField('fAmount', caseData.amount ? '₹' + caseData.amount : null);
-        updateCaseField('fSafety', caseData.safety_level);
-        updateProgressTracker(caseData.status);
+        if (!resp.ok) {
+            const err = await resp.json().catch(() => ({}));
+            throw new Error(err.detail || `Server error ${resp.status}`);
+        }
 
-        addMsg('agent', 'Main aapki baat samajh raha hoon. Kripya microphone ka upyog karein voice conversation ke liye.');
+        const data = await resp.json();
+
+        // Show tool calls
+        if (data.tool_calls_made && data.tool_calls_made.length > 0) {
+            data.tool_calls_made.forEach(tool => {
+                addToolEntry(tool, '✅ completed');
+            });
+        }
+
+        // Show agent text response formatted
+        if (data.agent_text) {
+            addMsg('agent', data.agent_text, { audioBase64: data.audio_base64 });
+        }
+
+        // Update case state
+        if (typeof pollCase === 'function') {
+            await pollCase();
+        }
 
     } catch (e) {
         addMsg('system', `⚠️ Error: ${e.message}`);
