@@ -166,7 +166,7 @@ async def run_agent_turn(
                 tools=api_tools if api_tools else None,
                 tool_choice="auto" if api_tools else None,
                 temperature=0.3,
-                max_tokens=600,
+                max_tokens=1000,
             )
         except Exception as e:
             print(f"  [llm] API error: {e}")
@@ -241,7 +241,7 @@ async def run_agent_turn(
             model=settings.llm_model,
             messages=messages + [{"role": "user", "content": "Please give a short, direct answer in Hindi/Hinglish now without calling any tools."}],
             temperature=0.3,
-            max_tokens=400,
+            max_tokens=1000,
         )
         text = final.choices[0].message.content or ""
         text = re.sub(r'</?(?:tool_call|function|parameter)[^>]*>', '', text).strip()

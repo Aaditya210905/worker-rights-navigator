@@ -81,6 +81,9 @@ class Settings(BaseSettings):
     embedding_api_key: str = ""
     embedding_model: str = "nvidia/nemotron-3-embed-1b:free"
 
+    # --- Tavily (live web search) ---
+    tavily_api_key: str = ""
+
     # --- Paths (defaults set for local dev) ---
     knowledge_dir: str = "knowledge"
 
