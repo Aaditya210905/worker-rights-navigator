@@ -831,12 +831,6 @@ python -m tests.test_api_integration
 
 <br/>
 
-<br/>
-
----
-
-<br/>
-
 ## ⚠️ Legal Disclaimer
 
 > [!WARNING]
