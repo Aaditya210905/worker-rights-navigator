@@ -74,29 +74,40 @@ class HybridRetriever:
         self._gaps = gaps or []
         self._conflicts = conflicts or []
 
-        # Align embedder dimension with existing Qdrant collection if present
-        existing_dim = self._qdrant.get_vector_size()
-        if existing_dim:
-            self._embedder.dimension = existing_dim
-
         # Build BM25 index
         tokenized_docs = [_tokenize(doc.text) for doc in documents]
         self._bm25 = BM25Okapi(tokenized_docs)
 
-        # Index documents into Qdrant (required for in-memory mode)
+        # Index documents into Qdrant (required for in-memory mode or if dimension changed)
         self._ensure_indexed()
 
     def _ensure_indexed(self):
-        """Create Qdrant collection and index documents if not already done."""
+        """Create Qdrant collection and index documents if not already done or dimension changed."""
         try:
             collections = [
                 c.name for c in self._qdrant._client.get_collections().collections
             ]
-            if self._qdrant._collection in collections:
-                return  # Already indexed
-
-            # Get embedding dimension
             dimension = self._embedder.dimension
+
+            needs_reindex = False
+            if self._qdrant._collection in collections:
+                coll_dim = self._qdrant.get_vector_size()
+                if coll_dim and dimension and coll_dim != dimension:
+                    print(f"  [retriever] Embedding dimension changed ({coll_dim} -> {dimension}). Re-indexing into Qdrant...")
+                    needs_reindex = True
+                else:
+                    # Test search with dummy vector to verify underlying storage matches dimension
+                    try:
+                        self._qdrant.search([0.0] * dimension, limit=1)
+                    except Exception as e:
+                        if "not aligned" in str(e) or "broadcast" in str(e) or "shape" in str(e):
+                            print(f"  [retriever] Vector storage dimension mismatch ({e}). Re-indexing into Qdrant...")
+                            needs_reindex = True
+            else:
+                needs_reindex = True
+
+            if not needs_reindex:
+                return  # Already indexed with matching dimension
 
             # Create collection
             self._qdrant.create_collection(dimension)
@@ -107,7 +118,7 @@ class HybridRetriever:
 
             # Index into Qdrant
             self._qdrant.upsert_documents(self._documents, vectors)
-            print(f"  [retriever] Indexed {len(self._documents)} documents into Qdrant")
+            print(f"  [retriever] Indexed {len(self._documents)} documents into Qdrant (dim={dimension})")
 
         except Exception as e:
             print(f"  [retriever] Indexing error: {e}")

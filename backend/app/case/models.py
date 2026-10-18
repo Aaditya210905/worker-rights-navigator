@@ -309,7 +309,7 @@ class CaseState(BaseModel):
                 WorkerType.UNKNOWN, IssueCategory.UNKNOWN,
                 IndianState.UNKNOWN, SafetyLevel.UNKNOWN,
             ):
-                filled[field_name] = str(val) if isinstance(val, Enum) else val
+                filled[field_name] = val.value if isinstance(val, Enum) else str(val)
         return filled
 
     def summary(self) -> str:

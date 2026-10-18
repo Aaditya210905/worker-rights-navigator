@@ -123,7 +123,7 @@ async function runEligibilityCheck() {
     const hasEshram = eshramCheck ? eshramCheck.checked : false;
 
     try {
-        const resp = await fetch(`${API_BASE}/sessions/${sessionId}/eligibility`, {
+        const resp = await apiFetch(sid => `${API_BASE}/sessions/${sid}/eligibility`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -218,7 +218,7 @@ async function runWageCalculation() {
     const period = periodEl ? periodEl.value : 'Disputed Period';
 
     try {
-        const resp = await fetch(`${API_BASE}/sessions/${sessionId}/wages`, {
+        const resp = await apiFetch(sid => `${API_BASE}/sessions/${sid}/wages`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -299,7 +299,7 @@ async function handleEvidenceFileUpload(file, caption = "") {
     if (caption) formData.append('caption', caption);
 
     try {
-        const resp = await fetch(`${API_BASE}/sessions/${sessionId}/evidence/upload`, {
+        const resp = await apiFetch(sid => `${API_BASE}/sessions/${sid}/evidence/upload`, {
             method: 'POST',
             body: formData
         });
@@ -320,7 +320,7 @@ async function handleEvidenceFileUpload(file, caption = "") {
 async function loadEvidenceTimeline() {
     if (!sessionId) return;
     try {
-        const resp = await fetch(`${API_BASE}/sessions/${sessionId}/evidence`);
+        const resp = await apiFetch(sid => `${API_BASE}/sessions/${sid}/evidence`);
         if (!resp.ok) return;
         const data = await resp.json();
         renderEvidenceListAndTimeline(data);
@@ -388,7 +388,7 @@ async function generateLegalComplaint() {
     }
 
     try {
-        const resp = await fetch(`${API_BASE}/sessions/${sessionId}/complaint`, {
+        const resp = await apiFetch(sid => `${API_BASE}/sessions/${sid}/complaint`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -480,7 +480,7 @@ async function generateFullActionPlan() {
     }
 
     try {
-        const response = await fetch(`${API_BASE}/sessions/${sessionId}/action-plan`, {
+        const response = await apiFetch(sid => `${API_BASE}/sessions/${sid}/action-plan`, {
             method: 'POST'
         });
 

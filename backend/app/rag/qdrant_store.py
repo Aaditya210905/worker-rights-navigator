@@ -40,6 +40,7 @@ class QdrantStore:
         Args:
             path: Directory for persistent storage. None = in-memory.
         """
+        self._path = path
         if path:
             Path(path).mkdir(parents=True, exist_ok=True)
             self._client = QdrantClient(path=path)
@@ -49,10 +50,26 @@ class QdrantStore:
 
     def create_collection(self, dimension: int):
         """Create the vector collection with payload indexes."""
-        # Delete if exists
-        collections = [c.name for c in self._client.get_collections().collections]
-        if self._collection in collections:
-            self._client.delete_collection(self._collection)
+        import shutil
+
+        # Delete from meta registry
+        try:
+            collections = [c.name for c in self._client.get_collections().collections]
+            if self._collection in collections:
+                self._client.delete_collection(self._collection)
+        except Exception:
+            pass
+
+        # In Qdrant Local, also remove on-disk storage file to prevent shape mismatch
+        if self._path:
+            try:
+                self._client.close()
+            except Exception:
+                pass
+            coll_dir = Path(self._path) / "collection" / self._collection
+            if coll_dir.exists():
+                shutil.rmtree(coll_dir, ignore_errors=True)
+            self._client = QdrantClient(path=self._path)
 
         # Create collection
         self._client.create_collection(
@@ -65,11 +82,14 @@ class QdrantStore:
 
         # Create payload indexes for fast filtering
         for field in ["jurisdiction", "evidence_level", "topic", "legal_status"]:
-            self._client.create_payload_index(
-                collection_name=self._collection,
-                field_name=field,
-                field_schema=PayloadSchemaType.KEYWORD,
-            )
+            try:
+                self._client.create_payload_index(
+                    collection_name=self._collection,
+                    field_name=field,
+                    field_schema=PayloadSchemaType.KEYWORD,
+                )
+            except Exception:
+                pass
 
         print(f"  Created Qdrant collection '{self._collection}' "
               f"(dim={dimension}, distance=cosine)")

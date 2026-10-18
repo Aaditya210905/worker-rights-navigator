@@ -2,34 +2,8 @@
  * api.js — REST calls to the WorkerSaathi backend.
  *
  * Session creation, case polling and the LeMUR action-plan request.
+ * Includes auto-recovery from stale sessions (e.g. after server restart).
  */
-
-async function pollCase() {
-    if (!sessionId) return;
-    try {
-        const r = await fetch(`${API_BASE}/sessions/${sessionId}/case`);
-        if (!r.ok) return;
-        const c = await r.json();
-        updateCaseField('fStatus', c.status);
-        updateCaseField('fWorkerType', c.worker_type);
-        updateCaseField('fIssue', c.issue_category);
-        updateCaseField('fState', c.state);
-        updateCaseField('fEmployer', c.platform_or_employer);
-        updateCaseField('fAmount', c.amount ? '₹' + c.amount : null);
-        updateCaseField('fSafety', c.safety_level);
-
-        // Auto-sync legal hub widgets if active
-        if (c.eligibility_report && typeof renderEligibilityReport === 'function') {
-            renderEligibilityReport(c.eligibility_report);
-        }
-        if (c.wage_calculation && typeof renderWageResults === 'function') {
-            renderWageResults(c.wage_calculation);
-        }
-
-        // Update progress tracker (presentation-only)
-        updateProgressTracker(c.status);
-    } catch (e) { }
-}
 
 // ── Session creation ─────────────────────────────────────────────
 
@@ -56,6 +30,75 @@ async function createSession() {
     }
 }
 
+// ── Resilient fetch wrapper ──────────────────────────────────────
+
+/**
+ * Fetch wrapper that auto-recovers from stale/expired sessions.
+ *
+ * If the server returns 404 on a session endpoint (e.g. after
+ * uvicorn --reload wipes in-memory sessions), this automatically
+ * creates a fresh session and retries the request once.
+ *
+ * @param {string} urlBuilder  - Function or URL string. If a function,
+ *                               called with current sessionId to build URL.
+ * @param {object} opts        - fetch() options (method, body, headers, etc.)
+ * @returns {Promise<Response>} - The fetch Response object.
+ */
+async function apiFetch(urlBuilder, opts = {}) {
+    const buildUrl = typeof urlBuilder === 'function'
+        ? urlBuilder
+        : () => urlBuilder;
+
+    let url = buildUrl(sessionId);
+    let resp = await fetch(url, opts);
+
+    // If 404 on a session-scoped endpoint, try to recover
+    if (resp.status === 404 && sessionId && url.includes(`/sessions/${sessionId}`)) {
+        console.warn(`[api] Session ${sessionId} expired/lost — creating new session...`);
+        const oldId = sessionId;
+        sessionId = null;
+        const ok = await createSession();
+        if (ok) {
+            addMsg('system', `♻️ Session recovered (server restarted). Previous: ${oldId.slice(0, 12)}`);
+            url = buildUrl(sessionId);
+            resp = await fetch(url, opts);
+        }
+    }
+
+    return resp;
+}
+
+// ── Case polling ─────────────────────────────────────────────────
+
+async function pollCase() {
+    if (!sessionId) return;
+    try {
+        const r = await apiFetch(
+            sid => `${API_BASE}/sessions/${sid}/case`
+        );
+        if (!r.ok) return;
+        const c = await r.json();
+        updateCaseField('fStatus', c.status);
+        updateCaseField('fWorkerType', c.worker_type);
+        updateCaseField('fIssue', c.issue_category);
+        updateCaseField('fState', c.state);
+        updateCaseField('fEmployer', c.platform_or_employer);
+        updateCaseField('fAmount', c.amount ? '₹' + c.amount : null);
+        updateCaseField('fSafety', c.safety_level);
+
+        // Auto-sync legal hub widgets if active
+        if (c.eligibility_report && typeof renderEligibilityReport === 'function') {
+            renderEligibilityReport(c.eligibility_report);
+        }
+        if (c.wage_calculation && typeof renderWageResults === 'function') {
+            renderWageResults(c.wage_calculation);
+        }
+
+        // Update progress tracker (presentation-only)
+        updateProgressTracker(c.status);
+    } catch (e) { }
+}
+
 // ── LeMUR action plan ────────────────────────────────────────────
 
 async function fetchActionPlan(sid) {
@@ -76,9 +119,10 @@ async function fetchActionPlan(sid) {
     closeBtn.onclick = () => { modal.style.display = 'none'; };
 
     try {
-        const response = await fetch(`${API_BASE}/sessions/${sid}/action-plan`, {
-            method: 'POST'
-        });
+        const response = await apiFetch(
+            s => `${API_BASE}/sessions/${s}/action-plan`,
+            { method: 'POST' }
+        );
 
         if (!response.ok) {
             throw new Error('Failed to generate action plan');

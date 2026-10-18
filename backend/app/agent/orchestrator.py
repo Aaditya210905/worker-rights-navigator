@@ -83,6 +83,8 @@ class Orchestrator:
                 self.case_manager.case.raw_description = text.strip()
             else:
                 self.case_manager.case.raw_description += " | " + text.strip()
+            if self.case_manager.case.status == CaseStatus.NEW:
+                self.case_manager.case.status = CaseStatus.LISTENING
 
     def process_agent_transcript(self, text: str):
         """Record an agent transcript line."""
@@ -235,6 +237,14 @@ class Orchestrator:
 
     def _handle_retrieve_rights(self, arguments: dict) -> dict:
         """Search the Central legal knowledge base."""
+        # If the LLM passed case parameters directly to retrieve_rights, update case state
+        case_fields = [
+            "issue_category", "worker_type", "state", "platform_or_employer",
+            "amount", "payment_pending_duration", "incident_date"
+        ]
+        if any(f in arguments for f in case_fields):
+            self._handle_update_case(arguments)
+
         query = arguments.get("query", "")
 
         # Lazy-load the retriever
@@ -251,6 +261,12 @@ class Orchestrator:
         worker_type = case.worker_type.value if case.worker_type else "unknown"
         issue = case.issue_category.value if case.issue_category else None
         state = case.state.value if case.state and case.state != IndianState.UNKNOWN else None
+
+        if not query:
+            wt_label = worker_type if worker_type != "unknown" else "gig worker"
+            ic_label = issue if issue else "unpaid wages"
+            st_label = state if state else ""
+            query = f"{wt_label} {ic_label} {st_label} rights India".strip()
 
         evidence = retriever.retrieve(
             query=query,
@@ -753,7 +769,10 @@ class Orchestrator:
             return self._error_result(ToolError.INVALID_ARGUMENT, "Missing query")
 
         try:
-            from duckduckgo_search import DDGS
+            try:
+                from ddgs import DDGS
+            except ImportError:
+                from duckduckgo_search import DDGS
             with DDGS() as ddgs:
                 # Get top 3 news or general search results
                 results = list(ddgs.text(query, max_results=3))

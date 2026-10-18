@@ -14,7 +14,14 @@ import sys
 import time
 from pathlib import Path
 
-CHECKPOINT_FILE = Path(__file__).resolve().parent.parent / "data" / "embed_checkpoint.json"
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8")
+
+CHECKPOINT_FILE = PROJECT_ROOT / "data" / "embed_checkpoint.json"
 BATCH_SIZE = 16
 
 print("=" * 60)
@@ -110,9 +117,9 @@ else:
             checkpoint["completed_batches"] = batch_num
             checkpoint["vectors"] = vectors
             save_checkpoint()
-            print("✓")
+            print("OK")
         except Exception as e:
-            print(f"✗ Error: {e}")
+            print(f"FAILED Error: {e}")
             save_checkpoint()
             print(f"\n  Saved progress at batch {batch_num - 1}/{total_batches}.")
             print(f"  Re-run this script to resume from batch {batch_num}.")

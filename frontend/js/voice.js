@@ -101,6 +101,21 @@ async function finishRecordingAndConverse() {
             }),
         });
 
+        // If session was lost (server restart), auto-recover
+        if (response.status === 404 && sessionId) {
+            console.warn(`[voice] Session ${sessionId} expired — recreating...`);
+            const oldId = sessionId;
+            sessionId = null;
+            const ok = await createSession();
+            if (ok) {
+                addMsg('system', `♻️ Session recovered (server restarted). Previous: ${oldId.slice(0, 12)}`);
+                addMsg('system', '🎤 Please speak again — your last recording was lost.');
+            }
+            isProcessing = false;
+            resetMicButton();
+            return;
+        }
+
         if (!response.ok) {
             const err = await response.json().catch(() => ({}));
             throw new Error(err.detail || `Server error ${response.status}`);
@@ -212,13 +227,16 @@ async function sendTextMessage() {
     setStatus('connected', '⏳ Thinking...');
 
     try {
-        await fetch(`${API_BASE}/sessions/${sessionId}/transcript`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ text }),
-        });
+        await apiFetch(
+            sid => `${API_BASE}/sessions/${sid}/transcript`,
+            {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ text }),
+            }
+        );
 
-        const response = await fetch(`${API_BASE}/sessions/${sessionId}/case`);
+        const response = await apiFetch(sid => `${API_BASE}/sessions/${sid}/case`);
         const caseData = await response.json();
         updateCaseField('fStatus', caseData.status);
         updateCaseField('fWorkerType', caseData.worker_type);

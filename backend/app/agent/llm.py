@@ -7,7 +7,7 @@ OpenAI-compatible provider. Default: Groq (fast, free tier).
 Configure via .env:
     LLM_API_KEY     = your provider key  (required)
     LLM_BASE_URL    = https://api.groq.com/openai/v1  (default)
-    LLM_MODEL       = llama-3.1-8b-instant             (default)
+    LLM_MODEL       = qwen/qwen3.8-27b                (default)
 
 Swap to OpenAI:
     LLM_BASE_URL    = https://api.openai.com/v1
@@ -20,6 +20,7 @@ Swap to local Ollama:
 """
 
 import json
+import re
 import asyncio
 from typing import Optional
 from openai import AsyncOpenAI
@@ -75,6 +76,55 @@ def _normalize_tools(tools: list[dict]) -> list[dict]:
     return normalized
 
 
+def _parse_xml_tool_calls(text: str) -> list[dict]:
+    """
+    Parse native Qwen / Llama XML tool calls from message text:
+    <tool_call>
+      <function=retrieve_rights>
+        <parameter=issue_category>unpaid_wages</parameter>
+      </function>
+    </tool_call>
+    OR
+    <tool_call>
+      {"name": "...", "arguments": {...}}
+    </tool_call>
+    """
+    calls = []
+    if not text:
+        return calls
+
+    # Match <tool_call> blocks
+    tc_blocks = re.findall(r'<tool_call>(.*?)</tool_call>', text, re.DOTALL | re.IGNORECASE)
+    if not tc_blocks and '<tool_call>' in text:
+        parts = text.split('<tool_call>')
+        for p in parts[1:]:
+            tc_blocks.append(p)
+
+    for block in tc_blocks:
+        # Check if JSON format
+        try:
+            data = json.loads(block.strip())
+            if isinstance(data, dict) and "name" in data:
+                calls.append({"name": data["name"], "arguments": data.get("arguments", {})})
+                continue
+        except Exception:
+            pass
+
+        # Check XML format <function=NAME>
+        fn_match = re.search(r'<function=([a-zA-Z0-9_]+)>(.*?)(?:</function>|$)', block, re.DOTALL | re.IGNORECASE)
+        if fn_match:
+            fn_name = fn_match.group(1).strip()
+            body = fn_match.group(2)
+            params = {}
+            for param_match in re.finditer(r'<parameter=([a-zA-Z0-9_]+)>(.*?)(?:</parameter>|$)', body, re.DOTALL | re.IGNORECASE):
+                p_name = param_match.group(1).strip()
+                p_val = param_match.group(2).strip()
+                params[p_name] = p_val
+            calls.append({"name": fn_name, "arguments": params})
+
+    return calls
+
+
 # ── Agentic conversation loop ────────────────────────────────────────────────
 
 async def run_agent_turn(
@@ -124,27 +174,50 @@ async def run_agent_turn(
 
         msg = response.choices[0].message
 
+        # Collect tool calls (from OpenAI API schema OR parsed from Qwen XML text)
+        parsed_tool_calls = []
+        if msg.tool_calls:
+            for tc in msg.tool_calls:
+                try:
+                    args = json.loads(tc.function.arguments)
+                except Exception:
+                    args = {}
+                parsed_tool_calls.append({"id": tc.id, "name": tc.function.name, "arguments": args})
+        else:
+            raw_text = msg.content or ""
+            if "<tool_call>" in raw_text or "<function=" in raw_text:
+                xml_calls = _parse_xml_tool_calls(raw_text)
+                for i, xc in enumerate(xml_calls):
+                    parsed_tool_calls.append({
+                        "id": f"call_xml_{_round}_{i}",
+                        "name": xc["name"],
+                        "arguments": xc["arguments"],
+                    })
+
         # No tool call → final text response
-        if not msg.tool_calls:
+        if not parsed_tool_calls:
             text = msg.content or ""
-            return {"text": text.strip(), "tools_called": tools_called}
+            # Strip any dangling XML tool artifacts before returning to user
+            text = re.sub(r'</?(?:tool_call|function|parameter)[^>]*>', '', text).strip()
+            return {"text": text, "tools_called": tools_called}
 
-        # Tool calls → execute each, feed results back
-        messages.append({"role": "assistant", "tool_calls": [
-            {
-                "id": tc.id,
-                "type": "function",
-                "function": {"name": tc.function.name, "arguments": tc.function.arguments},
-            }
-            for tc in msg.tool_calls
-        ]})
+        # Tool calls found → execute each, feed results back
+        messages.append({
+            "role": "assistant",
+            "content": None,
+            "tool_calls": [
+                {
+                    "id": tc["id"],
+                    "type": "function",
+                    "function": {"name": tc["name"], "arguments": json.dumps(tc["arguments"])},
+                }
+                for tc in parsed_tool_calls
+            ],
+        })
 
-        for tc in msg.tool_calls:
-            tool_name = tc.function.name
-            try:
-                args = json.loads(tc.function.arguments)
-            except Exception:
-                args = {}
+        for tc in parsed_tool_calls:
+            tool_name = tc["name"]
+            args = tc["arguments"]
 
             print(f"  [llm] Tool call: {tool_name}({list(args.keys())})")
             tools_called.append(tool_name)
@@ -154,7 +227,7 @@ async def run_agent_turn(
 
             messages.append({
                 "role": "tool",
-                "tool_call_id": tc.id,
+                "tool_call_id": tc["id"],
                 "content": tool_result_str,
             })
 
@@ -166,11 +239,12 @@ async def run_agent_turn(
     try:
         final = await client.chat.completions.create(
             model=settings.llm_model,
-            messages=messages + [{"role": "user", "content": "Please respond now."}],
+            messages=messages + [{"role": "user", "content": "Please give a short, direct answer in Hindi/Hinglish now without calling any tools."}],
             temperature=0.3,
             max_tokens=400,
         )
         text = final.choices[0].message.content or ""
-        return {"text": text.strip(), "tools_called": tools_called}
+        text = re.sub(r'</?(?:tool_call|function|parameter)[^>]*>', '', text).strip()
+        return {"text": text, "tools_called": tools_called}
     except Exception as e:
         return {"text": None, "tools_called": tools_called, "error": str(e)}

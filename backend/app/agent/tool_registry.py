@@ -26,7 +26,7 @@ TOOL_PERMISSIONS = {
         "retrieving_rights",
     ],
     "retrieve_rights": [
-        "listening", "classified", "collecting_information",
+        "new", "listening", "classified", "collecting_information",
         "retrieving_rights", "rights_verified",
     ],
     "generate_evidence": [
