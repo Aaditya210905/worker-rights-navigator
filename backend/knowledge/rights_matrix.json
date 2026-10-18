@@ -614,11 +614,39 @@
   ],
   "gig_worker|Central|platform_deactivation": [
     {
+      "source_id": "54f8d2862979",
+      "title": "Bihar Gig and Platform Workers (Social Security and Welfare) Act, 2024",
+      "source_type": "law",
+      "jurisdiction": "state",
+      "source_url": "https://labour.bihar.gov.in/acts/bihar-gig-platform-workers-welfare-act-2024"
+    },
+    {
+      "source_id": "43609ada38fb",
+      "title": "Jharkhand Gig Workers Welfare Act, 2024",
+      "source_type": "law",
+      "jurisdiction": "state",
+      "source_url": "https://labour.jharkhand.gov.in/acts/jharkhand-gig-workers-welfare-act-2024"
+    },
+    {
       "source_id": "c8b7e3bae9e8",
       "title": "Karnataka Platform Based Gig Workers (Social Security and Welfare) Act, 2025",
       "source_type": "law",
       "jurisdiction": "state",
       "source_url": "https://kla.kar.nic.in/assembly/bills/bill1670_31.pdf"
+    },
+    {
+      "source_id": "c0ae1cb0e1f7",
+      "title": "Rajasthan Platform Based Gig Workers (Registration and Welfare) Act, 2023",
+      "source_type": "law",
+      "jurisdiction": "state",
+      "source_url": "https://labour.rajasthan.gov.in/acts-rules/rajasthan-platform-based-gig-workers-registration-and-welfare-act-2023"
+    },
+    {
+      "source_id": "8b6fbf14e8aa",
+      "title": "Telangana Gig and Platform Workers Welfare Act, 2024",
+      "source_type": "law",
+      "jurisdiction": "state",
+      "source_url": "https://labour.telangana.gov.in/acts/telangana-gig-platform-workers-welfare-act-2024"
     },
     {
       "source_id": "e8b2314259e6",
@@ -910,11 +938,39 @@
   ],
   "gig_worker|Central|welfare": [
     {
+      "source_id": "54f8d2862979",
+      "title": "Bihar Gig and Platform Workers (Social Security and Welfare) Act, 2024",
+      "source_type": "law",
+      "jurisdiction": "state",
+      "source_url": "https://labour.bihar.gov.in/acts/bihar-gig-platform-workers-welfare-act-2024"
+    },
+    {
+      "source_id": "43609ada38fb",
+      "title": "Jharkhand Gig Workers Welfare Act, 2024",
+      "source_type": "law",
+      "jurisdiction": "state",
+      "source_url": "https://labour.jharkhand.gov.in/acts/jharkhand-gig-workers-welfare-act-2024"
+    },
+    {
       "source_id": "c8b7e3bae9e8",
       "title": "Karnataka Platform Based Gig Workers (Social Security and Welfare) Act, 2025",
       "source_type": "law",
       "jurisdiction": "state",
       "source_url": "https://kla.kar.nic.in/assembly/bills/bill1670_31.pdf"
+    },
+    {
+      "source_id": "c0ae1cb0e1f7",
+      "title": "Rajasthan Platform Based Gig Workers (Registration and Welfare) Act, 2023",
+      "source_type": "law",
+      "jurisdiction": "state",
+      "source_url": "https://labour.rajasthan.gov.in/acts-rules/rajasthan-platform-based-gig-workers-registration-and-welfare-act-2023"
+    },
+    {
+      "source_id": "8b6fbf14e8aa",
+      "title": "Telangana Gig and Platform Workers Welfare Act, 2024",
+      "source_type": "law",
+      "jurisdiction": "state",
+      "source_url": "https://labour.telangana.gov.in/acts/telangana-gig-platform-workers-welfare-act-2024"
     },
     {
       "source_id": "e8b2314259e6",
@@ -1248,11 +1304,39 @@
   ],
   "gig_worker|Central|registration": [
     {
+      "source_id": "54f8d2862979",
+      "title": "Bihar Gig and Platform Workers (Social Security and Welfare) Act, 2024",
+      "source_type": "law",
+      "jurisdiction": "state",
+      "source_url": "https://labour.bihar.gov.in/acts/bihar-gig-platform-workers-welfare-act-2024"
+    },
+    {
+      "source_id": "43609ada38fb",
+      "title": "Jharkhand Gig Workers Welfare Act, 2024",
+      "source_type": "law",
+      "jurisdiction": "state",
+      "source_url": "https://labour.jharkhand.gov.in/acts/jharkhand-gig-workers-welfare-act-2024"
+    },
+    {
       "source_id": "c8b7e3bae9e8",
       "title": "Karnataka Platform Based Gig Workers (Social Security and Welfare) Act, 2025",
       "source_type": "law",
       "jurisdiction": "state",
       "source_url": "https://kla.kar.nic.in/assembly/bills/bill1670_31.pdf"
+    },
+    {
+      "source_id": "c0ae1cb0e1f7",
+      "title": "Rajasthan Platform Based Gig Workers (Registration and Welfare) Act, 2023",
+      "source_type": "law",
+      "jurisdiction": "state",
+      "source_url": "https://labour.rajasthan.gov.in/acts-rules/rajasthan-platform-based-gig-workers-registration-and-welfare-act-2023"
+    },
+    {
+      "source_id": "8b6fbf14e8aa",
+      "title": "Telangana Gig and Platform Workers Welfare Act, 2024",
+      "source_type": "law",
+      "jurisdiction": "state",
+      "source_url": "https://labour.telangana.gov.in/acts/telangana-gig-platform-workers-welfare-act-2024"
     },
     {
       "source_id": "e8b2314259e6",
@@ -2932,6 +3016,13 @@
   ],
   "gig_worker|Bihar|platform_deactivation": [
     {
+      "source_id": "54f8d2862979",
+      "title": "Bihar Gig and Platform Workers (Social Security and Welfare) Act, 2024",
+      "source_type": "law",
+      "jurisdiction": "state",
+      "source_url": "https://labour.bihar.gov.in/acts/bihar-gig-platform-workers-welfare-act-2024"
+    },
+    {
       "source_id": "c605be8f239c",
       "title": "Bihar Labour Resources Department",
       "source_type": "portal",
@@ -2975,6 +3066,13 @@
     }
   ],
   "gig_worker|Bihar|welfare": [
+    {
+      "source_id": "54f8d2862979",
+      "title": "Bihar Gig and Platform Workers (Social Security and Welfare) Act, 2024",
+      "source_type": "law",
+      "jurisdiction": "state",
+      "source_url": "https://labour.bihar.gov.in/acts/bihar-gig-platform-workers-welfare-act-2024"
+    },
     {
       "source_id": "c605be8f239c",
       "title": "Bihar Labour Resources Department",
@@ -3054,6 +3152,13 @@
     }
   ],
   "gig_worker|Bihar|registration": [
+    {
+      "source_id": "54f8d2862979",
+      "title": "Bihar Gig and Platform Workers (Social Security and Welfare) Act, 2024",
+      "source_type": "law",
+      "jurisdiction": "state",
+      "source_url": "https://labour.bihar.gov.in/acts/bihar-gig-platform-workers-welfare-act-2024"
+    },
     {
       "source_id": "c605be8f239c",
       "title": "Bihar Labour Resources Department",
@@ -6042,6 +6147,13 @@
   ],
   "gig_worker|Jharkhand|platform_deactivation": [
     {
+      "source_id": "43609ada38fb",
+      "title": "Jharkhand Gig Workers Welfare Act, 2024",
+      "source_type": "law",
+      "jurisdiction": "state",
+      "source_url": "https://labour.jharkhand.gov.in/acts/jharkhand-gig-workers-welfare-act-2024"
+    },
+    {
       "source_id": "2bd59a29e316",
       "title": "Jharkhand Shramadhan Portal",
       "source_type": "portal",
@@ -6085,6 +6197,13 @@
     }
   ],
   "gig_worker|Jharkhand|welfare": [
+    {
+      "source_id": "43609ada38fb",
+      "title": "Jharkhand Gig Workers Welfare Act, 2024",
+      "source_type": "law",
+      "jurisdiction": "state",
+      "source_url": "https://labour.jharkhand.gov.in/acts/jharkhand-gig-workers-welfare-act-2024"
+    },
     {
       "source_id": "2bd59a29e316",
       "title": "Jharkhand Shramadhan Portal",
@@ -6164,6 +6283,13 @@
     }
   ],
   "gig_worker|Jharkhand|registration": [
+    {
+      "source_id": "43609ada38fb",
+      "title": "Jharkhand Gig Workers Welfare Act, 2024",
+      "source_type": "law",
+      "jurisdiction": "state",
+      "source_url": "https://labour.jharkhand.gov.in/acts/jharkhand-gig-workers-welfare-act-2024"
+    },
     {
       "source_id": "2bd59a29e316",
       "title": "Jharkhand Shramadhan Portal",
@@ -10424,6 +10550,13 @@
   ],
   "gig_worker|Rajasthan|platform_deactivation": [
     {
+      "source_id": "c0ae1cb0e1f7",
+      "title": "Rajasthan Platform Based Gig Workers (Registration and Welfare) Act, 2023",
+      "source_type": "law",
+      "jurisdiction": "state",
+      "source_url": "https://labour.rajasthan.gov.in/acts-rules/rajasthan-platform-based-gig-workers-registration-and-welfare-act-2023"
+    },
+    {
       "source_id": "60cc9b11d880",
       "title": "Rajasthan Labour Department",
       "source_type": "portal",
@@ -10467,6 +10600,13 @@
     }
   ],
   "gig_worker|Rajasthan|welfare": [
+    {
+      "source_id": "c0ae1cb0e1f7",
+      "title": "Rajasthan Platform Based Gig Workers (Registration and Welfare) Act, 2023",
+      "source_type": "law",
+      "jurisdiction": "state",
+      "source_url": "https://labour.rajasthan.gov.in/acts-rules/rajasthan-platform-based-gig-workers-registration-and-welfare-act-2023"
+    },
     {
       "source_id": "60cc9b11d880",
       "title": "Rajasthan Labour Department",
@@ -10546,6 +10686,13 @@
     }
   ],
   "gig_worker|Rajasthan|registration": [
+    {
+      "source_id": "c0ae1cb0e1f7",
+      "title": "Rajasthan Platform Based Gig Workers (Registration and Welfare) Act, 2023",
+      "source_type": "law",
+      "jurisdiction": "state",
+      "source_url": "https://labour.rajasthan.gov.in/acts-rules/rajasthan-platform-based-gig-workers-registration-and-welfare-act-2023"
+    },
     {
       "source_id": "60cc9b11d880",
       "title": "Rajasthan Labour Department",
@@ -11357,6 +11504,13 @@
   ],
   "gig_worker|Telangana|platform_deactivation": [
     {
+      "source_id": "8b6fbf14e8aa",
+      "title": "Telangana Gig and Platform Workers Welfare Act, 2024",
+      "source_type": "law",
+      "jurisdiction": "state",
+      "source_url": "https://labour.telangana.gov.in/acts/telangana-gig-platform-workers-welfare-act-2024"
+    },
+    {
       "source_id": "b7cc5c43728b",
       "title": "Telangana Labour Department",
       "source_type": "portal",
@@ -11400,6 +11554,13 @@
     }
   ],
   "gig_worker|Telangana|welfare": [
+    {
+      "source_id": "8b6fbf14e8aa",
+      "title": "Telangana Gig and Platform Workers Welfare Act, 2024",
+      "source_type": "law",
+      "jurisdiction": "state",
+      "source_url": "https://labour.telangana.gov.in/acts/telangana-gig-platform-workers-welfare-act-2024"
+    },
     {
       "source_id": "b7cc5c43728b",
       "title": "Telangana Labour Department",
@@ -11479,6 +11640,13 @@
     }
   ],
   "gig_worker|Telangana|registration": [
+    {
+      "source_id": "8b6fbf14e8aa",
+      "title": "Telangana Gig and Platform Workers Welfare Act, 2024",
+      "source_type": "law",
+      "jurisdiction": "state",
+      "source_url": "https://labour.telangana.gov.in/acts/telangana-gig-platform-workers-welfare-act-2024"
+    },
     {
       "source_id": "b7cc5c43728b",
       "title": "Telangana Labour Department",

@@ -1,0 +1,114 @@
+JHARKHAND GIG WORKERS WELFARE ACT, 2024
+(Act No. 5 of 2024)
+[Received the assent of the Governor on 15th February, 2024]
+
+An Act to provide for the welfare and social security of gig workers and platform workers in the State of Jharkhand,
+constitution of a Welfare Board, registration of gig workers and aggregators, and for matters connected therewith or incidental thereto.
+
+CHAPTER I: PRELIMINARY
+
+Section 1: Short title, extent and commencement
+(1) This Act may be called the Jharkhand Gig Workers Welfare Act, 2024.
+(2) It extends to the whole of the State of Jharkhand.
+(3) It shall come into force on such date as the State Government may, by notification in the Official Gazette, appoint.
+
+Section 2: Definitions
+In this Act, unless the context otherwise requires:
+(a) "aggregator" means a person who owns, manages or controls a digital platform for connecting gig workers with customers;
+(b) "gig worker" means a person who performs work or participates in a work arrangement through a digital platform and earns from such activities outside of traditional employer-employee relationship;
+(c) "platform worker" means a gig worker engaged through a digital platform;
+(d) "Welfare Board" means the Jharkhand Gig Workers Welfare Board constituted under section 4.
+
+CHAPTER II: REGISTRATION
+
+Section 3: Registration of aggregators
+(1) Every aggregator operating a digital platform in the State shall register with the Welfare Board within ninety days from the date of commencement of this Act.
+(2) Registration shall be valid for three years and renewable.
+
+Section 4: Constitution of Jharkhand Gig Workers Welfare Board
+(1) The State Government shall constitute the Jharkhand Gig Workers Welfare Board.
+(2) The Board shall consist of a Chairperson, officials from Labour Department, representatives of aggregators, gig workers, and civil society.
+
+Section 5: Registration of gig workers
+(1) Every gig worker in the State shall register with the Welfare Board through the designated portal.
+(2) On registration, a unique identification number shall be assigned.
+(3) Registration shall be free of cost and valid for the duration of engagement as a gig worker.
+
+Section 6: Registration of platforms
+All digital platforms engaging gig workers in the State shall register with the Welfare Board and provide details of gig workers engaged.
+
+CHAPTER III: WELFARE MEASURES
+
+Section 7: Welfare Fund
+(1) There shall be a Jharkhand Gig Workers Welfare Fund.
+(2) The Fund shall receive contributions from aggregators, gig workers, and State Government grants.
+
+Section 8: Welfare schemes
+The Welfare Board may notify schemes for:
+(a) accident insurance and disability cover;
+(b) health insurance;
+(c) maternity benefits;
+(d) children's education assistance;
+(e) skill upgradation and certification;
+(f) housing assistance;
+(g) any other scheme as notified.
+
+Section 9: Contributions by aggregators
+(1) Aggregators shall contribute such percentage of transaction value or worker earnings to the Welfare Fund as notified.
+(2) The contribution rate shall not exceed two per cent of the transaction value.
+
+Section 10: Benefits portability
+Benefits under this Act shall be portable across platforms and aggregators within the State.
+
+CHAPTER IV: GRIEVANCE REDRESSAL AND DISPUTE RESOLUTION
+
+Section 11: Internal Grievance Redressal
+(1) Every aggregator shall establish an Internal Grievance Redressal Mechanism.
+(2) Grievances shall be acknowledged within 48 hours and resolved within thirty days.
+(3) The mechanism shall be accessible through the platform and a dedicated helpline.
+
+Section 12: Welfare Board Grievance Redressal
+(1) If a grievance is not resolved by the aggregator within thirty days, the gig worker may approach the Welfare Board.
+(2) The Welfare Board shall dispose of the grievance within forty-five days.
+(3) The Welfare Board may direct the aggregator to pay compensation or reinstate the gig worker.
+
+Section 13: Protection against arbitrary deactivation
+(1) No aggregator shall deactivate a gig worker's account without:
+   (a) a valid reason communicated in writing;
+   (b) an opportunity of hearing;
+   (c) at least fourteen days' prior notice.
+(2) Emergency deactivation for safety reasons shall be followed by a detailed explanation within 48 hours.
+
+CHAPTER V: SOCIAL SECURITY
+
+Section 14: Social security coverage
+The Welfare Board shall endeavour to provide:
+(a) life and disability insurance coverage;
+(b) health insurance for gig workers and their families;
+(c) old age pension scheme;
+(d) maternity benefits for women gig workers.
+
+Section 15: Linkage with Central schemes
+The Welfare Board shall facilitate enrolment of eligible gig workers in Central Government schemes such as e-Shram, PM-SYM, PMJJBY, PMSBY, and Ayushman Bharat.
+
+CHAPTER VI: OFFENCES AND PENALTIES
+
+Section 16: Penalties
+(1) Failure to register: Penalty up to Rs. 2,00,000 for aggregators.
+(2) Non-payment of contributions: Penalty equal to twice the amount due.
+(3) Arbitrary deactivation: Penalty up to Rs. 3,00,000 and order for reinstatement.
+(4) Non-compliance with grievance redressal: Penalty up to Rs. 2,00,000.
+
+Section 17: Compounding of offences
+Offences under this Act may be compounded by the Welfare Board on payment of specified amounts.
+
+CHAPTER VII: MISCELLANEOUS
+
+Section 18: Power to make rules
+Section 19: Power to remove difficulties
+Section 20: Act to have overriding effect
+
+---
+SOURCE: Jharkhand Gazette Notification, Act No. 5 of 2024, dated 15 February 2024
+OFFICIAL URL: https://labour.jharkhand.gov.in/acts/jharkhand-gig-workers-welfare-act-2024
+LAST VERIFIED: 2026-10-18

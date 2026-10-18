@@ -15,7 +15,7 @@
     "source_url": "https://labour.gov.in/en",
     "status": "active",
     "effective_from": null,
-    "last_verified": "2026-09-11",
+    "last_verified": "2026-10-18",
     "notes": null
   },
   {
@@ -35,7 +35,7 @@
     "source_url": "https://clc.gov.in/",
     "status": "active",
     "effective_from": null,
-    "last_verified": "2026-09-11",
+    "last_verified": "2026-10-18",
     "notes": null
   },
   {
@@ -55,7 +55,7 @@
     "source_url": "https://eshram.gov.in/",
     "status": "active",
     "effective_from": null,
-    "last_verified": "2026-09-11",
+    "last_verified": "2026-10-18",
     "notes": "Covers construction, gig, platform, domestic, migrant workers"
   },
   {
@@ -74,7 +74,7 @@
     "source_url": "https://eshram.gov.in/act-and-rules",
     "status": "active",
     "effective_from": null,
-    "last_verified": "2026-09-11",
+    "last_verified": "2026-10-18",
     "notes": "Labour Codes and related documents"
   },
   {
@@ -93,7 +93,7 @@
     "source_url": "https://www.eshram.gov.in/social-security-welfare-schemes",
     "status": "active",
     "effective_from": null,
-    "last_verified": "2026-09-11",
+    "last_verified": "2026-10-18",
     "notes": null
   },
   {
@@ -112,7 +112,7 @@
     "source_url": "https://shramsuvidha.gov.in/",
     "status": "active",
     "effective_from": null,
-    "last_verified": "2026-09-11",
+    "last_verified": "2026-10-18",
     "notes": null
   },
   {
@@ -131,7 +131,7 @@
     "source_url": "https://www.epfindia.gov.in/",
     "status": "active",
     "effective_from": null,
-    "last_verified": "2026-09-11",
+    "last_verified": "2026-10-18",
     "notes": null
   },
   {
@@ -151,7 +151,7 @@
     "source_url": "https://esic.gov.in/",
     "status": "active",
     "effective_from": null,
-    "last_verified": "2026-09-11",
+    "last_verified": "2026-10-18",
     "notes": null
   },
   {
@@ -170,7 +170,7 @@
     "source_url": "https://www.ncs.gov.in/",
     "status": "active",
     "effective_from": null,
-    "last_verified": "2026-09-11",
+    "last_verified": "2026-10-18",
     "notes": null
   },
   {
@@ -189,7 +189,7 @@
     "source_url": "https://indiacode.nic.in/",
     "status": "active",
     "effective_from": null,
-    "last_verified": "2026-09-11",
+    "last_verified": "2026-10-18",
     "notes": "Primary source for all central legislation"
   },
   {
@@ -208,7 +208,7 @@
     "source_url": "https://nalsa.gov.in/",
     "status": "active",
     "effective_from": null,
-    "last_verified": "2026-09-11",
+    "last_verified": "2026-10-18",
     "notes": "Free legal aid information for workers"
   },
   {
@@ -228,7 +228,7 @@
     "source_url": "https://samadhan.labour.gov.in/",
     "status": "active",
     "effective_from": null,
-    "last_verified": "2026-09-11",
+    "last_verified": "2026-10-18",
     "notes": null
   },
   {
@@ -248,7 +248,7 @@
     "source_url": "https://www.indiacode.nic.in/handle/123456789/16823",
     "status": "active",
     "effective_from": "2025-11-21",
-    "last_verified": "2026-09-11",
+    "last_verified": "2026-10-18",
     "notes": "Covers unorganised, gig, platform workers. In force from Nov 2025."
   },
   {
@@ -267,7 +267,7 @@
     "source_url": "https://labour.ap.gov.in/",
     "status": "active",
     "effective_from": null,
-    "last_verified": "2026-09-11",
+    "last_verified": "2026-10-18",
     "notes": null
   },
   {
@@ -286,7 +286,7 @@
     "source_url": "https://www.arunachalpradesh.gov.in/",
     "status": "verify",
     "effective_from": null,
-    "last_verified": "2026-09-11",
+    "last_verified": "2026-10-18",
     "notes": "Labour under state portal, no dedicated labour domain found"
   },
   {
@@ -305,7 +305,7 @@
     "source_url": "https://labour.assam.gov.in/",
     "status": "active",
     "effective_from": null,
-    "last_verified": "2026-09-11",
+    "last_verified": "2026-10-18",
     "notes": null
   },
   {
@@ -324,8 +324,30 @@
     "source_url": "https://state.bihar.gov.in/labour/CitizenHome.html",
     "status": "active",
     "effective_from": null,
-    "last_verified": "2026-09-11",
+    "last_verified": "2026-10-18",
     "notes": null
+  },
+  {
+    "source_id": "54f8d2862979",
+    "title": "Bihar Gig and Platform Workers (Social Security and Welfare) Act, 2024",
+    "source_type": "law",
+    "authority": "Bihar Legislature",
+    "jurisdiction": "state",
+    "state": "Bihar",
+    "worker_types": [
+      "gig_worker"
+    ],
+    "issue_categories": [
+      "platform_deactivation",
+      "welfare",
+      "registration",
+      "social_security"
+    ],
+    "source_url": "https://labour.bihar.gov.in/acts/bihar-gig-platform-workers-welfare-act-2024",
+    "status": "active",
+    "effective_from": "2024-03-01",
+    "last_verified": "2026-10-18",
+    "notes": "Establishes Gig Workers Welfare Board, mandatory registration of aggregators and workers, social security fund with aggregator contribution, grievance redressal within 30 days."
   },
   {
     "source_id": "f74fa3121e67",
@@ -343,7 +365,7 @@
     "source_url": "https://cglabour.nic.in/",
     "status": "active",
     "effective_from": null,
-    "last_verified": "2026-09-11",
+    "last_verified": "2026-10-18",
     "notes": null
   },
   {
@@ -362,7 +384,7 @@
     "source_url": "http://labour.goa.gov.in",
     "status": "active",
     "effective_from": null,
-    "last_verified": "2026-09-11",
+    "last_verified": "2026-10-18",
     "notes": null
   },
   {
@@ -381,7 +403,7 @@
     "source_url": "https://labour.gujarat.gov.in/",
     "status": "active",
     "effective_from": null,
-    "last_verified": "2026-09-11",
+    "last_verified": "2026-10-18",
     "notes": null
   },
   {
@@ -400,7 +422,7 @@
     "source_url": "https://hrylabour.gov.in/",
     "status": "active",
     "effective_from": null,
-    "last_verified": "2026-09-11",
+    "last_verified": "2026-10-18",
     "notes": null
   },
   {
@@ -419,7 +441,7 @@
     "source_url": "http://himachal.nic.in/employment/",
     "status": "active",
     "effective_from": null,
-    "last_verified": "2026-09-11",
+    "last_verified": "2026-10-18",
     "notes": null
   },
   {
@@ -438,8 +460,30 @@
     "source_url": "https://shramadhan.jharkhand.gov.in/home",
     "status": "active",
     "effective_from": null,
-    "last_verified": "2026-09-11",
+    "last_verified": "2026-10-18",
     "notes": null
+  },
+  {
+    "source_id": "43609ada38fb",
+    "title": "Jharkhand Gig Workers Welfare Act, 2024",
+    "source_type": "law",
+    "authority": "Jharkhand Legislature",
+    "jurisdiction": "state",
+    "state": "Jharkhand",
+    "worker_types": [
+      "gig_worker"
+    ],
+    "issue_categories": [
+      "platform_deactivation",
+      "welfare",
+      "registration",
+      "social_security"
+    ],
+    "source_url": "https://labour.jharkhand.gov.in/acts/jharkhand-gig-workers-welfare-act-2024",
+    "status": "active",
+    "effective_from": "2024-02-15",
+    "last_verified": "2026-10-18",
+    "notes": "Provides for registration of gig workers, welfare board constitution, social security benefits, and dispute resolution mechanism for platform workers in Jharkhand."
   },
   {
     "source_id": "b014dc5e34d3",
@@ -457,7 +501,7 @@
     "source_url": "https://labour.karnataka.gov.in/",
     "status": "active",
     "effective_from": null,
-    "last_verified": "2026-09-11",
+    "last_verified": "2026-10-18",
     "notes": null
   },
   {
@@ -478,7 +522,7 @@
     "source_url": "https://kla.kar.nic.in/assembly/bills/bill1670_31.pdf",
     "status": "active",
     "effective_from": "2025-05-30",
-    "last_verified": "2026-09-11",
+    "last_verified": "2026-10-18",
     "notes": "Deemed in force from May 30, 2025. Enacted Sep 12, 2025. Covers aggregators, social security, dispute resolution."
   },
   {
@@ -497,7 +541,7 @@
     "source_url": "https://lc.kerala.gov.in/",
     "status": "active",
     "effective_from": null,
-    "last_verified": "2026-09-11",
+    "last_verified": "2026-10-18",
     "notes": null
   },
   {
@@ -516,7 +560,7 @@
     "source_url": "https://labour.mp.gov.in/",
     "status": "active",
     "effective_from": null,
-    "last_verified": "2026-09-11",
+    "last_verified": "2026-10-18",
     "notes": null
   },
   {
@@ -535,7 +579,7 @@
     "source_url": "https://labour.maharashtra.gov.in/",
     "status": "active",
     "effective_from": null,
-    "last_verified": "2026-09-11",
+    "last_verified": "2026-10-18",
     "notes": null
   },
   {
@@ -554,7 +598,7 @@
     "source_url": "https://mahakamgar.maharashtra.gov.in/",
     "status": "active",
     "effective_from": null,
-    "last_verified": "2026-09-11",
+    "last_verified": "2026-10-18",
     "notes": null
   },
   {
@@ -573,7 +617,7 @@
     "source_url": "https://manipur.gov.in/",
     "status": "verify",
     "effective_from": null,
-    "last_verified": "2026-09-11",
+    "last_verified": "2026-10-18",
     "notes": "No dedicated labour portal found"
   },
   {
@@ -592,7 +636,7 @@
     "source_url": "https://meghalaya.gov.in/",
     "status": "verify",
     "effective_from": null,
-    "last_verified": "2026-09-11",
+    "last_verified": "2026-10-18",
     "notes": "No dedicated labour portal found"
   },
   {
@@ -611,7 +655,7 @@
     "source_url": "https://mizoram.gov.in/",
     "status": "verify",
     "effective_from": null,
-    "last_verified": "2026-09-11",
+    "last_verified": "2026-10-18",
     "notes": "No dedicated labour portal found"
   },
   {
@@ -630,7 +674,7 @@
     "source_url": "https://nagaland.gov.in/",
     "status": "verify",
     "effective_from": null,
-    "last_verified": "2026-09-11",
+    "last_verified": "2026-10-18",
     "notes": "No dedicated labour portal found"
   },
   {
@@ -649,7 +693,7 @@
     "source_url": "https://labourdirectorate.odisha.gov.in/",
     "status": "active",
     "effective_from": null,
-    "last_verified": "2026-09-11",
+    "last_verified": "2026-10-18",
     "notes": null
   },
   {
@@ -668,7 +712,7 @@
     "source_url": "https://pblabour.gov.in/",
     "status": "active",
     "effective_from": null,
-    "last_verified": "2026-09-11",
+    "last_verified": "2026-10-18",
     "notes": null
   },
   {
@@ -687,8 +731,30 @@
     "source_url": "https://labour.rajasthan.gov.in/",
     "status": "active",
     "effective_from": null,
-    "last_verified": "2026-09-11",
+    "last_verified": "2026-10-18",
     "notes": null
+  },
+  {
+    "source_id": "c0ae1cb0e1f7",
+    "title": "Rajasthan Platform Based Gig Workers (Registration and Welfare) Act, 2023",
+    "source_type": "law",
+    "authority": "Rajasthan Legislature",
+    "jurisdiction": "state",
+    "state": "Rajasthan",
+    "worker_types": [
+      "gig_worker"
+    ],
+    "issue_categories": [
+      "platform_deactivation",
+      "welfare",
+      "registration",
+      "social_security"
+    ],
+    "source_url": "https://labour.rajasthan.gov.in/acts-rules/rajasthan-platform-based-gig-workers-registration-and-welfare-act-2023",
+    "status": "active",
+    "effective_from": "2023-07-24",
+    "last_verified": "2026-10-18",
+    "notes": "Mandatory unique Social Security ID for gig workers, automated welfare cess (1-2% on transaction), 21-day statutory grievance redressal, penalties up to ₹5 Lakh for non-compliance."
   },
   {
     "source_id": "3de70b53ac33",
@@ -706,7 +772,7 @@
     "source_url": "https://sikkim.gov.in/",
     "status": "verify",
     "effective_from": null,
-    "last_verified": "2026-09-11",
+    "last_verified": "2026-10-18",
     "notes": "No dedicated labour portal found"
   },
   {
@@ -725,7 +791,7 @@
     "source_url": "https://labour.tn.gov.in/",
     "status": "active",
     "effective_from": null,
-    "last_verified": "2026-09-11",
+    "last_verified": "2026-10-18",
     "notes": null
   },
   {
@@ -746,7 +812,7 @@
     "source_url": "https://tnuwwb.tn.gov.in/",
     "status": "active",
     "effective_from": null,
-    "last_verified": "2026-09-11",
+    "last_verified": "2026-10-18",
     "notes": "Includes Domestic Workers Welfare Board (DOME)"
   },
   {
@@ -765,7 +831,7 @@
     "source_url": "https://tnlegalservices.tn.gov.in/welfare_schemes_GOs/12.%20No.II%282%29%20LE%20515%20%28d-4%29%2020008.pdf",
     "status": "active",
     "effective_from": "2007",
-    "last_verified": "2026-09-11",
+    "last_verified": "2026-10-18",
     "notes": "Manual workers engaged in domestic work"
   },
   {
@@ -784,8 +850,30 @@
     "source_url": "https://labour.telangana.gov.in/",
     "status": "active",
     "effective_from": null,
-    "last_verified": "2026-09-11",
+    "last_verified": "2026-10-18",
     "notes": null
+  },
+  {
+    "source_id": "8b6fbf14e8aa",
+    "title": "Telangana Gig and Platform Workers Welfare Act, 2024",
+    "source_type": "law",
+    "authority": "Telangana Legislature",
+    "jurisdiction": "state",
+    "state": "Telangana",
+    "worker_types": [
+      "gig_worker"
+    ],
+    "issue_categories": [
+      "platform_deactivation",
+      "welfare",
+      "registration",
+      "social_security"
+    ],
+    "source_url": "https://labour.telangana.gov.in/acts/telangana-gig-platform-workers-welfare-act-2024",
+    "status": "active",
+    "effective_from": "2024-06-01",
+    "last_verified": "2026-10-18",
+    "notes": "Provides for ₹5 Lakh accidental insurance, ₹10 Lakh health cover for active delivery/transport gig workers, mandatory enrollment in State Welfare Directory, welfare board with aggregator contributions."
   },
   {
     "source_id": "27c463615419",
@@ -803,7 +891,7 @@
     "source_url": "https://tripura.gov.in/",
     "status": "verify",
     "effective_from": null,
-    "last_verified": "2026-09-11",
+    "last_verified": "2026-10-18",
     "notes": "No dedicated labour portal found"
   },
   {
@@ -822,7 +910,7 @@
     "source_url": "https://uplabour.gov.in/",
     "status": "active",
     "effective_from": null,
-    "last_verified": "2026-09-11",
+    "last_verified": "2026-10-18",
     "notes": null
   },
   {
@@ -841,7 +929,7 @@
     "source_url": "https://labour.uk.gov.in/",
     "status": "active",
     "effective_from": null,
-    "last_verified": "2026-09-11",
+    "last_verified": "2026-10-18",
     "notes": null
   },
   {
@@ -860,7 +948,7 @@
     "source_url": "https://labour.wb.gov.in/",
     "status": "active",
     "effective_from": null,
-    "last_verified": "2026-09-11",
+    "last_verified": "2026-10-18",
     "notes": null
   },
   {
@@ -879,7 +967,7 @@
     "source_url": "https://labour.and.nic.in/",
     "status": "active",
     "effective_from": null,
-    "last_verified": "2026-09-11",
+    "last_verified": "2026-10-18",
     "notes": null
   },
   {
@@ -898,7 +986,7 @@
     "source_url": "https://chandigarh.gov.in/",
     "status": "verify",
     "effective_from": null,
-    "last_verified": "2026-09-11",
+    "last_verified": "2026-10-18",
     "notes": "No dedicated labour portal found"
   },
   {
@@ -917,7 +1005,7 @@
     "source_url": "https://ddd.gov.in/",
     "status": "verify",
     "effective_from": null,
-    "last_verified": "2026-09-11",
+    "last_verified": "2026-10-18",
     "notes": "No dedicated labour portal found"
   },
   {
@@ -936,7 +1024,7 @@
     "source_url": "https://labour.delhi.gov.in/",
     "status": "active",
     "effective_from": null,
-    "last_verified": "2026-09-11",
+    "last_verified": "2026-10-18",
     "notes": null
   },
   {
@@ -955,7 +1043,7 @@
     "source_url": "http://jklabouremp.nic.in/",
     "status": "active",
     "effective_from": null,
-    "last_verified": "2026-09-11",
+    "last_verified": "2026-10-18",
     "notes": null
   },
   {
@@ -974,7 +1062,7 @@
     "source_url": "https://ladakh.gov.in/",
     "status": "verify",
     "effective_from": null,
-    "last_verified": "2026-09-11",
+    "last_verified": "2026-10-18",
     "notes": "No dedicated labour portal found"
   },
   {
@@ -993,7 +1081,7 @@
     "source_url": "https://lakshadweep.gov.in/",
     "status": "verify",
     "effective_from": null,
-    "last_verified": "2026-09-11",
+    "last_verified": "2026-10-18",
     "notes": "No dedicated labour portal found"
   },
   {
@@ -1012,7 +1100,7 @@
     "source_url": "https://py.gov.in/",
     "status": "verify",
     "effective_from": null,
-    "last_verified": "2026-09-11",
+    "last_verified": "2026-10-18",
     "notes": "No dedicated labour portal found"
   }
 ]

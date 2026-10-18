@@ -180,6 +180,7 @@ class HybridRetriever:
                     query_vector=query_vector,
                     limit=top_k * 3,
                     jurisdiction=rq.jurisdiction,
+                    state=state,
                     worker_type=primary_worker,
                     issue_category=primary_issue,
                 )

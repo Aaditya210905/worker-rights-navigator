@@ -125,6 +125,7 @@ class QdrantStore:
         query_vector: list[float],
         limit: int = 10,
         jurisdiction: str = None,
+        state: str = None,
         worker_type: str = None,
         issue_category: str = None,
     ) -> list[dict]:
@@ -141,6 +142,14 @@ class QdrantStore:
                 FieldCondition(
                     key="jurisdiction",
                     match=MatchValue(value=jurisdiction),
+                )
+            )
+
+        if state:
+            conditions.append(
+                FieldCondition(
+                    key="state",
+                    match=MatchValue(value=state),
                 )
             )
 

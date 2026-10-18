@@ -22,3 +22,7 @@ ollama>=0.6.0
 
 # Web search (Tavily — for search_live_news tool)
 tavily-python>=0.5.0
+
+# PDF Generation & OCR
+fpdf2>=2.7.6
+pytesseract>=0.3.10

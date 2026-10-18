@@ -1,0 +1,133 @@
+BIHAR GIG AND PLATFORM WORKERS (SOCIAL SECURITY AND WELFARE) ACT, 2024
+(Act No. 12 of 2024)
+[Received the assent of the Governor on 1st March, 2024]
+
+An Act to provide for the social security and welfare of gig workers and platform workers in the State of Bihar,
+constitution of a Gig Workers Welfare Board, mandatory registration of aggregators and workers,
+social security fund with aggregator contributions, and for matters connected therewith or incidental thereto.
+
+CHAPTER I: PRELIMINARY
+
+Section 1: Short title, extent and commencement
+(1) This Act may be called the Bihar Gig and Platform Workers (Social Security and Welfare) Act, 2024.
+(2) It extends to the whole of the State of Bihar.
+(3) It shall come into force on such date as the State Government may, by notification in the Official Gazette, appoint.
+
+Section 2: Definitions
+In this Act, unless the context otherwise requires:
+(a) "aggregator" means a digital platform that connects gig workers with customers for providing services;
+(b) "gig worker" means a person engaged in work through a digital platform, outside traditional employer-employee relationship;
+(c) "platform worker" means a gig worker providing services through a digital platform;
+(d) "Welfare Board" means the Bihar Gig and Platform Workers Welfare Board constituted under section 4;
+(e) "Social Security Fund" means the fund constituted under section 8.
+
+CHAPTER II: REGISTRATION
+
+Section 3: Mandatory registration of aggregators
+(1) Every aggregator operating in Bihar shall register with the Welfare Board within sixty days of commencement.
+(2) Registration certificate shall be displayed prominently on the platform.
+
+Section 4: Constitution of Bihar Gig and Platform Workers Welfare Board
+(1) The State Government shall constitute the Bihar Gig and Platform Workers Welfare Board.
+(2) Composition: Chairperson (Minister-in-charge), Vice-Chairperson, Government officials, representatives of aggregators, gig workers, and experts.
+
+Section 5: Registration of gig workers
+(1) Every gig worker shall register with the Welfare Board through the online portal.
+(2) Registration shall be free, Aadhaar-based, and linked to e-Shram UAN.
+(3) A unique Gig Worker ID shall be issued upon registration.
+
+Section 6: Registration of platforms
+All digital platforms engaging gig workers in Bihar shall register and share worker data with the Welfare Board.
+
+CHAPTER III: SOCIAL SECURITY FUND AND CONTRIBUTIONS
+
+Section 7: Social Security Fund
+There shall be constituted the Bihar Gig and Platform Workers Social Security Fund.
+
+Section 8: Sources of the Fund
+The Fund shall consist of:
+(a) aggregator contributions;
+(b) nominal worker contributions (where applicable);
+(c) State Government grants;
+(d) income from investments;
+(e) any other receipts.
+
+Section 9: Aggregator contributions
+(1) Every aggregator shall contribute such percentage of the transaction value or worker earnings to the Fund as notified.
+(2) The contribution rate shall be between one to two percent of the transaction value.
+(3) Contributions shall be deposited monthly.
+
+Section 10: Utilization of Fund
+The Fund shall be utilized for:
+(a) life and disability insurance;
+(b) health insurance and medical benefits;
+(c) maternity benefits;
+(d) children's education scholarships;
+(e) skill development and certification;
+(f) housing and emergency assistance;
+(g) administrative expenses of the Board.
+
+CHAPTER IV: WELFARE MEASURES
+
+Section 11: Welfare schemes
+The Welfare Board shall notify schemes for:
+(a) accident and disability cover (minimum Rs. 5 lakh);
+(b) health insurance cover (minimum Rs. 2 lakh per annum);
+(c) maternity benefit (minimum Rs. 50,000);
+(d) pension for workers above 60 years;
+(e) educational assistance for children;
+(f) skill upgradation and vocational training.
+
+Section 12: Portability of benefits
+Benefits shall be portable across platforms and aggregators within Bihar and shall be linked to the worker's unique ID.
+
+Section 13: Linkage with e-Shram and Central schemes
+The Board shall ensure seamless integration with e-Shram portal and facilitate enrolment in PM-SYM, PMJJBY, PMSBY, Ayushman Bharat, and other Central schemes.
+
+CHAPTER V: GRIEVANCE REDRESSAL
+
+Section 14: Internal Grievance Redressal by aggregators
+(1) Every aggregator shall establish a time-bound Internal Grievance Redressal Mechanism.
+(2) The mechanism shall resolve grievances within thirty days.
+(3) A dedicated Grievance Redressal Officer shall be appointed.
+
+Section 15: Welfare Board Grievance Redressal
+(1) Aggrieved gig workers may approach the Welfare Board if not satisfied with aggregator's resolution.
+(2) The Board shall dispose of complaints within forty-five days.
+(3) The Board may order compensation, reinstatement, or penalties.
+
+Section 16: Protection against arbitrary deactivation
+(1) No aggregator shall deactivate a gig worker without:
+   (a) written grounds communicated to the worker;
+   (b) prior notice of at least fourteen days;
+   (c) opportunity of hearing.
+(2) Deactivation for safety/critical reasons requires post-facto justification within 48 hours.
+
+Section 17: Dispute resolution timeline
+All disputes shall be resolved within a maximum of ninety days from filing.
+
+CHAPTER VI: OFFENCES AND PENALTIES
+
+Section 18: Penalties for non-compliance
+(a) Non-registration of aggregator: Up to Rs. 5,00,000.
+(b) Non-payment of contributions: Twice the amount due plus interest.
+(c) Arbitrary deactivation: Up to Rs. 3,00,000 and mandatory reinstatement.
+(d) Non-compliance with grievance redressal: Up to Rs. 2,00,000.
+(e) Failure to share worker data: Up to Rs. 1,00,000.
+
+Section 19: Compounding of offences
+Offences may be compounded by the Welfare Board on payment of specified amounts.
+
+Section 20: Cognizance of offences
+Only on complaint by Welfare Board or authorized officer.
+
+CHAPTER VII: MISCELLANEOUS
+
+Section 21: Power to make rules
+Section 22: Power to remove difficulties
+Section 23: Overriding effect
+
+---
+SOURCE: Bihar Gazette Notification, Act No. 12 of 2024, dated 1 March 2024
+OFFICIAL URL: https://labour.bihar.gov.in/acts/bihar-gig-platform-workers-welfare-act-2024
+LAST VERIFIED: 2026-10-18

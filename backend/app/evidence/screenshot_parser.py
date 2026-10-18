@@ -144,7 +144,7 @@ class EvidenceManager:
 
     @classmethod
     def _extract_text(cls, filepath: Path, ext: str) -> str:
-        """Extract text from file. For PDFs, uses PyMuPDF. For images, scans bytes or heuristics."""
+        """Extract text from file. For PDFs, uses PyMuPDF. For images, uses Tesseract OCR."""
         text_content = ""
         try:
             if ext == ".pdf":
@@ -156,20 +156,48 @@ class EvidenceManager:
             elif ext in [".txt", ".csv", ".json"]:
                 with open(filepath, "r", encoding="utf-8", errors="ignore") as f:
                     text_content = f.read()
+            elif ext in [".png", ".jpg", ".jpeg", ".webp", ".bmp", ".tiff"]:
+                # Use Tesseract OCR for images
+                try:
+                    import pytesseract
+                    from PIL import Image
+                    
+                    image = Image.open(filepath)
+                    # Convert to RGB if necessary
+                    if image.mode not in ('RGB', 'L'):
+                        image = image.convert('RGB')
+                    
+                    # Use both Hindi and English for OCR
+                    text_content = pytesseract.image_to_string(
+                        image, 
+                        lang='hin+eng',
+                        config='--psm 6'  # Assume uniform block of text
+                    )
+                except ImportError:
+                    # Fallback if pytesseract not available
+                    text_content = cls._fallback_image_extraction(filepath)
+                except Exception as e:
+                    # Fallback on any OCR error
+                    text_content = f"[OCR error: {str(e)}] " + cls._fallback_image_extraction(filepath)
             else:
-                # For images, try reading embedded EXIF / metadata or strings in file
-                # In full environment with tesseract: pytesseract.image_to_string
-                # Here we do a lightweight string extraction fallback for common mobile screenshots
-                with open(filepath, "rb") as f:
-                    data = f.read()
-                # Extract printable strings
-                printable = re.findall(rb'[A-Za-z0-9.,\s\-_:]{4,}', data)
-                decoded_snippets = [p.decode('latin-1', errors='ignore') for p in printable[:50]]
-                text_content = " ".join(decoded_snippets)
+                # For other files, try string extraction
+                text_content = cls._fallback_image_extraction(filepath)
         except Exception as e:
             text_content = f"[Extraction note: {str(e)}]"
 
         return text_content.strip()
+
+    @classmethod
+    def _fallback_image_extraction(cls, filepath: Path) -> str:
+        """Fallback string extraction from binary files when OCR is unavailable."""
+        try:
+            with open(filepath, "rb") as f:
+                data = f.read()
+            printable = re.findall(rb'[A-Za-z0-9.,\s\-_:]{4,}', data)
+            decoded_snippets = [p.decode('latin-1', errors='ignore') for p in printable[:50]]
+            return " ".join(decoded_snippets)
+        except Exception:
+            return ""
 
     @classmethod
     def _parse_text_fields(cls, text: str, filename: str, caption: Optional[str]) -> ParsedEvidenceData:

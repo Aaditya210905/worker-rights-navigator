@@ -132,6 +132,7 @@ class RAGDocument(BaseModel):
 
     # Classification
     jurisdiction: str = "central"
+    state: str = ""  # State name for state-level laws (e.g., "Rajasthan", "Karnataka")
     source_type: str = ""
     evidence_level: str = EvidenceLevel.SECONDARY.value
 

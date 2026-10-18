@@ -8,10 +8,12 @@ Generates statutory complaint petitions and formal demand notices for:
 4. State Gig & Platform Workers Welfare Board (Rajasthan / Karnataka / Tamil Nadu / Telangana).
 
 Available in English and Hindi with full statutory citations and Annexures table.
+Supports PDF generation via fpdf2 (pure Python, no external dependencies).
 """
 
 import re
 import html
+import base64
 from enum import Enum
 from datetime import datetime
 from typing import Optional, List, Dict, Any
@@ -21,6 +23,14 @@ from app.case.models import CaseState, WorkerType, IndianState, IssueCategory
 from app.evidence.eligibility import EligibilityReport
 from app.evidence.wage_calculator import WageCalculationResult
 from app.evidence.screenshot_parser import EvidenceTimeline, EvidenceItem
+
+# Optional fpdf2 import for PDF generation (pure Python, no external deps)
+try:
+    from fpdf import FPDF
+    FPDF_AVAILABLE = True
+except ImportError:
+    FPDF_AVAILABLE = False
+    FPDF = None
 
 
 class ComplaintAuthority(str, Enum):
@@ -46,6 +56,7 @@ class GeneratedDocument(BaseModel):
     subject_line: str
     body_markdown: str
     body_html: str
+    body_pdf_base64: Optional[str] = None  # Base64-encoded PDF
     prayers_reliefs: List[str]
     annexures: List[Dict[str, str]]
     statutory_citations: List[str]
@@ -142,6 +153,9 @@ class ComplaintGenerator:
 
         body_html = cls._convert_md_to_html(body_md)
 
+        # Generate PDF from HTML
+        body_pdf_base64 = cls._generate_pdf_from_html(body_html)
+
         return GeneratedDocument(
             document_id=doc_id,
             case_id=case.case_id,
@@ -153,6 +167,7 @@ class ComplaintGenerator:
             subject_line=subject,
             body_markdown=body_md,
             body_html=body_html,
+            body_pdf_base64=body_pdf_base64,
             prayers_reliefs=prayers,
             annexures=annexures,
             statutory_citations=legal_grounds["citations"],
@@ -473,3 +488,93 @@ I, the Complainant, do hereby verify that the contents of the above complaint ar
             out.append(f"<tr>{row_html}</tr>")
         out.append("</table>")
         return "\n".join(out)
+
+    @classmethod
+    def _generate_pdf_from_html(cls, html_content: str) -> Optional[str]:
+        """
+        Generate PDF from HTML content using fpdf2.
+        Returns base64-encoded PDF string, or None if fpdf2 unavailable.
+        """
+        if not FPDF_AVAILABLE or FPDF is None:
+            return None
+        
+        try:
+            # Create a simple PDF from the HTML content
+            pdf = FPDF()
+            pdf.add_page()
+            pdf.set_auto_page_break(auto=True, margin=25)
+            
+            # Use a Unicode-capable font
+            # Try to use a system font that supports Unicode
+            font_added = False
+            font_paths = [
+                # Windows fonts
+                ('C:/Windows/Fonts/arial.ttf', 'C:/Windows/Fonts/arialbd.ttf', 'C:/Windows/Fonts/ariali.ttf', 'C:/Windows/Fonts/arialbi.ttf'),
+                ('C:/Windows/Fonts/segui.ttf', 'C:/Windows/Fonts/seguib.ttf', 'C:/Windows/Fonts/seguii.ttf', 'C:/Windows/Fonts/seguiz.ttf'),  # Segoe UI
+                # Linux fonts
+                ('/usr/share/fonts/truetype/dejavu/DejaVuSerif.ttf', '/usr/share/fonts/truetype/dejavu/DejaVuSerif-Bold.ttf', '/usr/share/fonts/truetype/dejavu/DejaVuSerif-Italic.ttf', '/usr/share/fonts/truetype/dejavu/DejaVuSerif-BoldItalic.ttf'),
+                ('/usr/share/fonts/truetype/noto/NotoSerif-Regular.ttf', '/usr/share/fonts/truetype/noto/NotoSerif-Bold.ttf', '/usr/share/fonts/truetype/noto/NotoSerif-Italic.ttf', '/usr/share/fonts/truetype/noto/NotoSerif-BoldItalic.ttf'),
+            ]
+            
+            for regular, bold, italic, bold_italic in font_paths:
+                import os
+                if os.path.exists(regular):
+                    pdf.add_font('CustomFont', '', regular, uni=True)
+                    if os.path.exists(bold):
+                        pdf.add_font('CustomFont', 'B', bold, uni=True)
+                    if os.path.exists(italic):
+                        pdf.add_font('CustomFont', 'I', italic, uni=True)
+                    if os.path.exists(bold_italic):
+                        pdf.add_font('CustomFont', 'BI', bold_italic, uni=True)
+                    font_name = 'CustomFont'
+                    font_added = True
+                    break
+            
+            if not font_added:
+                # Fallback to built-in font (limited Unicode)
+                font_name = 'Helvetica'
+            
+            pdf.set_font(font_name, '', 11)
+            
+            # Simple HTML to text conversion for PDF
+            import re
+            
+            # Replace common HTML tags with plain text equivalents
+            text = html_content
+            # Headers
+            text = re.sub(r'<h1[^>]*>(.*?)</h1>', r'\1\n\n', text, flags=re.IGNORECASE | re.DOTALL)
+            text = re.sub(r'<h2[^>]*>(.*?)</h2>', r'\1\n\n', text, flags=re.IGNORECASE | re.DOTALL)
+            text = re.sub(r'<h3[^>]*>(.*?)</h3>', r'\1\n', text, flags=re.IGNORECASE | re.DOTALL)
+            text = re.sub(r'<h4[^>]*>(.*?)</h4>', r'\1\n', text, flags=re.IGNORECASE | re.DOTALL)
+            # Paragraphs
+            text = re.sub(r'<p[^>]*>(.*?)</p>', r'\1\n\n', text, flags=re.IGNORECASE | re.DOTALL)
+            # Bold
+            text = re.sub(r'<strong>(.*?)</strong>', r'\1', text, flags=re.IGNORECASE | re.DOTALL)
+            text = re.sub(r'<b>(.*?)</b>', r'\1', text, flags=re.IGNORECASE | re.DOTALL)
+            # Line breaks
+            text = re.sub(r'<br\s*/?>', '\n', text, flags=re.IGNORECASE)
+            text = re.sub(r'<hr\s*/?>', '\n' + '-'*50 + '\n', text, flags=re.IGNORECASE)
+            # Lists
+            text = re.sub(r'<li[^>]*>(.*?)</li>', r'  - \1\n', text, flags=re.IGNORECASE | re.DOTALL)
+            # Tables - simplified
+            text = re.sub(r'<table[^>]*>.*?</table>', '[Table - see HTML version for full details]', text, flags=re.IGNORECASE | re.DOTALL)
+            # Remove remaining tags
+            text = re.sub(r'<[^>]+>', '', text)
+            # Decode HTML entities
+            text = html.unescape(text)
+            # Clean up whitespace
+            text = re.sub(r'\n{3,}', '\n\n', text)
+            text = re.sub(r' {2,}', ' ', text)
+            text = text.strip()
+            
+            # Write to PDF
+            pdf.multi_cell(0, 5, text)
+            
+            # Output as bytes
+            pdf_bytes = pdf.output(dest='S')
+            if isinstance(pdf_bytes, str):
+                pdf_bytes = pdf_bytes.encode('latin-1')
+            return base64.b64encode(pdf_bytes).decode('utf-8')
+        except Exception as e:
+            print(f"[complaint_generator] PDF generation failed: {e}")
+            return None

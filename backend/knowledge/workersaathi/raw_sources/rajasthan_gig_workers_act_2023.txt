@@ -1,0 +1,107 @@
+RAJASTHAN PLATFORM BASED GIG WORKERS (REGISTRATION AND WELFARE) ACT, 2023
+(Act No. 18 of 2023)
+[Received the assent of the Governor on 24th July, 2023]
+
+An Act to provide for the registration of platform based gig workers, aggregators and primary employers, 
+constitution of a Welfare Board, social security and welfare measures for platform based gig workers 
+in the State of Rajasthan and for matters connected therewith or incidental thereto.
+
+CHAPTER I: PRELIMINARY
+
+Section 1: Short title, extent and commencement
+(1) This Act may be called the Rajasthan Platform Based Gig Workers (Registration and Welfare) Act, 2023.
+(2) It extends to the whole of the State of Rajasthan.
+(3) It shall come into force on such date as the State Government may, by notification in the Official Gazette, appoint.
+
+Section 2: Definitions
+In this Act, unless the context otherwise requires:
+(a) "aggregator" means a digital intermediary or a marketplace for a buyer or user of a service to connect with the seller or the service provider;
+(b) "gig worker" means a person who performs work or participates in a work arrangement and earns from such activities outside of traditional employer-employee relationship;
+(c) "platform" means an online platform or application used by an aggregator to connect gig workers with customers;
+(d) "welfare cess" means the cess levied under section 12;
+(e) "Welfare Board" means the Rajasthan Platform Based Gig Workers Welfare Board constituted under section 5.
+
+CHAPTER II: REGISTRATION
+
+Section 3: Registration of aggregators
+(1) Every aggregator operating in the State shall register itself with the Welfare Board within sixty days from the date of commencement of this Act.
+(2) The registration shall be valid for a period of five years and renewable thereafter.
+
+Section 4: Registration of gig workers
+(1) Every gig worker working through a platform in the State shall register with the Welfare Board.
+(2) On registration, a unique Social Security ID shall be assigned to each gig worker.
+(3) The Social Security ID shall be portable across platforms and valid throughout the State.
+
+Section 5: Constitution of Welfare Board
+(1) The State Government shall constitute a Board to be called the Rajasthan Platform Based Gig Workers Welfare Board.
+(2) The Board shall consist of a Chairperson, representatives of the State Government, aggregators, gig workers, and experts.
+
+Section 6: Functions of the Welfare Board
+The Welfare Board shall:
+(a) register aggregators and gig workers;
+(b) administer the welfare fund;
+(c) formulate welfare schemes for gig workers;
+(d) provide for grievance redressal mechanism;
+(e) monitor compliance by aggregators.
+
+CHAPTER III: SOCIAL SECURITY AND WELFARE
+
+Section 7: Welfare schemes
+The Welfare Board may notify schemes for:
+(a) life and disability cover;
+(b) health and maternity benefits;
+(c) old age protection;
+(d) skill development and training;
+(e) any other welfare measure as may be notified.
+
+Section 8: Welfare Fund
+(1) There shall be constituted a Fund to be called the Rajasthan Platform Based Gig Workers Welfare Fund.
+(2) The Fund shall consist of:
+   (a) welfare cess collected from aggregators;
+   (b) contributions from gig workers;
+   (c) grants from the State Government;
+   (d) any other receipts.
+
+Section 9: Welfare cess
+(1) Every aggregator shall pay welfare cess at such rate, not exceeding two per cent of the value of each transaction, as may be notified by the State Government.
+(2) The cess shall be collected and remitted to the Welfare Fund.
+
+Section 10: Social security contributions
+Aggregators shall contribute to the social security of gig workers as per the schemes notified by the Welfare Board.
+
+CHAPTER IV: GRIEVANCE REDRESSAL
+
+Section 11: Grievance Redressal Mechanism
+(1) Every aggregator shall establish an Internal Grievance Redressal Mechanism for gig workers.
+(2) The aggregator shall resolve grievances within twenty-one days from the date of receipt.
+(3) If the grievance is not resolved within twenty-one days, the gig worker may approach the Welfare Board.
+
+Section 12: Appellate Authority
+The State Government shall constitute an Appellate Authority to hear appeals against orders of the Welfare Board.
+
+CHAPTER V: OFFENCES AND PENALTIES
+
+Section 13: Penalty for non-registration
+If an aggregator fails to register under section 3, it shall be liable to a penalty which may extend to five lakh rupees.
+
+Section 14: Penalty for non-payment of cess
+If an aggregator fails to pay welfare cess, it shall be liable to a penalty equal to twice the amount of cess due.
+
+Section 15: Penalty for non-compliance with grievance redressal
+If an aggregator fails to comply with the grievance redressal mechanism under section 11, it shall be liable to a penalty which may extend to five lakh rupees.
+
+Section 16: Cognizance of offences
+No court shall take cognizance of any offence under this Act except on a complaint made by the Welfare Board or an officer authorised by it.
+
+CHAPTER VI: MISCELLANEOUS
+
+Section 17: Power to make rules
+The State Government may make rules for carrying out the provisions of this Act.
+
+Section 18: Power to remove difficulties
+If any difficulty arises in giving effect to the provisions of this Act, the State Government may make such provisions as appear necessary.
+
+---
+SOURCE: Rajasthan Gazette Notification, Act No. 18 of 2023, dated 24 July 2023
+OFFICIAL URL: https://labour.rajasthan.gov.in/acts-rules/rajasthan-platform-based-gig-workers-registration-and-welfare-act-2023
+LAST VERIFIED: 2026-10-18

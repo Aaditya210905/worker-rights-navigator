@@ -19,6 +19,16 @@ WORKDIR /app
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
         build-essential \
+        tesseract-ocr \
+        tesseract-ocr-hin \
+        tesseract-ocr-eng \
+        libpango-1.0-0 \
+        libpangoft2-1.0-0 \
+        libgdk-pixbuf-2.0-0 \
+        libffi-dev \
+        shared-mime-info \
+        fonts-dejavu-core \
+        fonts-liberation \
     && rm -rf /var/lib/apt/lists/*
 
 # ── Python deps (cached layer) ──────────────────────────────────

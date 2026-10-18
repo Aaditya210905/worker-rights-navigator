@@ -204,6 +204,18 @@ https://labour.assam.gov.in/
 https://state.bihar.gov.in/labour/CitizenHome.html
 ---
 # JURISDICTION: state
+# STATE: Bihar
+# TYPE: law
+# TITLE: Bihar Gig and Platform Workers (Social Security and Welfare) Act, 2024
+# AUTHORITY: Bihar Legislature
+# WORKER_TYPES: gig_worker
+# ISSUES: platform_deactivation, welfare, registration, social_security
+# STATUS: active
+# EFFECTIVE: 2024-03-01
+# NOTES: Establishes Gig Workers Welfare Board, mandatory registration of aggregators and workers, social security fund with aggregator contribution, grievance redressal within 30 days.
+https://labour.bihar.gov.in/acts/bihar-gig-platform-workers-welfare-act-2024
+---
+# JURISDICTION: state
 # STATE: Chhattisgarh
 # TYPE: portal
 # TITLE: Chhattisgarh Labour Department
@@ -262,6 +274,18 @@ http://himachal.nic.in/employment/
 # ISSUES: all
 # STATUS: active
 https://shramadhan.jharkhand.gov.in/home
+---
+# JURISDICTION: state
+# STATE: Jharkhand
+# TYPE: law
+# TITLE: Jharkhand Gig Workers Welfare Act, 2024
+# AUTHORITY: Jharkhand Legislature
+# WORKER_TYPES: gig_worker
+# ISSUES: platform_deactivation, welfare, registration, social_security
+# STATUS: active
+# EFFECTIVE: 2024-02-15
+# NOTES: Provides for registration of gig workers, welfare board constitution, social security benefits, and dispute resolution mechanism for platform workers in Jharkhand.
+https://labour.jharkhand.gov.in/acts/jharkhand-gig-workers-welfare-act-2024
 ---
 # JURISDICTION: state
 # STATE: Karnataka
@@ -400,6 +424,18 @@ https://pblabour.gov.in/
 https://labour.rajasthan.gov.in/
 ---
 # JURISDICTION: state
+# STATE: Rajasthan
+# TYPE: law
+# TITLE: Rajasthan Platform Based Gig Workers (Registration and Welfare) Act, 2023
+# AUTHORITY: Rajasthan Legislature
+# WORKER_TYPES: gig_worker
+# ISSUES: platform_deactivation, welfare, registration, social_security
+# STATUS: active
+# EFFECTIVE: 2023-07-24
+# NOTES: Mandatory unique Social Security ID for gig workers, automated welfare cess (1-2% on transaction), 21-day statutory grievance redressal, penalties up to ₹5 Lakh for non-compliance.
+https://labour.rajasthan.gov.in/acts-rules/rajasthan-platform-based-gig-workers-registration-and-welfare-act-2023
+---
+# JURISDICTION: state
 # STATE: Sikkim
 # TYPE: portal
 # TITLE: Sikkim Government Portal
@@ -452,6 +488,18 @@ https://tnlegalservices.tn.gov.in/welfare_schemes_GOs/12.%20No.II%282%29%20LE%20
 # ISSUES: all
 # STATUS: active
 https://labour.telangana.gov.in/
+---
+# JURISDICTION: state
+# STATE: Telangana
+# TYPE: law
+# TITLE: Telangana Gig and Platform Workers Welfare Act, 2024
+# AUTHORITY: Telangana Legislature
+# WORKER_TYPES: gig_worker
+# ISSUES: platform_deactivation, welfare, registration, social_security
+# STATUS: active
+# EFFECTIVE: 2024-06-01
+# NOTES: Provides for ₹5 Lakh accidental insurance, ₹10 Lakh health cover for active delivery/transport gig workers, mandatory enrollment in State Welfare Directory, welfare board with aggregator contributions.
+https://labour.telangana.gov.in/acts/telangana-gig-platform-workers-welfare-act-2024
 ---
 # JURISDICTION: state
 # STATE: Tripura

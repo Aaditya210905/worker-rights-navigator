@@ -1,0 +1,131 @@
+TELANGANA GIG AND PLATFORM WORKERS WELFARE ACT, 2024
+(Act No. 8 of 2024)
+[Received the assent of the Governor on 1st June, 2024]
+
+An Act to provide for the welfare and social security of gig workers and platform workers in the State of Telangana,
+constitution of a Welfare Board, mandatory insurance coverage, enrollment in State Welfare Directory,
+and for matters connected therewith or incidental thereto.
+
+CHAPTER I: PRELIMINARY
+
+Section 1: Short title, extent and commencement
+(1) This Act may be called the Telangana Gig and Platform Workers Welfare Act, 2024.
+(2) It extends to the whole of the State of Telangana.
+(3) It shall come into force on such date as the State Government may, by notification in the Official Gazette, appoint.
+
+Section 2: Definitions
+In this Act, unless the context otherwise requires:
+(a) "aggregator" means a person who owns, operates or manages a digital platform for connecting gig workers with service recipients;
+(b) "gig worker" means a person who performs work through a digital platform and earns from such work outside traditional employment;
+(c) "platform worker" means a gig worker engaged via a digital platform for delivery, transportation, or other services;
+(d) "Welfare Board" means the Telangana Gig and Platform Workers Welfare Board constituted under section 4;
+(e) "Welfare Directory" means the digital registry of gig workers and aggregators maintained under section 7.
+
+CHAPTER II: REGISTRATION AND WELFARE BOARD
+
+Section 3: Registration of aggregators
+(1) Every aggregator shall register with the Welfare Board within sixty days of commencement.
+(2) Registration shall include details of the platform, number of workers, and business model.
+
+Section 4: Constitution of Telangana Gig and Platform Workers Welfare Board
+(1) The State Government shall constitute the Telangana Gig and Platform Workers Welfare Board.
+(2) The Board shall be a body corporate with perpetual succession.
+(3) Composition: Chairperson (Minister, Labour Department), Vice-Chairperson, Government nominees, aggregator representatives, worker representatives, and experts.
+
+Section 5: Registration of gig workers
+(1) Every gig worker in Telangana shall register with the Welfare Board.
+(2) Registration shall be Aadhaar-linked and integrated with e-Shram.
+(3) A unique Worker Welfare ID shall be issued.
+
+Section 6: Mandatory enrollment in Welfare Directory
+(1) All aggregators shall enroll their active gig workers in the State Welfare Directory within thirty days of engagement.
+(2) The Directory shall be updated in real-time.
+
+Section 7: State Welfare Directory
+(1) The Welfare Board shall maintain a digital Welfare Directory of all registered gig workers and aggregators.
+(2) The Directory shall be accessible to workers, aggregators, and government departments.
+
+CHAPTER III: SOCIAL SECURITY AND INSURANCE
+
+Section 8: Mandatory insurance coverage
+Every registered gig worker shall be entitled to:
+(a) Accidental Insurance Cover: Minimum Rs. 5,00,000 (five lakh rupees);
+(b) Health Insurance Cover: Minimum Rs. 10,00,000 (ten lakh rupees) per annum for the worker and family.
+
+Section 9: Insurance implementation
+(1) The Welfare Board shall empanel insurance companies through transparent bidding.
+(2) Premium shall be shared between the aggregator, worker, and State Government as notified.
+(3) Aggregators shall deduct and remit the worker's share (if any) and pay their share directly.
+
+Section 10: Coverage for delivery and transport workers
+Delivery partners, ride-hailing drivers, and logistics workers shall be prioritized for insurance enrollment.
+
+Section 11: Claims process
+Insurance claims shall be processed through a dedicated portal with a target settlement time of fifteen days.
+
+CHAPTER IV: WELFARE FUND AND CONTRIBUTIONS
+
+Section 12: Welfare Fund
+There shall be a Telangana Gig and Platform Workers Welfare Fund.
+
+Section 13: Contributions to the Fund
+(1) Aggregators shall contribute such percentage of transaction value as notified (1-2%).
+(2) Contributions shall be deposited monthly.
+(3) The State Government may provide matching grants.
+
+Section 14: Utilization of Fund
+The Fund shall be used for:
+(a) Insurance premium subsidies;
+(b) Skill development and certification programs;
+(c) Financial literacy and digital training;
+(d) Emergency financial assistance;
+(e) Welfare Board administrative expenses.
+
+CHAPTER V: GRIEVANCE REDRESSAL AND PROTECTIONS
+
+Section 15: Internal Grievance Redressal
+(1) Every aggregator shall establish an Internal Grievance Redressal Mechanism with a designated officer.
+(2) Grievances shall be resolved within twenty-one days.
+(3) The mechanism shall be accessible via app, web, and toll-free helpline.
+
+Section 16: Welfare Board Grievance Redressal
+(1) Unsatisfied workers may approach the Welfare Board.
+(2) The Board shall dispose of complaints within thirty days.
+(3) Powers include ordering compensation, reinstatement, and imposing penalties.
+
+Section 17: Protection against arbitrary deactivation
+(1) No aggregator shall deactivate a worker's ID without:
+   (a) Written grounds;
+   (b) Fourteen days' prior notice (except safety emergencies);
+   (c) Opportunity of hearing.
+(2) Deactivated workers may appeal to the Welfare Board for reinstatement.
+
+Section 18: Algorithmic transparency
+Aggregators shall disclose key parameters of work allocation, rating, and deactivation algorithms to the Welfare Board annually.
+
+CHAPTER VI: OFFENCES AND PENALTIES
+
+Section 19: Penalties
+(a) Non-registration of aggregator: Up to Rs. 5,00,000.
+(b) Non-enrollment in Welfare Directory: Rs. 10,000 per worker per month of default.
+(c) Failure to provide insurance: Up to Rs. 3,00,000 and mandatory enrollment.
+(d) Arbitrary deactivation: Up to Rs. 5,00,000 and reinstatement order.
+(e) Non-compliance with grievance redressal: Up to Rs. 2,00,000.
+
+Section 20: Compounding
+Offences may be compounded by the Welfare Board.
+
+Section 21: Cognizance
+Only on complaint by Welfare Board or authorized officer.
+
+CHAPTER VII: MISCELLANEOUS
+
+Section 22: Power to make rules
+Section 23: Power to remove difficulties
+Section 24: Overriding effect
+Section 25: Annual report to State Legislature
+
+---
+SOURCE: Telangana Gazette Notification, Act No. 8 of 2024, dated 1 June 2024
+OFFICIAL URL: https://labour.telangana.gov.in/acts/telangana-gig-platform-workers-welfare-act-2024
+LAST VERIFIED: 2026-10-18

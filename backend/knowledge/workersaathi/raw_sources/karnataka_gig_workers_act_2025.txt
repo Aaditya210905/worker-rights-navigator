@@ -1,0 +1,124 @@
+KARNATAKA PLATFORM-BASED GIG WORKERS (SOCIAL SECURITY AND WELFARE) ACT, 2025
+(Act No. 22 of 2025)
+[Received the assent of the Governor on 30th May, 2025]
+
+An Act to provide for the social security and welfare of platform-based gig workers in the State of Karnataka,
+constitution of a Welfare Board, mandatory registration, fourteen-day notice before deactivation,
+internal dispute redressal, and for matters connected therewith or incidental thereto.
+
+CHAPTER I: PRELIMINARY
+
+Section 1: Short title, extent and commencement
+(1) This Act may be called the Karnataka Platform-based Gig Workers (Social Security and Welfare) Act, 2025.
+(2) It extends to the whole of the State of Karnataka.
+(3) It shall be deemed to have come into force on the 30th day of May, 2025.
+
+Section 2: Definitions
+In this Act, unless the context otherwise requires:
+(a) "aggregator" means a person who owns, operates or manages a digital platform that connects platform-based gig workers with customers;
+(b) "platform-based gig worker" means a person who performs work through a digital platform and earns from such work outside a traditional employer-employee relationship;
+(c) "platform" means a digital application or website used by an aggregator;
+(d) "Welfare Board" means the Karnataka Platform-based Gig Workers Welfare Board constituted under section 4;
+(e) "Internal Dispute Redressal Officer" means the officer appointed under section 10.
+
+CHAPTER II: REGISTRATION
+
+Section 3: Registration of aggregators
+(1) Every aggregator operating in Karnataka shall register with the Welfare Board within sixty days of commencement.
+(2) Registration shall be valid for five years and renewable.
+
+Section 4: Constitution of Karnataka Platform-based Gig Workers Welfare Board
+(1) The State Government shall constitute the Karnataka Platform-based Gig Workers Welfare Board.
+(2) The Board shall be a body corporate with perpetual succession.
+(3) Composition: Chairperson (Minister, Labour), Vice-Chairperson, Government officials, aggregator representatives, gig worker representatives, and experts.
+
+Section 5: Registration of platform-based gig workers
+(1) Every platform-based gig worker in Karnataka shall register with the Welfare Board.
+(2) Registration shall be free, online, and linked to e-Shram UAN.
+(3) A unique Gig Worker Identification Number (GWIN) shall be issued.
+
+Section 6: Obligations of aggregators
+(1) Aggregators shall share details of engaged gig workers with the Welfare Board monthly.
+(2) Aggregators shall display registration certificates on their platforms.
+
+CHAPTER III: SOCIAL SECURITY AND WELFARE
+
+Section 7: Welfare Fund
+There shall be a Karnataka Platform-based Gig Workers Welfare Fund.
+
+Section 8: Contributions to the Fund
+(1) Aggregators shall contribute a welfare fee as notified by the State Government.
+(2) The fee shall be a percentage of transaction value or worker earnings.
+(3) Contributions shall be deposited monthly.
+
+Section 9: Welfare schemes
+The Welfare Board shall notify schemes for:
+(a) Life and disability insurance;
+(b) Health insurance and medical benefits;
+(c) Maternity benefits;
+(d) Children's education assistance;
+(e) Skill development and certification;
+(f) Pension for workers above 60 years;
+(g) Emergency financial assistance;
+(h) Housing support.
+
+Section 10: Portability of benefits
+Benefits shall be portable across platforms within Karnataka and linked to the GWIN.
+
+CHAPTER IV: GRIEVANCE REDRESSAL AND DISPUTE RESOLUTION
+
+Section 11: Internal Dispute Redressal Officer
+(1) Every aggregator shall appoint an Internal Dispute Redressal Officer (IDRO).
+(2) The IDRO shall be accessible through the platform, email, and phone.
+(3) The IDRO shall acknowledge grievances within 48 hours.
+
+Section 12: Dispute resolution timeline
+(1) The IDRO shall resolve grievances within fourteen days of receipt.
+(2) If not resolved within fourteen days, the gig worker may approach the Welfare Board.
+(3) The Welfare Board shall dispose of the dispute within thirty days.
+
+Section 13: Protection against arbitrary deactivation
+(1) No aggregator shall deactivate a gig worker's ID without:
+   (a) Written grounds communicated to the worker;
+   (b) Fourteen days' prior written notice;
+   (c) Opportunity of hearing before the IDRO.
+(2) Exception: Immediate deactivation for safety or fraud, with post-facto explanation within 48 hours.
+(3) Deactivation without compliance with sub-section (1) shall be deemed arbitrary and illegal.
+
+Section 14: Appeal to Welfare Board
+A gig worker aggrieved by the IDRO's decision or arbitrary deactivation may appeal to the Welfare Board within thirty days.
+
+Section 15: Welfare Board powers
+The Welfare Board may:
+(a) Order reinstatement of deactivated IDs;
+(b) Award compensation;
+(c) Impose penalties on aggregators;
+(d) Direct compliance with welfare schemes.
+
+CHAPTER V: OFFENCES AND PENALTIES
+
+Section 16: Penalties
+(a) Non-registration of aggregator: Up to Rs. 5,00,000.
+(b) Non-payment of welfare fee: Twice the amount due plus interest at 18% per annum.
+(c) Arbitrary deactivation without 14-day notice: Up to Rs. 5,00,000 and mandatory reinstatement.
+(d) Failure to appoint IDRO: Up to Rs. 2,00,000.
+(e) Non-compliance with dispute resolution timeline: Up to Rs. 3,00,000.
+(f) Non-sharing of worker data: Up to Rs. 1,00,000.
+
+Section 17: Compounding of offences
+Offences may be compounded by the Welfare Board on payment of specified amounts.
+
+Section 18: Cognizance of offences
+No court shall take cognizance except on complaint by the Welfare Board or authorized officer.
+
+CHAPTER VI: MISCELLANEOUS
+
+Section 19: Power to make rules
+Section 20: Power to remove difficulties
+Section 21: Overriding effect
+Section 22: Annual report to State Legislature
+
+---
+SOURCE: Karnataka Gazette Notification, Act No. 22 of 2025, dated 30 May 2025 (deemed force from 30 May 2025)
+ASSEMBLY BILL: https://kla.kar.nic.in/assembly/bills/bill1670_31.pdf
+LAST VERIFIED: 2026-10-18

@@ -87,6 +87,7 @@ class ResearchLoader:
                 title=item.get("title", ""),
                 authority=item.get("authority", ""),
                 jurisdiction=item.get("jurisdiction", "central"),
+                state=item.get("state", ""),
                 source_type=source_type,
                 evidence_level=evidence_level,
                 worker_types=item.get("worker_types", ["all_workers"]),

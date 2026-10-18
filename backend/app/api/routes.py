@@ -480,3 +480,32 @@ async def view_complaint_html(session_id: str, doc_id: str):
             return draft.get("body_html", "<p>No content</p>")
 
     raise HTTPException(status_code=404, detail="Complaint document not found")
+
+
+@router.get("/sessions/{session_id}/complaint/{doc_id}/pdf")
+async def download_complaint_pdf(session_id: str, doc_id: str):
+    """
+    Returns the generated complaint as a downloadable PDF.
+    """
+    from fastapi.responses import Response
+    session = _get_session_or_404(session_id)
+    case = session.orchestrator.case
+
+    for draft in case.complaint_drafts:
+        if draft.get("document_id") == doc_id:
+            pdf_base64 = draft.get("body_pdf_base64")
+            if not pdf_base64:
+                raise HTTPException(
+                    status_code=501,
+                    detail="PDF generation not available (weasyprint not installed or failed)."
+                )
+            import base64
+            pdf_bytes = base64.b64decode(pdf_base64)
+            filename = f"{doc_id}.pdf"
+            return Response(
+                content=pdf_bytes,
+                media_type="application/pdf",
+                headers={"Content-Disposition": f'attachment; filename="{filename}"'}
+            )
+
+    raise HTTPException(status_code=404, detail="Complaint document not found")
