@@ -69,7 +69,7 @@ class ToolCallRequest(BaseModel):
     """Arguments to pass to a tool."""
     arguments: dict[str, Any] = Field(
         default_factory=dict,
-        description="Tool-specific arguments (same schema as AssemblyAI tool.call)"
+        description="Tool-specific arguments"
     )
 
 

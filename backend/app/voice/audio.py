@@ -1,12 +1,12 @@
 """
 audio.py -- Microphone capture and speaker playback using PyAudio.
 
-This module knows NOTHING about WorkerSaathi, AssemblyAI, or WebSockets.
+This module knows NOTHING about WorkerSaathi or WebSockets.
 It only deals with:
   - Reading PCM audio from the microphone
   - Writing PCM audio to the speakers
 
-Audio format (AssemblyAI Voice Agent default):
+Audio format:
   - Sample rate : 24,000 Hz
   - Channels    : 1 (mono)
   - Format      : PCM 16-bit signed little-endian

@@ -2,7 +2,7 @@
 tool_registry.py -- Central tool registry for WorkerSaathi.
 
 Defines ALL tools in one place. Each tool has:
-  - AssemblyAI schema (for session.update)
+  - Tool definitions and schemas
   - Allowed case statuses (when the tool can be used)
   - Handler function name
 
@@ -51,7 +51,7 @@ TOOL_PERMISSIONS = {
 }
 
 
-# ── AssemblyAI tool schemas ──────────────────────────────────────────────────
+# ── Tool schemas ─────────────────────────────────────────────────────────────
 
 TOOL_UPDATE_CASE = {
     "type": "function",

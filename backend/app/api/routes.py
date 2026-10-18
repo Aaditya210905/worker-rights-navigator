@@ -154,7 +154,7 @@ async def execute_tool(session_id: str, tool_name: str, req: ToolCallRequest):
     """
     Execute a tool call via the session's Orchestrator.
 
-    This is the primary API — the same interface the AssemblyAI voice
+    This is the primary API — the same interface the voice
     agent uses, now exposed as REST.
     """
     session = _get_session_or_404(session_id)

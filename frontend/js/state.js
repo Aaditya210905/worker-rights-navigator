@@ -7,12 +7,19 @@
 
 // ── Session state ────────────────────────────────────────────────
 let sessionId = null;
-let ws = null;
 let audioCtx = null;
 let micStream = null;
-let scriptProcessor = null;
 let isRunning = false;
 let isMuted = false;
+let isRecording = false;
+let isProcessing = false; // True while waiting for Sarvam STT/TTS response
+let mediaRecorder = null;
+let audioChunks = [];
+
+// ── Language settings ────────────────────────────────────────────
+let selectedLanguage = 'auto';     // STT input language
+let selectedTTSLanguage = 'hi-IN'; // TTS output language
+let selectedSpeaker = 'ritu';     // TTS voice persona (valid Bulbul v3 speaker)
 
 // ── DOM references ───────────────────────────────────────────────
 const badge = document.getElementById('statusBadge');
@@ -25,6 +32,9 @@ const muteIndicator = document.getElementById('muteIndicator');
 const micArea = document.getElementById('micArea');
 const muteIconUnmuted = document.getElementById('muteIconUnmuted');
 const muteIconMuted = document.getElementById('muteIconMuted');
+const langSelect = document.getElementById('langSelect');
+const textInput = document.getElementById('textInput');
+const sendTextBtn = document.getElementById('sendTextBtn');
 
 // ── Streaming agent bubble state ─────────────────────────────────
 let streamingBubble = null;

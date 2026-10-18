@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description"
-        content="WorkerSaathi — AI-powered voice assistant helping Indian workers understand their legal rights in Hindi, Hinglish, and English.">
+        content="WorkerSaathi — AI-powered voice assistant helping Indian workers understand their legal rights in 11+ Indian languages.">
     <title>WorkerSaathi — Your Rights. Your Voice. Your Saathi.</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -20,6 +20,7 @@
     <link rel="stylesheet" href="css/03-components.css">
     <link rel="stylesheet" href="css/04-responsive.css">
     <link rel="stylesheet" href="css/05-modal.css">
+    <link rel="stylesheet" href="css/06-voice.css">
 </head>
 
 <body>
@@ -31,7 +32,13 @@
         <h1>Worker<span>Saathi</span><span class="header-subtitle">— Your rights. Your voice.</span></h1>
     </div>
     <div class="header-right">
-        <span class="lang-indicator">हिंदी · Hinglish · English</span>
+        <!-- Language Selector -->
+        <div class="lang-selector-wrapper" id="langSelectorWrapper">
+            <label for="langSelect" class="lang-selector-label">🌐</label>
+            <select id="langSelect" class="lang-selector" aria-label="Select language">
+                <!-- Populated by main.js from DEFAULT_LANGUAGES -->
+            </select>
+        </div>
         <span id="statusBadge" class="status-badge disconnected">Disconnected</span>
     </div>
 </div>
@@ -45,10 +52,15 @@
             <div class="empty-state" id="emptyState">
                 <div class="empty-state-icon">🎙️</div>
                 <div class="empty-state-title">Speak to WorkerSaathi</div>
-                <div class="empty-state-desc">Tap the microphone and describe your workplace issue in Hindi,
-                    Hinglish, or English. We'll help you understand your rights.</div>
+                <div class="empty-state-desc">Tap the microphone and describe your workplace issue.
+                    We support <strong>Hindi, English, Bengali, Tamil, Telugu, Marathi, Gujarati, Kannada, Malayalam, Punjabi, Odia</strong> and more.
+                </div>
+                <div class="empty-state-hint">
+                    <span class="kbd">Space</span> to record &middot;
+                    <span class="kbd">Esc</span> to end session
+                </div>
             </div>
-            <div class="msg system">Click the microphone to start a conversation</div>
+            <div class="msg system">Tap the microphone to start a conversation</div>
         </div>
 
         <!-- Mic Area — Voice Hero -->
@@ -96,8 +108,25 @@
                 <span class="mic-hint" id="micHint">Click to start</span>
                 <span class="mute-indicator" id="muteIndicator">Mic muted</span>
             </div>
-            <span class="mic-lang-hint" aria-label="Supported languages">हिंदी · Hinglish · English</span>
+            <span class="mic-lang-hint" aria-label="Supported languages">11+ Indian languages supported</span>
         </div>
+
+        <!-- Text Input (fallback for typing) -->
+        <div class="text-input-area" id="textInputArea">
+            <input type="text" id="textInput" class="text-input"
+                placeholder="Type your message in any language..."
+                aria-label="Type a message" autocomplete="off">
+            <button id="sendTextBtn" class="send-text-btn" aria-label="Send message" title="Send">
+                <svg viewBox="0 0 24 24" width="20" height="20">
+                    <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" fill="currentColor"/>
+                </svg>
+            </button>
+        </div>
+
+        <!-- End Session Button -->
+        <button id="endSessionBtn" class="end-session-btn" style="display:none" aria-label="End session">
+            End Session
+        </button>
     </div>
 
     <!-- ─── Side Panel ──────────────────────────────────────────── -->
@@ -210,7 +239,7 @@
         <div class="modal-body" id="actionPlanBody">
             <div class="loading-state">
                 <div class="spinner"></div>
-                <p>Generating action plan with LeMUR...</p>
+                <p>Generating action plan...</p>
             </div>
         </div>
         <div class="modal-footer">

@@ -17,7 +17,7 @@ services:
     
     # Environment variables (set these in Render dashboard)
     envVars:
-      - key: ASSEMBLYAI_API_KEY
+      - key: SARVAM_API_KEY
         sync: false  # Must be set manually in dashboard
       - key: HF_TOKEN
         sync: false  # Must be set manually in dashboard

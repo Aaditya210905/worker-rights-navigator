@@ -1,9 +1,15 @@
 """
-voice/ — AssemblyAI integration.
+voice/ — Speech provider integration.
 
 Responsibilities:
-  - WebSocket proxy (browser ↔ AssemblyAI)
-  - Session lifecycle management
-  - Audio streaming
-  - Event handling (tool.call, reply.done, etc.)
+  - STT via Sarvam Saaras v4 (22 Indic languages + English)
+  - TTS via Sarvam Bulbul v3 (11 Indic languages + English)
+  - Provider abstraction for easy swapping
+  - Audio format handling
+
+Modules:
+  - providers/base.py    — Abstract STT/TTS interfaces
+  - providers/sarvam.py  — Sarvam AI integration
+  - stt.py               — High-level STT service
+  - tts.py               — High-level TTS service
 """

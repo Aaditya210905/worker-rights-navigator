@@ -2,7 +2,7 @@
 WorkerSaathi — Voice-first Indian worker rights navigator.
 
 A retrieval-grounded legal/benefits navigator for Indian informal workers.
-AssemblyAI handles real-time voice. FastAPI backend provides deterministic
+Sarvam AI handles Indic voice (STT/TTS). FastAPI backend provides deterministic
 legal tools, RAG retrieval, case management, safety escalation, and
 evidence generation.
 """

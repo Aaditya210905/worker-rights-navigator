@@ -2,7 +2,7 @@
 classifier.py -- Tool definitions for LLM-based classification.
 
 Instead of brittle keyword matching, we define tools that the
-AssemblyAI LLM calls when it identifies case information from
+the voice agent calls when it identifies case information from
 the worker's speech. The LLM naturally handles:
   - Multiple languages (Hindi, English, Hinglish)
   - Paraphrasing and indirect descriptions
@@ -15,7 +15,7 @@ arguments and update the case state.
 """
 
 # ── Tool definitions for session.update ──────────────────────────────────────
-# These follow the AssemblyAI tool schema (same as OpenAI function calling).
+# These follow the OpenAI function calling / JSON schema convention.
 
 CASE_TOOLS = [
     {

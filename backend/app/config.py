@@ -21,13 +21,16 @@ class Settings(BaseSettings):
         extra="ignore",
     )
 
-    # --- AssemblyAI ---
-    assemblyai_api_key: str = ""
+    # --- Sarvam AI (voice provider) ---
+    sarvam_api_key: str = ""
 
     # --- Application ---
     app_env: str = "development"
     app_port: int = 8000
     app_host: str = "0.0.0.0"
+
+    # --- Embedding backend ---
+    embedding_backend: str = "huggingface"
 
     # --- Paths (defaults set for local dev) ---
     knowledge_dir: str = "knowledge"

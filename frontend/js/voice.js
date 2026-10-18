@@ -1,211 +1,299 @@
 /**
- * voice.js — Voice session lifecycle.
+ * voice.js — Voice session lifecycle (Sarvam push-to-talk).
  *
- * Owns the websocket conversation with the backend proxy: start/stop the
- * session, stream microphone audio upstream, route backend events to the UI
- * and handle mute/unmute.
+ * Flow: Press mic → record → release → Sarvam STT → orchestrator → Sarvam TTS → play
  */
 
+// ── Main toggle ──────────────────────────────────────────────────
+
 async function toggleSession() {
-    if (isRunning) {
-        stopSession();
+    if (isProcessing) return; // Don't interrupt while processing
+
+    if (isRecording) {
+        // Stop recording → send to Sarvam
+        await finishRecordingAndConverse();
+    } else if (!isRunning) {
+        // First press → create session + start
+        await startSarvamSession();
     } else {
-        await startSession();
+        // Session active, not recording → start recording
+        await startSarvamRecording();
     }
 }
 
-// ── Start / stop session ─────────────────────────────────────────
+// ── Session lifecycle ────────────────────────────────────────────
 
-async function startSession() {
-    setStatus('connecting', 'Connecting...');
-    micHint.textContent = 'Connecting...';
+async function startSarvamSession() {
+    setStatus('connecting', 'Starting...');
+    micHint.textContent = 'Creating session...';
 
-    // 1. Create the session through the REST API
+    // Create session via REST
     if (!(await createSession())) return;
 
-    // 2. Audio context — use default sample rate for best playback quality
-    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    isRunning = true;
+    addMsg('system', '🎤 WorkerSaathi is ready! Tap the microphone and speak.');
 
-    // 3. Connect WebSocket
-    const wsUrl = `${WS_BASE}/voice/${sessionId}`;
-    ws = new WebSocket(wsUrl);
+    // Immediately start first recording
+    await startSarvamRecording();
 
-    ws.onopen = async () => {
-        setStatus('connected', 'Connected');
+    // Speak the greeting
+    const greeting = 'Namaste! Main WorkerSaathi hoon. Aap mujhe apni problem bata sakte hain — Hindi, English, ya apni bhasha mein.';
+    addMsg('agent', greeting);
 
-        // 4. Capture the microphone and start streaming audio upstream
-        if (!(await startAudioPipeline())) return;
+    // TTS the greeting
+    speakText(greeting, selectedTTSLanguage);
+}
 
-        isRunning = true;
-        isMuted = false;
-        micBtn.className = 'mic-btn stop recording';
-        micBtn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M6 6h12v12H6z"/></svg>';
-        micHint.textContent = 'Listening... click to end session';
-        setStatus('listening', '🎤 Listening');
-        // Show the mute button
-        muteBtn.classList.add('visible');
-        updateMuteUI();
-    };
+async function startSarvamRecording() {
+    if (isProcessing) return;
 
-    ws.onmessage = handleServerEvent;
+    setStatus('listening', '🎤 Recording...');
+    micBtn.className = 'mic-btn recording';
+    micBtn.innerHTML = '<svg viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2"/></svg>';
+    micHint.textContent = 'Speaking... tap to send';
 
-    ws.onclose = (e) => {
-        if (isRunning) {
-            // Detect keepalive timeout (1011) vs normal close
-            if (e.code === 1011 || e.code === 1006) {
-                addMsg('system', '⚠️ Connection timed out — the server may be processing a heavy request. Try starting a new session.');
-            } else if (e.code !== 1000) {
-                addMsg('system', `Connection closed (code: ${e.code})`);
-            } else {
-                addMsg('system', 'Connection closed');
-            }
-            stopSession();
+    // Add pulse animation
+    micArea.classList.add('is-recording');
+    muteBtn.classList.add('visible');
+
+    const started = await startRecording();
+    if (!started) {
+        setStatus('connected', '⚠️ Mic failed');
+        micBtn.className = 'mic-btn start';
+        return;
+    }
+}
+
+async function finishRecordingAndConverse() {
+    // Stop recording and get audio blob
+    setStatus('connected', '⏳ Processing...');
+    micHint.textContent = 'Processing your speech...';
+    micBtn.className = 'mic-btn processing';
+    micBtn.innerHTML = '<div class="mic-spinner"></div>';
+    micArea.classList.remove('is-recording');
+    isProcessing = true;
+
+    const audioBlob = await stopRecording();
+    releaseRecording();
+
+    if (!audioBlob || audioBlob.size < 1000) {
+        addMsg('system', '⚠️ Recording too short. Please speak longer.');
+        isProcessing = false;
+        resetMicButton();
+        return;
+    }
+
+    // Convert blob to base64
+    const base64Audio = await blobToBase64(audioBlob);
+
+    // Call /voice/converse endpoint
+    try {
+        const response = await fetch(VOICE_API.CONVERSE, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                audio_base64: base64Audio,
+                session_id: sessionId,
+                language_code: selectedLanguage,
+                stt_mode: 'transcribe',
+                tts_speaker: selectedSpeaker,
+                tts_language: selectedTTSLanguage,
+            }),
+        });
+
+        if (!response.ok) {
+            const err = await response.json().catch(() => ({}));
+            throw new Error(err.detail || `Server error ${response.status}`);
         }
-    };
 
-    ws.onerror = (e) => {
-        addMsg('system', '⚠️ WebSocket error — check your network connection');
-    };
+        const data = await response.json();
+
+        // Handle STT error
+        if (data.stt_error) {
+            addMsg('system', `⚠️ Speech recognition error: ${data.stt_error}`);
+            isProcessing = false;
+            resetMicButton();
+            return;
+        }
+
+        // Show user transcript
+        if (data.user_transcript) {
+            addMsg('user', data.user_transcript);
+
+            // Auto-detect language for TTS responses
+            if (data.detected_language && data.detected_language !== 'unknown') {
+                selectedTTSLanguage = data.detected_language;
+                console.log(`[voice] Auto-detected language: ${data.detected_language}`);
+            }
+        }
+
+        // Show tool calls
+        if (data.tool_calls_made && data.tool_calls_made.length > 0) {
+            data.tool_calls_made.forEach(tool => {
+                addToolEntry(tool, '✅ completed');
+            });
+        }
+
+        // Show agent text response
+        if (data.agent_text) {
+            addMsg('agent', data.agent_text);
+        }
+
+        // Update case status
+        if (data.case_status) {
+            pollCase();
+        }
+
+        // Play TTS audio
+        if (data.audio_base64) {
+            playAudioBase64(data.audio_base64);
+        } else if (data.tts_error) {
+            console.warn('[voice] TTS error:', data.tts_error);
+        }
+
+    } catch (e) {
+        addMsg('system', `⚠️ Error: ${e.message}`);
+        console.error('[voice] Converse error:', e);
+    }
+
+    isProcessing = false;
+    resetMicButton();
+}
+
+function resetMicButton() {
+    if (!isRunning) {
+        micBtn.className = 'mic-btn start';
+        micBtn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm-1-9c0-.55.45-1 1-1s1 .45 1 1v6c0 .55-.45 1-1 1s-1-.45-1-1V5z"/><path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/></svg>';
+        micHint.textContent = 'Click to start';
+        setStatus('disconnected', 'Disconnected');
+        return;
+    }
+
+    micBtn.className = 'mic-btn start recording-ready';
+    micBtn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm-1-9c0-.55.45-1 1-1s1 .45 1 1v6c0 .55-.45 1-1 1s-1-.45-1-1V5z"/><path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/></svg>';
+    micHint.textContent = 'Tap to speak';
+    setStatus('connected', '✅ Ready');
 }
 
 function stopSession() {
     isRunning = false;
-    isMuted = false;
-    if (ws && ws.readyState === 1) {
-        try { ws.send(JSON.stringify({ type: 'session.end' })); } catch(e) {}
-        ws.close();
-    }
-    ws = null;
-
-    // Release microphone / audio-graph resources
-    stopAudioPipeline();
-
+    isRecording = false;
+    isProcessing = false;
+    releaseRecording();
     flushAudio();
-    micBtn.className = 'mic-btn start';
-    micBtn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm-1-9c0-.55.45-1 1-1s1 .45 1 1v6c0 .55-.45 1-1 1s-1-.45-1-1V5z"/><path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/></svg>';
-    micHint.textContent = 'Click to start';
-    setStatus('disconnected', 'Disconnected');
-    // Hide mute button and reset mute state
+    resetMicButton();
     muteBtn.classList.remove('visible', 'muted');
     muteIndicator.classList.remove('visible');
-    micArea.classList.remove('is-muted');
-    updateMuteUI();
-}
+    micArea.classList.remove('is-muted', 'is-recording');
+    addMsg('system', 'Session ended.');
 
-// ── Server events ────────────────────────────────────────────────
-
-/**
- * Route a single event pushed by the backend websocket proxy.
- * @param {MessageEvent} e raw JSON event frame
- */
-function handleServerEvent(e) {
-    const event = JSON.parse(e.data);
-    const type = event.type;
-
-    // Debug: log all events to see what AssemblyAI sends
-    if (type !== 'reply.audio') console.log('[ws]', type, event);
-
-    if (type === 'session.ready') {
-        addMsg('system', 'WorkerSaathi is ready. Speak now!');
-    }
-    else if (type === 'transcript.user') {
-        const text = event.text;
-        if (text && text.trim()) {
-            finalizeStreamingBubble();
-            addMsg('user', text);
-        }
-    }
-    else if (type === 'transcript.agent.delta') {
-        // Stream the text as it is generated!
-        const textChunk = event.delta || event.text || "";
-        if (textChunk) {
-            if (!streamingBubble) {
-                startStreamingBubble();
-                streamingTextNode.textContent = "";
-            }
-            // If it currently says "Speaking...", clear it before appending
-            if (streamingTextNode.textContent === 'Speaking...') {
-                streamingTextNode.textContent = "";
-            }
-            streamingTextNode.textContent += textChunk;
-            chatEl.scrollTop = chatEl.scrollHeight;
-        }
-    }
-    else if (type === 'transcript.agent') {
-        // Final complete transcript — replace "Speaking..." with actual text
-        const text = event.text;
-        const interrupted = event.interrupted;
-
-        // Try JS reference first, then fallback to DOM lookup
-        let bubble = streamingBubble;
-        let textNode = streamingTextNode;
-
-        if (!bubble) {
-            // Find the last "Speaking..." bubble in the DOM
-            const allAgentMsgs = chatEl.querySelectorAll('.msg.agent');
-            for (let i = allAgentMsgs.length - 1; i >= 0; i--) {
-                const span = allAgentMsgs[i].querySelector('.streaming-text');
-                if (span && span.textContent === 'Speaking...') {
-                    bubble = allAgentMsgs[i];
-                    textNode = span;
-                    break;
-                }
-            }
-        }
-
-        if (bubble && textNode && text && text.trim()) {
-            textNode.textContent = text;
-            if (interrupted) bubble.classList.add('interrupted');
-            bubble.classList.remove('streaming');
-            const cursor = bubble.querySelector('.typing-cursor');
-            if (cursor) cursor.remove();
-            streamingBubble = null;
-            streamingTextNode = null;
-        } else if (text && text.trim()) {
-            const el = addMsg('agent', text);
-            if (interrupted) el.classList.add('interrupted');
-        }
-        if (interrupted) flushAudio();
-    }
-    else if (type === 'reply.audio') {
-        // Agent is speaking — show streaming bubble with speaking indicator
-        if (!streamingBubble) {
-            startStreamingBubble();
-            updateStreamingBubble('Speaking...');
-        }
-        if (event.data) playAudioChunk(event.data);
-    }
-    else if (type === 'reply.done') {
-        // Don't finalize streaming bubble here — transcript.agent will do it
-        if (event.status === 'interrupted') {
-            finalizeStreamingBubble();
-            flushAudio();
-        }
-        pollCase();  // refresh side panel
-    }
-    else if (type === 'tool.call') {
-        addToolEntry(event.name, '⏳ executing...');
-    }
-    else if (type === 'session.ended') {
-        addMsg('system', 'Session ended. Generating action plan...');
-        stopSession();
-        if (sessionId) {
-            fetchActionPlan(sessionId);
-        }
-    }
-    else if (type === 'error') {
-        addMsg('system', '⚠️ ' + (event.message || 'Unknown error'));
+    // Trigger action plan generation if available
+    if (sessionId) {
+        fetchActionPlan(sessionId);
     }
 }
 
+// ── Text input support ───────────────────────────────────────────
 
-// ── Mute / unmute (keeps the session alive) ──────────────────────
+async function sendTextMessage() {
+    if (!textInput || !textInput.value.trim()) return;
+    if (!isRunning) {
+        // Auto-start a session
+        setStatus('connecting', 'Starting...');
+        if (!(await createSession())) return;
+        isRunning = true;
+    }
+
+    const text = textInput.value.trim();
+    textInput.value = '';
+    addMsg('user', text);
+
+    isProcessing = true;
+    setStatus('connected', '⏳ Thinking...');
+
+    try {
+        await fetch(`${API_BASE}/sessions/${sessionId}/transcript`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ text }),
+        });
+
+        const response = await fetch(`${API_BASE}/sessions/${sessionId}/case`);
+        const caseData = await response.json();
+        updateCaseField('fStatus', caseData.status);
+        updateCaseField('fWorkerType', caseData.worker_type);
+        updateCaseField('fIssue', caseData.issue_category);
+        updateCaseField('fState', caseData.state);
+        updateCaseField('fEmployer', caseData.platform_or_employer);
+        updateCaseField('fAmount', caseData.amount ? '₹' + caseData.amount : null);
+        updateCaseField('fSafety', caseData.safety_level);
+        updateProgressTracker(caseData.status);
+
+        addMsg('agent', 'Main aapki baat samajh raha hoon. Kripya microphone ka upyog karein voice conversation ke liye.');
+
+    } catch (e) {
+        addMsg('system', `⚠️ Error: ${e.message}`);
+    }
+
+    isProcessing = false;
+    resetMicButton();
+}
+
+// ── TTS helper ───────────────────────────────────────────────────
+
+async function speakText(text, langCode) {
+    try {
+        const resp = await fetch(VOICE_API.TTS, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                text: text,
+                language_code: langCode || selectedTTSLanguage,
+                speaker: selectedSpeaker,
+                pace: 1.0,
+            }),
+        });
+        const data = await resp.json();
+        if (data.audio_base64) {
+            playAudioBase64(data.audio_base64);
+        }
+    } catch (e) {
+        console.warn('[voice] TTS failed:', e);
+    }
+}
+
+// ── Utilities ────────────────────────────────────────────────────
+
+function blobToBase64(blob) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+            const base64 = reader.result.split(',')[1];
+            resolve(base64);
+        };
+        reader.onerror = reject;
+        reader.readAsDataURL(blob);
+    });
+}
+
+// ── Language change handler ──────────────────────────────────────
+
+function onLanguageChange(e) {
+    const code = e.target.value;
+    selectedLanguage = code;
+    if (code !== 'auto') {
+        selectedTTSLanguage = code;
+    }
+    console.log(`[voice] Language set to: ${code}`);
+}
+
+// ── Mute / unmute ────────────────────────────────────────────────
 
 function toggleMute() {
     if (!isRunning) return;
     isMuted = !isMuted;
     updateMuteUI();
-    addMsg('system', isMuted ? '🔇 Microphone muted — agent can\'t hear you' : '🎙️ Microphone unmuted — agent is listening');
+    addMsg('system', isMuted ? '🔇 Microphone muted' : '🎙️ Microphone unmuted');
 }
 
 function updateMuteUI() {
@@ -213,8 +301,8 @@ function updateMuteUI() {
         muteBtn.classList.add('muted');
         muteBtn.title = 'Unmute mic';
         muteBtn.setAttribute('aria-label', 'Unmute microphone');
-        muteIconUnmuted.style.display = 'none';
-        muteIconMuted.style.display = 'block';
+        if (muteIconUnmuted) muteIconUnmuted.style.display = 'none';
+        if (muteIconMuted) muteIconMuted.style.display = 'block';
         muteIndicator.classList.add('visible');
         micArea.classList.add('is-muted');
         if (isRunning) {
@@ -223,15 +311,15 @@ function updateMuteUI() {
         }
     } else {
         muteBtn.classList.remove('muted');
-        muteBtn.title = 'Mute mic (keeps session alive)';
+        muteBtn.title = 'Mute mic';
         muteBtn.setAttribute('aria-label', 'Mute microphone');
-        muteIconUnmuted.style.display = 'block';
-        muteIconMuted.style.display = 'none';
+        if (muteIconUnmuted) muteIconUnmuted.style.display = 'block';
+        if (muteIconMuted) muteIconMuted.style.display = 'none';
         muteIndicator.classList.remove('visible');
         micArea.classList.remove('is-muted');
         if (isRunning) {
-            micHint.textContent = 'Listening... click to end session';
-            setStatus('listening', '🎤 Listening');
+            micHint.textContent = 'Tap to speak';
+            setStatus('connected', '✅ Ready');
         }
     }
 }

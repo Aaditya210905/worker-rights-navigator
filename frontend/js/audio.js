@@ -1,149 +1,177 @@
 /**
- * audio.js — Microphone capture, agent audio playback and the visualizer.
+ * audio.js — Microphone capture, recording, and agent audio playback.
  *
- * Talks to the Web Audio API only; it never creates sessions or sockets.
+ * Uses MediaRecorder to capture audio → sends to /voice/converse.
+ * Plays back Sarvam TTS audio via Web Audio API.
  */
 
 // ── Agent audio playback ─────────────────────────────────────────
-// AssemblyAI output is PCM16 mono at 24 kHz (see config.js).
 
-function playAudioChunk(base64) {
-    if (!audioCtx) return;
-    // Resume audio context if suspended (browser autoplay policy)
+function playAudioBase64(base64) {
+    if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    }
     if (audioCtx.state === 'suspended') audioCtx.resume();
 
-    // Decode base64 safely (no spread operator — avoids stack overflow)
+    // Decode base64 safely
     const binaryStr = atob(base64);
     const bytes = new Uint8Array(binaryStr.length);
     for (let i = 0; i < binaryStr.length; i++) bytes[i] = binaryStr.charCodeAt(i);
 
-    // Convert PCM16 LE to Float32
-    const samples = new Int16Array(bytes.buffer);
-    const floats = new Float32Array(samples.length);
-    for (let i = 0; i < samples.length; i++) floats[i] = samples[i] / 32768;
-
-    // Create audio buffer at AssemblyAI's output rate
-    const buf = audioCtx.createBuffer(1, floats.length, AAI_SAMPLE_RATE);
-    buf.getChannelData(0).set(floats);
-
-    // Schedule gapless playback with a small lookahead to prevent choppy speech
-    const src = audioCtx.createBufferSource();
-    src.buffer = buf;
-    src.connect(audioCtx.destination);
-
-    const now = audioCtx.currentTime;
-    // If we've fallen behind, re-anchor with a tiny buffer for smoothness
-    if (nextPlayTime < now) nextPlayTime = now + AUDIO_BUFFER_MS;
-    src.start(nextPlayTime);
-    nextPlayTime += buf.duration;
+    // Decode as WAV/MP3 (Sarvam returns full audio files)
+    audioCtx.decodeAudioData(bytes.buffer.slice(0), (buffer) => {
+        const src = audioCtx.createBufferSource();
+        src.buffer = buffer;
+        src.connect(audioCtx.destination);
+        src.start(0);
+    }, (err) => {
+        console.warn('[audio] Failed to decode audio:', err);
+    });
 }
 
 function flushAudio() {
-    // Reset scheduling so next chunk starts immediately
     nextPlayTime = 0;
 }
 
-// ── Microphone capture + visualizer ──────────────────────────────
+// ── MediaRecorder-based recording ────────────────────────────────
 
-async function startAudioPipeline() {
-    // 4. Get microphone
+async function startRecording() {
     try {
-        micStream = await navigator.mediaDevices.getUserMedia({ audio: { sampleRate: 16000, channelCount: 1, echoCancellation: true, noiseSuppression: true } });
+        micStream = await navigator.mediaDevices.getUserMedia({
+            audio: {
+                sampleRate: RECORDING_SAMPLE_RATE,
+                channelCount: RECORDING_CHANNELS,
+                echoCancellation: true,
+                noiseSuppression: true,
+                autoGainControl: true,
+            }
+        });
     } catch (e) {
-        addMsg('system', 'Microphone access denied. Please allow microphone access.');
-        stopSession();
-        return;
+        addMsg('system', '🎙️ Microphone access denied. Please allow microphone access.');
+        return false;
     }
 
-    const micCtx = new AudioContext({ sampleRate: 16000 });
-    const source = micCtx.createMediaStreamSource(micStream);
+    audioChunks = [];
 
-    // ── Visualizer setup ──────────────────────────────────────────
-    const analyser = micCtx.createAnalyser();
-    analyser.fftSize = 256;
-    source.connect(analyser);
-    const bufferLength = analyser.frequencyBinCount;
-    const dataArray = new Uint8Array(bufferLength);
+    // Use webm/opus for browser compat
+    const mimeType = MediaRecorder.isTypeSupported('audio/webm;codecs=opus')
+        ? 'audio/webm;codecs=opus'
+        : 'audio/webm';
 
-    const canvas = document.getElementById('audioVisualizer');
-    const canvasCtx = canvas.getContext('2d');
+    mediaRecorder = new MediaRecorder(micStream, { mimeType });
 
-    // Match canvas logical size to physical CSS size
-    canvas.width = 140;
-    canvas.height = 140;
-
-    function drawVisualizer() {
-        if (!isRunning) return; // Stop animation loop when session ends
-        requestAnimationFrame(drawVisualizer);
-
-        analyser.getByteFrequencyData(dataArray);
-
-        // Calculate average volume
-        let sum = 0;
-        for(let i = 0; i < bufferLength; i++) {
-            sum += dataArray[i];
-        }
-        let average = sum / bufferLength;
-
-        canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
-
-        // Draw circle that scales with volume
-        let radius = 35 + (average / 255) * 30; // base radius 35, max 65
-
-        canvasCtx.beginPath();
-        canvasCtx.arc(canvas.width/2, canvas.height/2, radius, 0, 2 * Math.PI, false);
-        canvasCtx.fillStyle = 'rgba(224, 122, 47, 0.5)'; // Saffron tint
-        canvasCtx.fill();
-
-        // Optionally, draw a second inner circle
-        canvasCtx.beginPath();
-        canvasCtx.arc(canvas.width/2, canvas.height/2, radius * 0.7, 0, 2 * Math.PI, false);
-        canvasCtx.fillStyle = 'rgba(224, 122, 47, 0.8)';
-        canvasCtx.fill();
-    }
-
-    drawVisualizer();
-    // ──────────────────────────────────────────────────────────────
-
-    scriptProcessor = micCtx.createScriptProcessor(4096, 1, 1);
-
-    scriptProcessor.onaudioprocess = (e) => {
-        if (!isRunning || !ws || ws.readyState !== 1) return;
-        // When muted, don't send audio — session stays alive
-        if (isMuted) return;
-        const float32 = e.inputBuffer.getChannelData(0);
-        const int16 = new Int16Array(float32.length);
-        for (let i = 0; i < float32.length; i++) {
-            int16[i] = Math.max(-32768, Math.min(32767, Math.floor(float32[i] * 32768)));
-        }
-        // Safe base64 encode (chunk to avoid stack overflow)
-        const uint8 = new Uint8Array(int16.buffer);
-        let binary = '';
-        for (let i = 0; i < uint8.length; i++) binary += String.fromCharCode(uint8[i]);
-        const base64 = btoa(binary);
-        ws.send(JSON.stringify({ type: 'input.audio', audio: base64 }));
+    mediaRecorder.ondataavailable = (e) => {
+        if (e.data.size > 0) audioChunks.push(e.data);
     };
 
-    source.connect(scriptProcessor);
-    scriptProcessor.connect(micCtx.destination);
+    mediaRecorder.start();
+    isRecording = true;
+
+    // Start visualizer
+    startVisualizer();
 
     return true;
 }
 
-/**
- * Release every audio resource created by startAudioPipeline().
- * Called by voice.stopSession() and on microphone-permission failure.
- */
-function stopAudioPipeline() {
+function stopRecording() {
+    return new Promise((resolve) => {
+        if (!mediaRecorder || mediaRecorder.state === 'inactive') {
+            resolve(null);
+            return;
+        }
+
+        mediaRecorder.onstop = () => {
+            const blob = new Blob(audioChunks, { type: mediaRecorder.mimeType });
+            audioChunks = [];
+            isRecording = false;
+            resolve(blob);
+        };
+
+        mediaRecorder.stop();
+    });
+}
+
+function releaseRecording() {
     if (micStream) {
         micStream.getTracks().forEach(t => t.stop());
         micStream = null;
     }
-    if (scriptProcessor) {
-        scriptProcessor.disconnect();
-        scriptProcessor = null;
+    if (mediaRecorder) {
+        mediaRecorder = null;
+    }
+    isRecording = false;
+    stopVisualizer();
+}
+
+// ── Visualizer ──────────────────────────────────────────────────
+
+let analyserNode = null;
+let analyserCtx = null;
+let animationId = null;
+
+function startVisualizer() {
+    if (!micStream) return;
+
+    analyserCtx = new AudioContext({ sampleRate: RECORDING_SAMPLE_RATE });
+    const source = analyserCtx.createMediaStreamSource(micStream);
+    analyserNode = analyserCtx.createAnalyser();
+    analyserNode.fftSize = 256;
+    source.connect(analyserNode);
+
+    const canvas = document.getElementById('audioVisualizer');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    canvas.width = 140;
+    canvas.height = 140;
+
+    const bufferLength = analyserNode.frequencyBinCount;
+    const dataArray = new Uint8Array(bufferLength);
+
+    function draw() {
+        if (!isRecording && !isRunning) {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            return;
+        }
+        animationId = requestAnimationFrame(draw);
+
+        analyserNode.getByteFrequencyData(dataArray);
+        let sum = 0;
+        for (let i = 0; i < bufferLength; i++) sum += dataArray[i];
+        let average = sum / bufferLength;
+
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Outer glow
+        let radius = 35 + (average / 255) * 30;
+        ctx.beginPath();
+        ctx.arc(canvas.width / 2, canvas.height / 2, radius, 0, 2 * Math.PI);
+        ctx.fillStyle = isRecording
+            ? 'rgba(239, 68, 68, 0.4)'   // Red pulse while recording
+            : 'rgba(224, 122, 47, 0.5)';  // Saffron while idle
+        ctx.fill();
+
+        // Inner circle
+        ctx.beginPath();
+        ctx.arc(canvas.width / 2, canvas.height / 2, radius * 0.7, 0, 2 * Math.PI);
+        ctx.fillStyle = isRecording
+            ? 'rgba(239, 68, 68, 0.7)'
+            : 'rgba(224, 122, 47, 0.8)';
+        ctx.fill();
     }
 
+    draw();
+}
+
+function stopVisualizer() {
+    if (animationId) {
+        cancelAnimationFrame(animationId);
+        animationId = null;
+    }
+    if (analyserCtx) {
+        analyserCtx.close().catch(() => {});
+        analyserCtx = null;
+        analyserNode = null;
+    }
     const canvas = document.getElementById('audioVisualizer');
     if (canvas) {
         const ctx = canvas.getContext('2d');
