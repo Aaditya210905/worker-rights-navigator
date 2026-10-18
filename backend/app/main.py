@@ -136,9 +136,13 @@ from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from pathlib import Path
 
-# frontend/ lives next to the backend/ folder, at the repository root.
-PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
-FRONTEND_DIR = PROJECT_ROOT / "frontend"
+# frontend/ resolution: works both in local dev (repo root) and in Docker (/app/frontend)
+_candidates = [
+    Path(__file__).resolve().parent.parent.parent / "frontend",  # Local repo root
+    Path(__file__).resolve().parent.parent / "frontend",         # Docker container (/app/frontend)
+    Path.cwd() / "frontend",
+]
+FRONTEND_DIR = next((p for p in _candidates if p.is_dir()), _candidates[0])
 INDEX_HTML = FRONTEND_DIR / "index.html"
 
 if FRONTEND_DIR.is_dir():
