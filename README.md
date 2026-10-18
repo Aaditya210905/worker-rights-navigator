@@ -831,31 +831,6 @@ python -m tests.test_api_integration
 
 <br/>
 
-## 🛣️ Roadmap
-
-### ✅ Phase 1 — Core Foundation & Statutory Engines (Delivered)
-- [x] Full Indic voice agent pipeline via **Sarvam AI** (Saaras v4 STT + Bulbul v3 TTS)
-- [x] Deterministic 11-stage case state machine with Hinglish question generator
-- [x] 7-Stage Hybrid RAG pipeline (Qdrant + BM25 + Reciprocal Rank Fusion + Authority Reranker)
-- [x] 90/120-Day Rule & State Gig Worker Acts statutory eligibility checker
-- [x] Section 18 deduction cap and Section 45 10x statutory wage compensation calculator
-- [x] DPDP Act 2023 regex PII redaction for uploaded proofs and screenshots
-- [x] Multi-authority complaint drafting with **pure Python fpdf2 PDF export**
-- [x] Zero-delay emergency safety escalation with verified government helplines
-- [x] SQLite WAL persistence with audit logging and action plan generation
-- [x] Responsive 6-workspace web client with real-time waveform visualization
-
-### 🔜 Phase 2 — Multi-Channel Accessibility (In Progress)
-- [ ] **WhatsApp Cloud Voice Notes** — Submit grievances via WhatsApp voice notes with automated PDF return.
-- [ ] **State Gazette Auto-Ingestion** — Automated scrapers for newly notified State Gig Worker Rules.
-- [ ] **Tesseract OCR Integration** — On-device image OCR for mobile screenshot extraction without cloud APIs.
-- [ ] **Toll-Free IVR Hotline** — Dual-tone multi-frequency (DTMF) voice support for feature phones without 4G internet.
-
-### 🔮 Phase 3 — National Scale & Public Infrastructure
-- [ ] **Direct e-Shram API Sync** — Verify worker registration status against the national e-Shram database.
-- [ ] **DLSA Advocate Dashboard** — Secure, anonymized case export for District Legal Services Authority panel lawyers.
-- [ ] **Trade Union Collaboration Mode** — Aggregated dispute pattern reporting to identify systemic platform wage theft.
-
 <br/>
 
 ---
