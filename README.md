@@ -6,38 +6,44 @@
 <br/>
 
 <p>
-  <strong>🇮🇳 An AI-powered voice agent empowering India's 450M+ informal & gig workers to navigate complex legal frameworks — entirely through natural, multilingual voice interaction.</strong>
+  <strong>🇮🇳 A Voice-First AI Agent & Statutory Legal Defender empowering India's 450M+ informal & gig workers to navigate complex labour codes, compute statutory wage claims, verify welfare eligibility, redact sensitive PII, and generate court-ready dispute petitions — entirely through natural multilingual voice interaction in 22 Indic languages and Hinglish.</strong>
 </p>
 
 <br/>
 
-<!-- Badges Row 1 — Tech Stack -->
+<!-- Badges Row 1 — Core Stack -->
 <p>
   <img src="https://img.shields.io/badge/Python-3.10+-005571?style=for-the-badge&logo=python&logoColor=white" alt="Python"/>
   <img src="https://img.shields.io/badge/FastAPI-0.115+-009688?style=for-the-badge&logo=fastapi&logoColor=white" alt="FastAPI"/>
-  <img src="https://img.shields.io/badge/AssemblyAI-Voice_Agent_API-6366F1?style=for-the-badge" alt="AssemblyAI"/>
-  <img src="https://img.shields.io/badge/Qdrant-Vector_DB-F04E98?style=for-the-badge&logo=qdrant" alt="Qdrant"/>
-  <img src="https://img.shields.io/badge/Ollama-Local_Embeddings-000000?style=for-the-badge" alt="Ollama"/>
+  <img src="https://img.shields.io/badge/Sarvam_AI-Saaras_v4_STT_%7C_Bulbul_v3_TTS-FF6F00?style=for-the-badge" alt="Sarvam AI"/>
+  <img src="https://img.shields.io/badge/Groq-Llama_3.1_8B_Instant-F55036?style=for-the-badge&logo=groq&logoColor=white" alt="Groq"/>
+  <img src="https://img.shields.io/badge/Qdrant-Hybrid_Vector_DB-F04E98?style=for-the-badge&logo=qdrant" alt="Qdrant"/>
+  <img src="https://img.shields.io/badge/Tavily-Live_Gov_Radar-4F46E5?style=for-the-badge" alt="Tavily"/>
 </p>
 
-<!-- Badges Row 2 — Status -->
+<!-- Badges Row 2 — Status & Capabilities -->
 <p>
-  <img src="https://img.shields.io/badge/status-hackathon_demo-E8772E?style=flat-square" alt="Status"/>
+  <img src="https://img.shields.io/badge/status-National_Hackathon_2026_Finalist-E8772E?style=flat-square" alt="Status"/>
+  <img src="https://img.shields.io/badge/tests-100%25_Passing-16A34A?style=flat-square" alt="Tests"/>
+  <img src="https://img.shields.io/badge/languages-22_Indic_+_Hinglish_CodeMix-6366F1?style=flat-square" alt="Languages"/>
+  <img src="https://img.shields.io/badge/privacy-DPDP_Act_2023_Compliant-0284C7?style=flat-square" alt="DPDP"/>
+  <img src="https://img.shields.io/badge/PDF_Engine-Pure_Python_fpdf2-EC4899?style=flat-square" alt="PDF"/>
   <img src="https://img.shields.io/badge/license-MIT-1B2138?style=flat-square" alt="License"/>
-  <img src="https://img.shields.io/badge/voice-Hindi_|_English_|_Hinglish-16A34A?style=flat-square" alt="Languages"/>
-  <img src="https://img.shields.io/badge/built_at-LabLab_Hackathon-6366F1?style=flat-square" alt="LabLab"/>
 </p>
 
 <!-- Quick Nav -->
 <p>
   <a href="#-the-problem"><strong>Problem</strong></a> · 
   <a href="#-how-it-works"><strong>How It Works</strong></a> · 
-  <a href="#-core-capabilities"><strong>Features</strong></a> · 
+  <a href="#-core-pillars"><strong>Core Pillars</strong></a> · 
   <a href="#%EF%B8%8F-system-architecture"><strong>Architecture</strong></a> · 
   <a href="#-rag-pipeline-deep-dive"><strong>RAG Pipeline</strong></a> · 
-  <a href="#-voice-agent-engine"><strong>Voice Engine</strong></a> ·
+  <a href="#-sarvam-ai-voice-engine"><strong>Voice Engine</strong></a> ·
+  <a href="#-9-orchestrator-tools"><strong>Orchestrator Tools</strong></a> ·
+  <a href="#-interactive-legal-workspaces"><strong>Legal Workspaces</strong></a> ·
   <a href="#-quick-start"><strong>Quick Start</strong></a> · 
-  <a href="#-api-reference"><strong>API</strong></a>
+  <a href="#-api-reference"><strong>API</strong></a> ·
+  <a href="#-testing--verification"><strong>Tests</strong></a>
 </p>
 
 </div>
@@ -54,33 +60,35 @@
   <tr>
     <td width="50%">
       <h3>The Reality of India's Informal Workforce</h3>
-      <p>India's informal sector constitutes <strong>over 90% of the total workforce</strong> — roughly <strong>450 million</strong> people. These are the delivery riders, construction labourers, domestic helpers, and daily-wage earners who power the nation's economy.</p>
-      <p>Despite strong legal protections under codes like the <em>Code on Wages 2019</em> and <em>OSH Code 2020</em>, the accessibility gap is <strong>massive</strong>:</p>
+      <p>India's unorganized sector constitutes <strong>over 90% of the nation's total workforce</strong> — upwards of <strong>450 million</strong> delivery riders, cab drivers, construction laborers, domestic staff, and daily-wage earners who keep India moving.</p>
+      <p>Despite progressive legal protections enacted under Central and State frameworks, the accessibility gap remains devastating:</p>
       <ul>
-        <li>📖 <strong>Literacy barrier</strong> — Legal texts require 12th-grade reading comprehension</li>
-        <li>🌐 <strong>Language barrier</strong> — Most legal resources exist only in English</li>
-        <li>🔍 <strong>Information overload</strong> — Google returns conflicting, SEO-spammed legal advice</li>
-        <li>❌ <strong>No actionability</strong> — Workers learn a law exists but don't know the next step</li>
+        <li>📖 <strong>Literacy & Legal Jargon Barrier</strong> — Statutory codes require legal degrees to parse; workers cannot interpret Section clauses.</li>
+        <li>🌐 <strong>Linguistic Exclusion</strong> — Crucial gazette notifications, court rulings, and portal guides are issued predominantly in English.</li>
+        <li>⚖️ <strong>Algorithmic Arbitrariness</strong> — Platform deactivations, penalty deductions, and withheld surge pay happen without due process.</li>
+        <li>📝 <strong>Bureaucratic Intimidation</strong> — Filing a grievance before the Assistant Labour Commissioner or DLSA requires structured petitions that workers cannot draft alone.</li>
       </ul>
     </td>
     <td width="50%">
       <h3>The WorkerSaathi Solution</h3>
-      <p>WorkerSaathi is a <strong>zero-friction, voice-first AI agent</strong> that transforms how workers access legal knowledge:</p>
+      <p>WorkerSaathi is a <strong>zero-barrier, voice-first AI legal champion</strong> that turns natural spoken grievances into actionable legal remedies:</p>
       <ul>
-        <li>🎙️ <strong>Voice-native</strong> — Just tap and speak in Hindi, English, or Hinglish</li>
-        <li>🛡️ <strong>Verified answers</strong> — RAG-grounded in curated Central Government legal codes</li>
-        <li>📋 <strong>End-to-end resolution</strong> — From understanding rights to drafting formal grievance communications</li>
-        <li>🚨 <strong>Safety-first</strong> — Automatic escalation for injuries, trafficking, and child labour</li>
-        <li>🔒 <strong>Privacy-respecting</strong> — No audio logging, ephemeral sessions, zero PII collection</li>
+        <li>🎙️ <strong>Native Indic Voice</strong> — Speak in Hindi, English, or conversational Hinglish powered by <strong>Sarvam AI Saaras v4 STT</strong> and <strong>Bulbul v3 TTS</strong>.</li>
+        <li>🛡️ <strong>Zero Hallucination Hybrid RAG</strong> — Direct citation of Central Labour Codes (Wages, OSH, Social Security) and State Gig Worker Acts (Rajasthan 2023, Karnataka 2024/25).</li>
+        <li>🧮 <strong>Statutory Wage & Penalty Calculator</strong> — Enforces Section 18 deduction caps (50% max) and claims up to <strong>10x compensation</strong> under Section 45.</li>
+        <li>🔍 <strong>90/120-Day Rule Eligibility Engine</strong> — Deterministic checks against the Code on Social Security 2020 for aggregator social security.</li>
+        <li>📄 <strong>Court-Ready Complaint Generator</strong> — Generates and downloads official PDF dispute petitions with Annexure timelines via <strong>fpdf2</strong>.</li>
+        <li>🔒 <strong>DPDP Act 2023 Privacy</strong> — Automatic regex redaction of Aadhaar, bank details, and OTPs before storage or LLM processing.</li>
       </ul>
-      <br/>
-      <blockquote>
-        <p><em>"Main Swiggy mein delivery karta hoon. Mujhe 25 din se payment nahi mila..."</em></p>
-        <p>→ WorkerSaathi classifies the issue, retrieves relevant law, and drafts a formal dispute letter — all through voice.</p>
-      </blockquote>
     </td>
   </tr>
 </table>
+
+<br/>
+
+> **Real-World Case:**  
+> *"Main Swiggy mein delivery karta hoon Mumbai mein. Pichle 25 din se mera ₹8,000 ka payment atka hua hai aur company ne account bhi lock kar diya..."*  
+> **→ WorkerSaathi classifies the dispute, evaluates 90-day aggregator tenure, runs the Section 18 deduction test, verifies legal rights under the Code on Wages 2019, redacts payout screenshots, and produces a court-ready formal petition with a single voice command.**
 
 <br/>
 
@@ -90,39 +98,42 @@
 
 ## 🔄 How It Works
 
-> **A single voice interaction walks the worker through: problem intake → legal research → evidence packaging → actionable next steps.**
-
 ```
-╔══════════════════════════════════════════════════════════════════════════════════╗
-║                                                                                ║
-║   👤 Worker speaks naturally        "Meri salary 2 mahine se nahi aayi"        ║
-║         │                                                                      ║
-║         ▼                                                                      ║
-║   🎙️ AssemblyAI STT                Real-time Hindi/English/Hinglish → Text     ║
-║         │                                                                      ║
-║         ▼                                                                      ║
-║   🧠 LLM Orchestrator              Extracts: worker_type, issue, employer...   ║
-║         │                           Calls: update_case_info tool               ║
-║         │                                                                      ║
-║         ├──→ 📋 Case State Machine  Tracks all case fields, determines         ║
-║         │                           what to ask next                           ║
-║         │                                                                      ║
-║         ├──→ 🔍 Hybrid RAG          Semantic + BM25 → RRF Fusion → Rerank     ║
-║         │    └─ Qdrant Vector DB    Returns verified legal evidence            ║
-║         │                                                                      ║
-║         ├──→ 🛡️ Safety Guardrails   Detects danger → Emergency helplines       ║
-║         │                                                                      ║
-║         ├──→ 📦 Evidence Generator  Structured case package for complaints     ║
-║         │                                                                      ║
-║         └──→ ✉️ Message Drafter     Formal dispute letters to employers        ║
-║                                                                                ║
-║         ▼                                                                      ║
-║   🔊 Text-to-Speech                Agent responds in worker's language         ║
-║         │                                                                      ║
-║         ▼                                                                      ║
-║   👤 Worker hears actionable guidance                                          ║
-║                                                                                ║
-╚══════════════════════════════════════════════════════════════════════════════════╝
+╔══════════════════════════════════════════════════════════════════════════════════════════════════╗
+║                                  END-TO-END SYSTEM EXECUTION FLOW                                 ║
+╚══════════════════════════════════════════════════════════════════════════════════════════════════╝
+
+   👤 Worker speaks naturally        "Meri salary 2 mahine se nahi aayi aur account block ho gaya"
+         │
+         ▼
+   🎙️ Sarvam AI STT (Saaras v4)     Native 22 Indic Languages + Hinglish CodeMix → Real-time Text
+         │
+         ▼
+   🧠 LLM Orchestrator (Llama 3.1)   Extracts: worker_type, issue, employer, amount, days_worked...
+         │                           Dispatches to Schema-Validated Backend Tools
+         │
+         ├───▶ 📋 11-Stage State Machine ── Enforces missing fields, asks 1 question at a time
+         │
+         ├───▶ 🔍 7-Stage Hybrid RAG ────── Qdrant Dense + BM25 Sparse ──▶ RRF (k=60) ──▶ Authority Reranker
+         │                                 Returns verified statutory backing with citation coverage
+         │
+         ├───▶ 🛡️ Statutory Eligibility ── Evaluates 90/120-day rule, e-Shram & State Gig Worker Acts
+         │
+         ├───▶ 🧮 Statutory Wage Engine ── Computes unpaid dues + Sec 18 deduction cap + Sec 45 10x claim
+         │
+         ├───▶ 📁 PII-Redacted Evidence ── Redacts Aadhaar/Bank/OTP via regex ──▶ Builds Annexure Timeline
+         │
+         ├───▶ 📄 Complaint Studio ─────── Pure Python fpdf2 engine generates formal PDF legal petitions
+         │
+         ├───▶ 🚨 Emergency Guardrail ──── Immediate override: triggers 112 / 1098 / Labour Helplines
+         │
+         └───▶ 🌐 Live Gov Radar (Tavily) ─ Searches real-time gazette notifications & platform policies
+         │
+         ▼
+   🔊 Sarvam AI TTS (Bulbul v3)     Clear, empathetic voice synthesis (Shubh / Meera personas)
+         │
+         ▼
+   👤 Worker hears actionable guidance + downloads official court-ready complaint PDF
 ```
 
 <br/>
@@ -131,35 +142,43 @@
 
 <br/>
 
-## ✨ Core Capabilities
+## ✨ Core Pillars
 
 <table>
   <tr>
-    <td width="33%" align="center">
-      <h3>🎙️ Multilingual Voice Agent</h3>
-      <p>Real-time speech processing via <strong>AssemblyAI Universal-2</strong>. Handles seamless <strong>code-switching</strong> between Hindi, English, and Hinglish. Workers speak naturally — no forms, no typing.</p>
+    <td width="25%" align="center">
+      <h3>🎙️ Indic Voice Engine</h3>
+      <p>Powered by <strong>Sarvam AI</strong> (Saaras v4 STT + Bulbul v3 TTS). Handles code-switching between 22 Indic languages + Hinglish. Zero typing needed.</p>
     </td>
-    <td width="33%" align="center">
-      <h3>🧠 Stateful Case Management</h3>
-      <p>A deterministic <strong>finite state machine</strong> tracks every case through 11 distinct stages. Dynamically identifies <strong>missing fields</strong> and prompts the next question — one at a time, never overwhelming.</p>
+    <td width="25%" align="center">
+      <h3>🧠 Deterministic State Machine</h3>
+      <p>An 11-stage finite state machine controls transitions. Dynamically computes missing fields and asks <strong>one question at a time</strong> in natural conversational Hinglish.</p>
     </td>
-    <td width="33%" align="center">
-      <h3>🔍 Hybrid RAG Engine</h3>
-      <p><strong>Semantic search (Qdrant) + BM25 keyword search</strong>, fused via Reciprocal Rank Fusion. Authority reranking ensures primary legislation outranks FAQs. <strong>Zero hallucinations by design.</strong></p>
+    <td width="25%" align="center">
+      <h3>🔍 7-Stage Hybrid RAG</h3>
+      <p>Dense semantic search (Qdrant) + BM25 sparse keyword search fused via <strong>Reciprocal Rank Fusion (k=60)</strong> with custom Authority Reranking.</p>
+    </td>
+    <td width="25%" align="center">
+      <h3>🛡️ 90/120-Day Eligibility</h3>
+      <p>Deterministic evaluation of statutory thresholds under the <strong>Code on Social Security 2020</strong>, Section 113/114 advisories, and State Welfare Board laws.</p>
     </td>
   </tr>
   <tr>
-    <td width="33%" align="center">
-      <h3>🛡️ Safety-First Escalation</h3>
-      <p>Mentions of <strong>injury, violence, trafficking, or child labour</strong> instantly halt all flows. Verified government helpline numbers (112, 1098, 181) are read aloud before any legal discussion.</p>
+    <td width="25%" align="center">
+      <h3>🧮 Wage & Penalty Math</h3>
+      <p>Calculates unlawful deductions under <strong>Section 18</strong> (50% statutory ceiling) and computes up to <strong>10x statutory compensation claims</strong> under Section 45.</p>
     </td>
-    <td width="33%" align="center">
-      <h3>📋 Evidence Structuring</h3>
-      <p>Transforms unstructured voice narratives into <strong>timeline-based evidence packages</strong> with legal backing — ready for submission to Labour Commissioner or DLSA.</p>
+    <td width="25%" align="center">
+      <h3>📁 PII Evidence Locker</h3>
+      <p>Auto-redacts 12-digit Aadhaar, bank account numbers, and OTPs under <strong>DPDP Act 2023</strong>. Ingests payment proofs into chronological Annexure timelines.</p>
     </td>
-    <td width="33%" align="center">
-      <h3>✉️ Message Drafting</h3>
-      <p>Generates <strong>professional, legally-sound communication templates</strong> tailored to the specific platform (Swiggy, Zomato, Urban Company) for formal dispute initiation.</p>
+    <td width="25%" align="center">
+      <h3>📄 Complaint Studio</h3>
+      <p>Drafts statutory dispute petitions for 4 authorities (Labour Commissioner, Aggregator Grievance Officer, DLSA, Welfare Board) with <strong>instant PDF export via fpdf2</strong>.</p>
+    </td>
+    <td width="25%" align="center">
+      <h3>🚨 Safety-First SOS</h3>
+      <p>Mentions of injury, violence, trafficking, or child labor <strong>immediately override all workflows</strong> to deliver verified emergency numbers (112, 1098, 1800-419-8588).</p>
     </td>
   </tr>
 </table>
@@ -172,90 +191,114 @@
 
 ## 🏗️ System Architecture
 
-WorkerSaathi is built as a modular, event-driven system with clear separation between voice transport, AI orchestration, and legal knowledge retrieval.
+WorkerSaathi is architected with strict decoupling: speech transport, deterministic orchestration, statutory mathematical logic, hybrid RAG retrieval, and clean UI components.
 
 ```mermaid
 graph TD
-    classDef client fill:#1B2138,stroke:#E07A2F,stroke-width:2px,color:#fff
-    classDef voice fill:#6366f1,stroke:#4f46e5,stroke-width:2px,color:#fff
+    classDef client fill:#1B2138,stroke:#E8772E,stroke-width:2px,color:#fff
+    classDef voice fill:#FF6F00,stroke:#EA580C,stroke-width:2px,color:#fff
     classDef backend fill:#005571,stroke:#003b4f,stroke-width:2px,color:#fff
     classDef db fill:#F04E98,stroke:#be185d,stroke-width:2px,color:#fff
-    classDef external fill:#4A5578,stroke:#2D3A5C,stroke-width:2px,color:#fff
+    classDef tools fill:#2563EB,stroke:#1D4ED8,stroke-width:2px,color:#fff
     classDef safety fill:#DC2626,stroke:#991B1B,stroke-width:2px,color:#fff
+    classDef legal fill:#059669,stroke:#047857,stroke-width:2px,color:#fff
 
-    User["👤 Worker"]:::client -->|Speaks| Browser["🎙️ Voice Web Client<br/>(frontend/)"]
-    
-    Browser:::client <-->|"WebSocket<br/>PCM16 Audio"| Proxy["FastAPI WS Proxy<br/>/api/v1/voice/{id}"]
-    
-    Proxy:::backend <-->|"WebSocket<br/>Audio + Events"| AAI["AssemblyAI<br/>Voice Agent API"]:::voice
-    
-    AAI -->|"tool.call events"| Proxy
-    Proxy -->|"tool.result"| AAI
-    
-    subgraph Orchestration ["🧠 Backend Intelligence Layer"]
-        Orch["Orchestrator<br/>(orchestrator.py)"]:::backend
-        CM["Case Manager<br/>(state.py)"]:::backend
-        TR["Tool Registry<br/>(tool_registry.py)"]:::backend
-        Prompts["Prompt Builder<br/>(prompts.py)"]:::backend
+    User["👤 Informal / Gig Worker"]:::client -->|Voice / Text / Evidence Upload| UI["🖥️ Frontend Legal Hub<br/>(Voice, Wages, Eligibility, Dossier, Studio)"]:::client
+
+    UI <-->|"REST API + Base64 Audio<br/>/api/v1/voice/converse"| Gateway["FastAPI API Gateway<br/>(main.py / routes.py)"]:::backend
+
+    subgraph VoiceEngine ["🎙️ Sarvam AI Indic Speech Layer"]
+        STT["Sarvam Saaras v4 STT<br/>(22 Indic Languages + Hinglish CodeMix)"]:::voice
+        TTS["Sarvam Bulbul v3 TTS<br/>(Shubh / Meera Voice Personas)"]:::voice
     end
-    
-    Proxy --> Orch
-    Orch --> CM
-    Orch --> TR
-    Orch --> Prompts
-    
-    subgraph Tools ["🔧 Tool Execution Layer"]
-        T1["update_case_info"]:::external
-        T2["retrieve_rights"]:::external
-        T3["generate_evidence"]:::external
-        T4["draft_message"]:::external
-        T5["escalate_safety"]:::safety
+
+    Gateway --> STT
+    TTS --> Gateway
+
+    subgraph Intelligence ["🧠 AI Orchestrator & State Core"]
+        Orch["Orchestrator Engine<br/>(orchestrator.py)"]:::backend
+        LLM["Groq Llama 3.1 8B Instant<br/>Tool Calling & Entity Extraction"]:::backend
+        SM["11-Stage Case State Machine<br/>(state.py & fields.py)"]:::backend
+        Reg["Permission-Gated Tool Registry<br/>(tool_registry.py)"]:::backend
     end
-    
-    Orch --> T1
-    Orch --> T2
-    Orch --> T3
-    Orch --> T4
-    Orch --> T5
-    
-    subgraph RAG ["📚 Legal Knowledge Engine"]
-        QB["Query Builder"]:::backend
-        Embed["Ollama Embeddings<br/>(Qwen3-Embedding)"]:::backend
-        QD["Qdrant Vector DB"]:::db
-        BM["BM25 Index"]:::backend
-        RRF["RRF Fusion"]:::backend
-        Rerank["Authority Reranker"]:::backend
-        Valid["Evidence Validator"]:::backend
+
+    STT --> Orch
+    Orch <--> LLM
+    Orch --> SM
+    Orch --> Reg
+
+    subgraph ToolSuite ["🔧 9 Schema-Validated Backend Tools"]
+        T_Case["update_case_info"]:::tools
+        T_RAG["retrieve_rights"]:::tools
+        T_Elig["check_eligibility"]:::legal
+        T_Wage["calculate_unpaid_wages"]:::legal
+        T_Evid["generate_evidence"]:::tools
+        T_Comp["generate_complaint_letter"]:::legal
+        T_Draft["draft_message"]:::tools
+        T_Tavily["search_live_news"]:::tools
+        T_SOS["escalate_safety<br/>⚠️ OVERRIDE"]:::safety
     end
-    
-    T2 --> QB --> Embed --> QD
-    QB --> BM
-    QD --> RRF
-    BM --> RRF
-    RRF --> Rerank --> Valid
-    
-    subgraph Persistence ["💾 Data Layer"]
-        SQLite["SQLite<br/>(Cases + Audit Log)"]:::db
-        KnowledgeBase["Knowledge Base<br/>(JSON + PDFs)"]:::db
+
+    Reg --> T_Case
+    Reg --> T_RAG
+    Reg --> T_Elig
+    Reg --> T_Wage
+    Reg --> T_Evid
+    Reg --> T_Comp
+    Reg --> T_Draft
+    Reg --> T_Tavily
+    Reg --> T_SOS
+
+    subgraph LegalEngines ["⚖️ Statutory Engines & Evidence Locker"]
+        EligCalc["EligibilityChecker<br/>(90/120-Day Rule, Sec 113/114)"]:::legal
+        WageCalc["WageCalculator<br/>(Sec 18 Cap & Sec 45 10x Claim)"]:::legal
+        Locker["EvidenceManager & Parser<br/>(PII Redaction & Annexure Timelines)"]:::legal
+        PDFGen["ComplaintGenerator<br/>(fpdf2 PDF Engine & Multi-Authority)"]:::legal
     end
-    
-    T3 --> SQLite
-    QB --> KnowledgeBase
+
+    T_Elig --> EligCalc
+    T_Wage --> WageCalc
+    T_Evid --> Locker
+    T_Comp --> PDFGen
+
+    subgraph RAGCore ["📚 7-Stage Hybrid Legal RAG Pipeline"]
+        QB["Query Builder & Context Injector"]:::backend
+        QD["Qdrant Vector DB<br/>(Dense Semantic Search)"]:::db
+        BM["BM25 Index<br/>(Sparse Keyword Match)"]:::backend
+        RRF["RRF Fusion Engine<br/>(k = 60)"]:::backend
+        Rerank["Authority Reranker<br/>(Primary > Gov > Explanatory)"]:::backend
+        Valid["Evidence Validator & Coverage Classifier"]:::backend
+    end
+
+    T_RAG --> QB
+    QB --> QD & BM
+    QD & BM --> RRF --> Rerank --> Valid
+
+    subgraph Storage ["💾 Persistence & Knowledge Base"]
+        DB["SQLite Database (WAL Mode)<br/>Cases, Audit Events, Action Plans, Evidence"]:::db
+        KB["Curated Legal Corpus (Central Codes, Central Rules 2026, State Acts)"]:::db
+    end
+
+    SM --> DB
+    Locker --> DB
+    Valid --> KB
+
+    Orch --> TTS
 ```
 
-### Architecture Highlights
+### Architectural Layer Specifications
 
-| Layer | Technology | Purpose |
-|-------|-----------|---------|
-| **Voice Transport** | AssemblyAI Universal-2 | Real-time STT/TTS with tool-calling over WebSocket |
-| **Web Interface** | Static HTML/CSS/JS (no build step) | Zero-dependency voice client with waveform animations, split into `frontend/` |
-| **API Gateway** | FastAPI + Uvicorn (ASGI) | Async HTTP/WS server with auto-generated Swagger docs |
-| **Orchestration** | Python + Pydantic | Deterministic tool dispatch with permission gating |
-| **Vector Search** | Qdrant (on-disk/in-memory) | Dense embedding search with metadata filtering |
-| **Keyword Search** | rank-bm25 | Sparse retrieval for exact legal section matching |
-| **Embeddings** | Ollama + Qwen3-Embedding-8B | Local, private embedding generation — no data leaves your machine |
-| **PDF Processing** | PyMuPDF | Extract and chunk legal documents from government PDFs |
-| **Persistence** | SQLite | Case snapshots, audit trail, action plans, evidence items |
+| Layer | Component | Implementation | Value Delivered |
+|---|---|---|---|
+| **Voice Transport** | Sarvam AI | `Saaras v4` STT + `Bulbul v3` TTS | Sub-second audio processing, native Hinglish dialect comprehension, human-like voice synthesis. |
+| **API Gateway** | FastAPI + Uvicorn | Async ASGI server (`routes.py`, `voice_routes.py`) | Interactive OpenAPI/Swagger documentation, CORS-enabled, static asset serving. |
+| **LLM Inference** | Groq / OpenRouter | `llama-3.1-8b-instant` / OpenAI-compatible | Extreme token throughput for real-time tool calling and natural conversation. |
+| **State Machine** | Python + SQLite | 11 deterministic case statuses in `state.py` | Predictable conversation transitions; guarantees backend control over legal workflows. |
+| **Hybrid Search** | Qdrant + BM25 | Dense embeddings + Sparse inverted index | Fuses semantic meaning with exact statutory section lookups via Reciprocal Rank Fusion ($k=60$). |
+| **Legal Authority** | Custom Reranker | Primary Act (1.0) > Gov Notification (0.7) > FAQs (0.4) | Prevents blog post hallucinations from overriding official Central/State legislation. |
+| **Evidence & Locker** | Regex + PyMuPDF | `screenshot_parser.py` + `redaction.py` | Complies with DPDP Act 2023 by masking Aadhaar numbers and bank details before storage. |
+| **Document Engine** | Pure Python `fpdf2` | `complaint_generator.py` | Generates official, downloadable legal complaint petitions without external system dependencies. |
+| **Live Radar** | Tavily Search API | `tavily-python` with query context enrichment | Fetches real-time welfare schemes, gazette notifications, and platform dispute updates. |
 
 <br/>
 
@@ -265,64 +308,53 @@ graph TD
 
 ## 🔍 RAG Pipeline Deep Dive
 
-> **The RAG pipeline is the brain behind WorkerSaathi's legal accuracy.** Unlike naive "stuff context" approaches, it uses a 7-stage pipeline that ensures every piece of legal information is verified, ranked, and validated before reaching the worker.
+> **Legal advice requires mathematical precision, not creative guessing.** WorkerSaathi's 7-stage RAG architecture guarantees that every statutory citation is verified, weighted by legislative hierarchy, and classified by coverage integrity.
 
 ```
-┌─────────────────────────────────────────────────────────────────────┐
-│                    RAG Pipeline Architecture                         │
-│                                                                     │
-│  ┌─────────────┐     ┌──────────────┐     ┌─────────────────────┐  │
-│  │  Knowledge   │     │   Chunker    │     │  Embedding Client   │  │
-│  │  Base (JSON  │────▶│  (semantic   │────▶│  (Ollama / Qwen3-   │  │
-│  │  + PDFs)     │     │   chunks)    │     │   Embedding-8B)     │  │
-│  └─────────────┘     └──────────────┘     └─────────┬───────────┘  │
-│                                                       │              │
-│  ┌────────────────────────────────────────────────────▼───────────┐  │
-│  │                   Hybrid Search Stage                           │  │
-│  │  ┌─────────────────┐          ┌─────────────────┐              │  │
-│  │  │  Qdrant Dense   │          │   BM25 Sparse   │              │  │
-│  │  │  Search         │          │   Search        │              │  │
-│  │  │  (semantic)     │          │   (keywords)    │              │  │
-│  │  └────────┬────────┘          └────────┬────────┘              │  │
-│  │           │          ┌──────────┐      │                       │  │
-│  │           └─────────▶│ RRF (k=  │◀─────┘                       │  │
-│  │                      │  60)     │                               │  │
-│  │                      └────┬─────┘                               │  │
-│  └───────────────────────────┼────────────────────────────────────┘  │
-│                              │                                       │
-│  ┌───────────────────────────▼────────────────────────────────────┐  │
-│  │              Post-Retrieval Pipeline                            │  │
-│  │  ┌─────────────┐  ┌────────────┐  ┌─────────────────────────┐ │  │
-│  │  │  Authority   │─▶│  Evidence  │─▶│  Evidence Assembler     │ │  │
-│  │  │  Reranker    │  │  Validator │  │  (LegalEvidence output) │ │  │
-│  │  └─────────────┘  └────────────┘  └─────────────────────────┘ │  │
-│  └────────────────────────────────────────────────────────────────┘  │
-└─────────────────────────────────────────────────────────────────────┘
+┌───────────────────────────────────────────────────────────────────────────────────────────────────┐
+│                                   7-STAGE HYBRID RAG ARCHITECTURE                                 │
+│                                                                                                   │
+│  ┌─────────────────┐      ┌──────────────────┐      ┌──────────────────────────────────────────┐  │
+│  │ Knowledge Base  │────▶ │ Context Chunker  │────▶ │ Dense Embedding Generation               │  │
+│  │ (Acts, Rules,   │      │ (Preserves Legal │      │ (OpenRouter Nemotron / Ollama Qwen3-8B)  │  │
+│  │ Gazette Notifs) │      │ Sections/Clauses)│      └────────────────────┬─────────────────────┘  │
+│  └─────────────────┘      └──────────────────┘                           │                        │
+│                                                                          │                        │
+│  ┌───────────────────────────────────────────────────────────────────────▼─────────────────────┐  │
+│  │                             STAGE 5: HYBRID RETRIEVAL & FUSION                              │  │
+│  │   ┌──────────────────────────────┐                ┌──────────────────────────────┐          │  │
+│  │   │     Qdrant Dense Search      │                │      BM25 Sparse Search      │          │  │
+│  │   │   (Cosine Semantic Distance) │                │  (Exact Legal Term Matching) │          │  │
+│  │   └──────────────┬───────────────┘                └──────────────┬───────────────┘          │  │
+│  │                  │             ┌──────────────────┐              │                          │  │
+│  │                  └───────────▶ │  RRF Fusion Core │ ◀────────────┘                          │  │
+│  │                                │     (k = 60)     │                                         │  │
+│  │                                └─────────┬────────┘                                         │  │
+│  └──────────────────────────────────────────┼──────────────────────────────────────────────────┘  │
+│                                             │                                                     │
+│  ┌──────────────────────────────────────────▼──────────────────────────────────────────────────┐  │
+│  │                        STAGE 6 & 7: AUTHORITY RERANKING & VALIDATION                        │  │
+│  │   ┌──────────────────────────────┐                ┌──────────────────────────────┐          │  │
+│  │   │  Authority Hierarchy Rerank  │ ─────────────▶ │   Evidence Integrity Check   │          │  │
+│  │   │  Primary Legislation = 1.0   │                │   - Validates in-force date  │          │  │
+│  │   │  Official Gov Rules  = 0.7   │                │   - Identifies Gaps/Conflicts│          │  │
+│  │   │  Explanatory FAQs    = 0.4   │                │   - Formats LegalEvidence    │          │  │
+│  │   └──────────────────────────────┘                └──────────────────────────────┘          │  │
+│  └─────────────────────────────────────────────────────────────────────────────────────────────┘  │
+└───────────────────────────────────────────────────────────────────────────────────────────────────┘
 ```
 
-### Pipeline Stages Explained
+### Coverage Classification Engine
 
-| # | Stage | Module | What It Does |
-|---|-------|--------|-------------|
-| 1 | **Data Ingestion** | `loader.py` + `pdf_loader.py` | Loads JSON research packages and government PDFs from `knowledge/workersaathi/` |
-| 2 | **Semantic Chunking** | `chunker.py` | Splits documents while preserving legal context (section headers with clauses) |
-| 3 | **Embedding Generation** | `embeddings.py` | Generates dense vectors via **Ollama** (Qwen3-Embedding-8B), optimized for local inference |
-| 4 | **Query Building** | `query_builder.py` | Expands the user's query with worker type and issue-specific terms; generates structured `RetrievalQuery` |
-| 5 | **Hybrid Search** | `retriever.py` | Runs **Qdrant dense search** and **BM25 sparse search** in parallel, merges via **Reciprocal Rank Fusion (k=60)** |
-| 6 | **Authority Reranking** | `reranker.py` | Boosts primary legislation (Acts/Codes) over secondary sources (FAQs/Blogs); applies worker-type and issue specificity scores |
-| 7 | **Validation & Assembly** | `validator.py` + `evidence.py` | Checks legal status, detects known gaps and conflicts, adds jurisdiction limitations, and produces the final `LegalEvidence` object |
+WorkerSaathi never pretends to know something it cannot prove. The retriever explicitly tags results with a coverage state:
 
-### Coverage Detection
-
-The pipeline explicitly tracks what it **doesn't know**:
-
-| Coverage Level | Meaning | Agent Behavior |
-|---------------|---------|---------------|
-| `FULL` | Verified evidence found | Present findings with source citations |
-| `PARTIAL` | Some evidence, known gaps | Present what's found, state missing info |
-| `GAP` | No verified info available | Honestly tell the worker; recommend legal aid |
-| `CONFLICT` | Sources contradict each other | Present both sides; recommend professional |
-| `NONE` | No relevant results | Suggest consulting labour office |
+| Coverage State | Condition | Agent Behavior & Worker Output |
+|---|---|---|
+| `FULL` | Primary legislation or rules directly address the worker's dispute | Quotes exact Sections, penalty provisions, and authoritative remedies. |
+| `PARTIAL` | General provisions exist, but state rules or specific thresholds are missing | Discloses the missing details honestly; advises targeted documentation. |
+| `GAP` | Law does not yet provide clear statutory protection (e.g. arbitrary deactivation) | Explains the legal void transparently and directs worker to DLSA/Trade Union aid. |
+| `CONFLICT` | Divergence between Central Codes and pending State notifications | Details the jurisdictional friction and suggests conciliation officer review. |
+| `NONE` | Query falls completely outside labour law scope | Respectfully redirects worker to the relevant civil or administrative helpline. |
 
 <br/>
 
@@ -330,53 +362,18 @@ The pipeline explicitly tracks what it **doesn't know**:
 
 <br/>
 
-## 🎙️ Voice Agent Engine
+## 🎙️ Sarvam AI Voice Engine
 
-WorkerSaathi's voice system operates in two modes, both powered by the same Orchestrator:
+WorkerSaathi replaces cumbersome keyboards and foreign jargon with an Indic-first conversational voice loop:
 
-### Mode 1: Browser-Based (WebSocket Proxy)
-
-```
-Browser ←→ FastAPI WS (/api/v1/voice/{session_id}) ←→ AssemblyAI
-               ↕
-          Orchestrator
-         (server-side tool execution)
-```
-
-The browser sends raw PCM16 audio. FastAPI proxies to AssemblyAI, **intercepts `tool.call` events**, executes them via the Orchestrator, and sends `tool.result` back — keeping the API key and all business logic server-side.
-
-### Mode 2: Direct Microphone (CLI)
-
-```bash
-cd backend
-python app/main.py --voice
-```
-
-Connects your microphone directly to AssemblyAI via WebSocket. Uses PyAudio for local audio capture and playback. **Requires headphones** to prevent acoustic echo.
-
-### Tool-Calling Protocol
-
-The voice agent uses **5 backend tools** — the LLM decides when to call them based on conversation context:
-
-```mermaid
-graph LR
-    classDef tool fill:#1B2138,stroke:#E8772E,stroke-width:2px,color:#fff
-    classDef always fill:#DC2626,stroke:#991B1B,stroke-width:2px,color:#fff
-    
-    LLM["🧠 LLM Agent"] --> UC["update_case_info<br/>Extract case fields"]:::tool
-    LLM --> RR["retrieve_rights<br/>Search legal KB"]:::tool
-    LLM --> GE["generate_evidence<br/>Build evidence package"]:::tool
-    LLM --> DM["draft_message<br/>Draft dispute letter"]:::tool
-    LLM --> ES["escalate_safety<br/>⚠️ ALWAYS AVAILABLE"]:::always
-```
-
-| Tool | When Called | Status Gates |
-|------|-----------|-------------|
-| `update_case_info` | Worker reveals any case information | `new` → `collecting_information` |
-| `retrieve_rights` | Enough info gathered to search legal KB | `classified` → `rights_verified` |
-| `generate_evidence` | Worker wants to file a complaint | `rights_verified` + |
-| `draft_message` | Worker wants to contact employer | `rights_verified` + |
-| `escalate_safety` | Any mention of danger/injury/trafficking | **ALL statuses** (overrides everything) |
+- **Speech-to-Text (`Saaras v4`)**:
+  - Handles 22 scheduled Indian languages (Hindi, Bengali, Marathi, Tamil, Telugu, Kannada, Gujarati, Punjabi, etc.).
+  - Configured with `mode="codemix"` for seamless **Hinglish** detection (e.g., *"Mera incentive deduct kar diya bina reason bataye"*).
+  - Domain keyterm boosting for gig platforms (*Swiggy, Zomato, Blinkit, Zepto, Urban Company, Uber, Ola*).
+- **Text-to-Speech (`Bulbul v3`)**:
+  - Natural cadence, empathetic pitch, and clear articulation designed for noisy mobile environments.
+  - Persona voices available: `shubh` (authoritative, clear) and `meera` (warm, reassuring).
+  - Audio returned in standard high-fidelity 24kHz Base64 WAV format.
 
 <br/>
 
@@ -384,28 +381,88 @@ graph LR
 
 <br/>
 
-## 🗣️ Voice Interaction Scenarios
+## 🛠️ 9 Orchestrator Tools
 
-Test WorkerSaathi's stateful reasoning with these real-world scenarios:
+The backend Orchestrator controls an arsenal of 9 specialized, schema-validated tools. The LLM cannot call arbitrary functions — every invocation is verified against the case status permission matrix:
+
+| Tool Name | Parameters | Allowed Status Gates | Real-World Functionality |
+|---|---|---|---|
+| `update_case_info` | `worker_type`, `issue_category`, `state`, `amount`, `platform`, `duration` | `new`, `listening`, `classified`, `collecting_information`, `safety_check`, `retrieving_rights`, `rights_verified` | Extracts entities from speech, updates SQLite, and computes the next single Hinglish question. |
+| `retrieve_rights` | `query` (natural language question) | `new`, `listening`, `classified`, `collecting_information`, `retrieving_rights`, `rights_verified` | Triggers the 7-stage Hybrid RAG engine to return verified legal findings, citations, and coverage levels. |
+| `check_eligibility` | `days_with_primary_aggregator`, `total_days`, `has_eshram`, `state` | `classified`, `collecting_information`, `retrieving_rights`, `rights_verified`, `action_plan_ready` | Evaluates the 90/120-day rule under the Social Security Code 2020 and checks State Gig Acts (Rajasthan, Karnataka). |
+| `calculate_unpaid_wages` | `base_unpaid`, `withheld_incentives`, `unauthorized_deductions`, `period` | `classified`, `collecting_information`, `retrieving_rights`, `rights_verified`, `action_plan_ready` | Computes Section 18 deduction caps, interest accruals, and Section 45 10x statutory compensation claims. |
+| `generate_evidence` | `purpose` (`complaint`, `reference`, `follow_up`) | `rights_verified`, `action_plan_ready` | Assembles claims vs legal facts, builds action milestones, and formats an evidence dossier. |
+| `generate_complaint_letter` | `authority_type`, `language` (`en`, `hi`) | `rights_verified`, `action_plan_ready`, `evidence_generated` | Produces formal complaint petitions for 4 authorities and compiles **pure Python fpdf2 downloadable PDFs**. |
+| `draft_message` | `recipient`, `tone` (`formal`, `firm`, `polite`) | `rights_verified`, `action_plan_ready`, `evidence_generated` | Drafts a firm, legally cited dispute letter directly addressed to the platform's support or nodal officer. |
+| `search_live_news` | `query` (specific scheme or notification search) | `new`, `listening`, `classified`, `collecting_information`, `retrieving_rights`, `rights_verified` | Calls Tavily API to fetch real-time government gazettes, portal schemes, and platform policy amendments. |
+| `escalate_safety` | `danger_type`, `description` | **ALL STATUSES (Instant Zero-Delay Override)** | Halts conversation immediately; delivers verified helplines for trauma, injury, child labor, or trafficking. |
+
+<br/>
+
+---
+
+<br/>
+
+## 💻 Interactive Legal Workspaces
+
+The WorkerSaathi web app (`frontend/`) is a comprehensive Legal Operations Hub:
+
+```
+┌──────────────────────────────────────────────────────────────────────────────────────────────────┐
+│                                   WORKERSAATHI LEGAL WORKSPACES                                  │
+├─────────────────────┬────────────────────────────────────────────────────────────────────────────┤
+│ 🎙️ Voice Saathi    │ Full-duplex voice navigator, animated audio waveform, live transcript     │
+│                     │ display, Hinglish text-chat fallback, and real-time tool inspection drawer.│
+├─────────────────────┼────────────────────────────────────────────────────────────────────────────┤
+│ 🛡️ Eligibility      │ Evaluates 90-day single aggregator / 120-day multi-aggregator tenure,      │
+│    Checker          │ checks e-Shram registration, and displays state-specific welfare benefits. │
+├─────────────────────┼────────────────────────────────────────────────────────────────────────────┤
+│ 🧮 Wage Calculator  │ Itemizes base pay, incentives, and unlawful cuts. Calculates Sec 18 deduction│
+│                     │ cap breaches (50% max) and projects Sec 45 statutory 10x compensation.     │
+├─────────────────────┼────────────────────────────────────────────────────────────────────────────┤
+│ 📁 Evidence Locker  │ Drag-and-drop document upload with automatic PII redaction badge (Aadhaar,  │
+│                     │ Bank AC, OTP). Generates chronological Annexure timelines (A-1, A-2...).   │
+├─────────────────────┼────────────────────────────────────────────────────────────────────────────┤
+│ 📄 Complaint Studio │ Official legal petition generator for ALC / Samadhan, DLSA Legal Aid,      │
+│                     │ Aggregator Nodal Officer, and Welfare Board. Direct PDF download.          │
+├─────────────────────┼────────────────────────────────────────────────────────────────────────────┤
+│ 📋 Case Dossier     │ Visual roadmap of the 11-stage case state machine, missing field indicators,│
+│                     │ and verified statutory citations with live coverage badges.                │
+└─────────────────────┴────────────────────────────────────────────────────────────────────────────┘
+```
+
+<br/>
+
+---
+
+<br/>
+
+## 🗣️ Demonstration Scenarios
 
 <table>
   <tr>
     <td width="5%" align="center">🛵</td>
-    <td width="25%"><strong>Scenario A</strong><br/><em>Wage Theft (Hindi)</em></td>
-    <td width="35%"><code>"Main Swiggy mein delivery karta hoon Mumbai mein. Mujhe pichle 25 din se 8000 rupaye ka payment nahi mila."</code></td>
-    <td width="35%"><strong>→</strong> Classifies as <code>unpaid_wages</code> + <code>gig_worker</code>. Triggers RAG for gig worker payment protections under Code on Wages 2019. Generates formal dispute draft addressed to Swiggy.</td>
+    <td width="22%"><strong>Scenario 1</strong><br/><em>Mumbai Swiggy Rider<br/>Wage Theft & Penalties</em></td>
+    <td width="36%"><code>"Main Swiggy mein delivery karta hoon Mumbai mein. Pichle 25 din se mera ₹8,000 ka payment atka hua hai aur unhone bina bataye ₹2,500 penalty kaat li."</code></td>
+    <td width="37%"><strong>Execution:</strong><br/>1. Classifies: <code>gig_worker</code>, <code>unpaid_wages</code>, <code>Maharashtra</code>.<br/>2. Invokes <code>calculate_unpaid_wages</code>: Flags ₹2,500 penalty as unlawful under Sec 18 Code on Wages.<br/>3. Invokes <code>retrieve_rights</code>: Cites Sec 45 for 10x claim.<br/>4. Invokes <code>generate_complaint_letter</code>: Generates formal notice to Swiggy Nodal Officer + downloadable PDF.</td>
   </tr>
   <tr>
     <td width="5%" align="center">🏗️</td>
-    <td width="25%"><strong>Scenario B</strong><br/><em>Safety Trigger (English)</em></td>
-    <td width="35%"><code>"The scaffolding broke on the 4th floor. My leg is severely injured and the contractor refuses to pay for the hospital."</code></td>
-    <td width="35%"><strong>→</strong> Detects <code>workplace_injury</code>. <strong>Immediately calls <code>escalate_safety</code></strong> — reads emergency helplines (112, 108) before any legal discussion. Then retrieves OSH Code compensation provisions.</td>
+    <td width="22%"><strong>Scenario 2</strong><br/><em>Delhi Construction Worker<br/>Scaffolding Injury SOS</em></td>
+    <td width="36%"><code>"Site par scaffolding toot gayi. Mera pair toot gaya hai aur contractor hospital ka kharcha dene se mana kar raha hai."</code></td>
+    <td width="37%"><strong>Execution:</strong><br/>1. Instantly triggers <code>escalate_safety</code> (Emergency Override).<br/>2. Spoken response reads <strong>112 (National Emergency)</strong> and <strong>108 (Ambulance)</strong>.<br/>3. Logs emergency event to SQLite audit table.<br/>4. Once safe, retrieves Employee's Compensation Act & OSH Code provisions.</td>
   </tr>
   <tr>
-    <td width="5%" align="center">📵</td>
-    <td width="25%"><strong>Scenario C</strong><br/><em>Deactivation (Hinglish)</em></td>
-    <td width="35%"><code>"Mera Zomato partner account achanak deactivate ho gaya. Unhone koi reason nahi diya."</code></td>
-    <td width="35%"><strong>→</strong> Classifies as <code>platform_deactivation</code>. Asks clarifying questions about tenure and last payment. Provides evidence collection checklist. Notes known <strong>knowledge gap</strong> in Central reinstatement procedures for gig workers.</td>
+    <td width="5%" align="center">📱</td>
+    <td width="22%"><strong>Scenario 3</strong><br/><em>Bengaluru Zomato Partner<br/>Sudden Deactivation</em></td>
+    <td width="36%"><code>"Mera Zomato partner ID bina kisi notice ke deactivate kar diya. Main 10 mahine se roz 12 ghante kaam kar raha tha."</code></td>
+    <td width="37%"><strong>Execution:</strong><br/>1. Invokes <code>check_eligibility</code>: Verifies >90 days worked (satisfied).<br/>2. Cites Karnataka Gig Workers Bill 2024/25 requiring 14 days prior notice before deactivation.<br/>3. Identifies central procedural GAP under Section 114.<br/>4. Prepares formal petition for Assistant Labour Commissioner.</td>
+  </tr>
+  <tr>
+    <td width="5%" align="center">📦</td>
+    <td width="22%"><strong>Scenario 4</strong><br/><em>Jaipur Delivery Worker<br/>Welfare Board Grievance</em></td>
+    <td width="36%"><code>"Rajasthan mein delivery karta hoon. Mere paas e-Shram card hai par aggregator ne welfare board mein register nahi kiya."</code></td>
+    <td width="37%"><strong>Execution:</strong><br/>1. Cites Rajasthan Platform Based Gig Workers Act 2023.<br/>2. Highlights statutory 21-day dispute resolution window.<br/>3. Notes ₹5 Lakh penalty on aggregator for non-registration.<br/>4. Generates bilingual Hindi/English petition for the State Welfare Board.</td>
   </tr>
 </table>
 
@@ -415,52 +472,35 @@ Test WorkerSaathi's stateful reasoning with these real-world scenarios:
 
 <br/>
 
-## 📋 Case State Machine
+## ⚖️ Statutory Legal Grounding
 
-Every conversation follows a deterministic state machine — the LLM proposes actions, but the **backend** controls transitions:
+WorkerSaathi is grounded directly in verified Central and State legislative frameworks:
 
-```mermaid
-stateDiagram-v2
-    [*] --> new
-    new --> listening: Worker starts speaking
-    listening --> classified: Issue category identified
-    classified --> collecting_information: Missing fields detected
-    collecting_information --> collecting_information: More info needed
-    collecting_information --> retrieving_rights: Ready for retrieval
-    classified --> retrieving_rights: All info available
-    
-    retrieving_rights --> rights_verified: Legal evidence found
-    rights_verified --> evidence_generated: Evidence package created
-    rights_verified --> action_plan_ready: Action plan generated
-    
-    evidence_generated --> closed: Session complete
-    action_plan_ready --> closed: Session complete
-    
-    new --> safety_escalation: ⚠️ Danger detected
-    listening --> safety_escalation: ⚠️ Danger detected
-    classified --> safety_escalation: ⚠️ Danger detected
-    collecting_information --> safety_escalation: ⚠️ Danger detected
-    
-    note right of safety_escalation
-        Safety escalation can trigger
-        from ANY state. Helplines
-        are read immediately.
-    end note
 ```
-
-### Case Fields Tracked
-
-| Field | Type | Extracted From |
-|-------|------|---------------|
-| `worker_type` | Enum | `gig_worker`, `construction_worker`, `domestic_worker`, `factory_worker`, `other` |
-| `issue_category` | Enum | `unpaid_wages`, `workplace_injury`, `platform_deactivation` |
-| `state` | Enum | All 28 Indian states + 8 UTs (with fuzzy matching: "Mumbai" → Maharashtra) |
-| `platform_or_employer` | String | "Swiggy", "Zomato", contractor name, etc. |
-| `amount` | String | Pending amount (Hindi numerals auto-converted: "20 hazaar" → "20000") |
-| `payment_pending_duration` | String | "2 months", "25 days" |
-| `incident_date` | String | "pichle hafte" → "approximately 1 week ago" |
-| `injury_details` | String | Free-text injury description |
-| `deactivation_reason` | String | "no reason", "low rating", etc. |
+┌──────────────────────────────────────────────────────────────────────────────────────────────────┐
+│                                   STATUTORY LEGISLATIVE CORPUS                                   │
+├─────────────────────────────────────────────────┬────────────────────────────────────────────────┤
+│ Code on Wages, 2019 (Act No. 29 of 2019)        │ • Section 18: Statutory deduction cap (50% max)│
+│                                                 │ • Section 45: Claims up to 10x compensation    │
+│                                                 │ • Section 14: Overtime at double standard rate │
+├─────────────────────────────────────────────────┼────────────────────────────────────────────────┤
+│ Code on Social Security, 2020 (Act 36 of 2020)  │ • Section 113: Aggregator welfare fund levy    │
+│ (Nov 2025 Commencement & Central Rules 2026)    │ • Section 114: Aggregator registration mandate │
+│                                                 │ • 90/120-Day Rule for social security eligibility│
+├─────────────────────────────────────────────────┼────────────────────────────────────────────────┤
+│ Occupational Safety, Health & Working Conditions│ • Sections 6-12: Employer safety duties        │
+│ Code, 2020 (OSH Code)                           │ • Sections 88-91: Immediate injury compensation│
+├─────────────────────────────────────────────────┼────────────────────────────────────────────────┤
+│ Rajasthan Platform Based Gig Workers Act, 2023  │ • Section 11: 21-day mandatory grievance window│
+│ (Act No. 34 of 2023)                            │ • Section 18: Up to ₹5,00,000 aggregator fine  │
+├─────────────────────────────────────────────────┼────────────────────────────────────────────────┤
+│ Karnataka Platform-Based Gig Workers Bill, 2024 │ • Mandatory 14-day notice before deactivation  │
+│                                                 │ • Automated algorithmic transparency disclosures│
+├─────────────────────────────────────────────────┼────────────────────────────────────────────────┤
+│ Digital Personal Data Protection Act, 2023      │ • Strict data minimization                     │
+│ (DPDP Act 2023)                                 │ • Ephemeral session handling & regex PII mask  │
+└─────────────────────────────────────────────────┴────────────────────────────────────────────────┘
+```
 
 <br/>
 
@@ -472,107 +512,97 @@ stateDiagram-v2
 
 ### Prerequisites
 
-| Requirement | Version | Purpose |
-|------------|---------|---------|
-| **Python** | 3.10+ | Runtime |
-| **AssemblyAI API Key** | — | Voice Agent API (Universal-2 access required) |
-| **Ollama** | Latest | Local embedding generation (Qwen3-Embedding-8B) |
-| **Audio I/O** | — | Microphone + headphones (for CLI mode) |
+| Requirement | Recommended Version | Purpose |
+|---|---|---|
+| **Python** | 3.10 or 3.11 | Backend runtime |
+| **Sarvam AI API Key** | — | High-fidelity Indic STT (Saaras v4) + TTS (Bulbul v3) |
+| **LLM API Key** | Groq / OpenRouter | Fast tool calling (`llama-3.1-8b-instant`) |
+| **Tavily API Key** | — | (Optional) Live government gazette & scheme search |
 
-### 1️⃣ Clone & Setup
+<br/>
+
+### 1️⃣ Clone & Environment Setup
 
 ```bash
 # Clone the repository
 git clone https://github.com/Aaditya210905/worker-rights-navigator.git
 cd worker-rights-navigator
 
-# Create isolated Python environment
+# Create isolated Python virtual environment
 python -m venv venv
 
-# Activate (Windows)
-venv\Scripts\activate
-# Activate (Unix/macOS)
+# Activate virtual environment
+# Windows (PowerShell):
+.\venv\Scripts\Activate.ps1
+# Linux / macOS:
 source venv/bin/activate
 
 # Install all dependencies
 pip install -r backend/requirements.txt
 ```
 
-> The repo is split into `backend/` (FastAPI + RAG engine) and `frontend/`
-> (static voice client). Every backend command below runs **from `backend/`**.
+<br/>
 
-### 2️⃣ Configure Environment
+### 2️⃣ Configure Environment Variables
 
 ```bash
 cd backend
 cp .env.example .env
 ```
 
-Edit `backend/.env`:
-```env
-# AssemblyAI — Required for voice features
-ASSEMBLYAI_API_KEY=your_production_key_here
+Edit `backend/.env` with your API keys:
 
-# Application
+```ini
+# ── Sarvam AI (Voice: Saaras v4 STT + Bulbul v3 TTS) ───────────────
+SARVAM_API_KEY=your_sarvam_api_key_here
+
+# ── LLM Engine (Groq / OpenRouter / OpenAI) ───────────────────────
+LLM_API_KEY=your_groq_api_key_here
+LLM_BASE_URL=https://api.groq.com/openai/v1
+LLM_MODEL=llama-3.1-8b-instant
+
+# ── Embedding Backend (OpenRouter / Ollama) ────────────────────────
+EMBEDDING_BACKEND=openai
+EMBEDDING_BASE_URL=https://openrouter.ai/api/v1
+EMBEDDING_API_KEY=your_openrouter_key_here
+EMBEDDING_MODEL=nvidia/nemotron-3-embed-1b:free
+
+# ── Live Web Search (Tavily) ──────────────────────────────────────
+TAVILY_API_KEY=your_tavily_api_key_here
+
+# ── Application Configuration ─────────────────────────────────────
 APP_ENV=development
 APP_PORT=8000
 APP_HOST=0.0.0.0
 ```
 
-### 3️⃣ Prepare Knowledge Base (Optional)
+<br/>
 
-If you want to rebuild the legal knowledge index:
-
-```bash
-cd backend
-
-# Install Ollama and pull the embedding model
-ollama pull qwen3-embedding:8b
-
-# Run the full knowledge pipeline
-python -m app.rag.pipeline --index
-
-# Verify retrieval quality
-python -m app.rag.pipeline --test
-```
-
-### 4️⃣ Launch
-
-<table>
-  <tr>
-    <td width="50%">
-      <h4>🌐 Web Server (Recommended)</h4>
+### 3️⃣ Launch the Server
 
 ```bash
-cd backend
-uvicorn app.main:app --reload
+# Start FastAPI with hot reload (runs from backend/)
+uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 ```
 
-The server also serves the frontend, so no separate frontend process is needed.
+> **Zero Build Frontend:** FastAPI serves the web application directly. No npm, node, or build step is required!
 
-**Access:**
-| Interface | URL |
-|-----------|-----|
-| 🎙️ Voice Client | [http://127.0.0.1:8000/voice](http://127.0.0.1:8000/voice) |
-| 📖 Swagger Docs | [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs) |
-| ❤️ Health Check | [http://127.0.0.1:8000/api/v1/health](http://127.0.0.1:8000/api/v1/health) |
+**Access Points:**
+- 🎙️ **WorkerSaathi Web Client:** [http://127.0.0.1:8000/voice](http://127.0.0.1:8000/voice) (or simply [http://127.0.0.1:8000/](http://127.0.0.1:8000/))
+- 📖 **Interactive Swagger API Docs:** [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
+- ❤️ **Liveness Health Check:** [http://127.0.0.1:8000/api/v1/health](http://127.0.0.1:8000/api/v1/health)
 
-</td>
-<td width="50%">
-  <h4>🎙️ Direct Microphone (CLI)</h4>
+<br/>
+
+### 🐳 Docker Deployment
 
 ```bash
-cd backend
-python app/main.py --voice
+# Build the production container from repo root
+docker build -t workersaathi -f backend/Dockerfile .
+
+# Run the container
+docker run -p 8000:8000 --env-file backend/.env workersaathi
 ```
-
-> ⚠️ **Use headphones** to prevent acoustic echo feedback!
-
-Connects your microphone directly to AssemblyAI. Speaks and listens in real-time. Press `Ctrl+C` to stop.
-
-</td>
-  </tr>
-</table>
 
 <br/>
 
@@ -580,41 +610,46 @@ Connects your microphone directly to AssemblyAI. Speaks and listens in real-time
 
 <br/>
 
-## 🌐 API Reference
+## 🌐 Complete REST API Reference
 
-WorkerSaathi exposes a fully documented REST + WebSocket API. Interactive docs available at `/docs`.
+All core routes are namespaced under `/api/v1`. Interactive Swagger documentation is automatically generated at `/docs`.
 
-### 📡 Session & Case Management
+### 📡 Session & Case Lifecycle
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| `POST` | `/api/v1/sessions` | Create a new conversation session. Returns session ID, case ID, initial prompt, and available tools. |
-| `GET` | `/api/v1/sessions` | List all active sessions with summaries. |
-| `GET` | `/api/v1/sessions/{id}` | Full session details including case state, available tools, and system prompt. |
-| `DELETE` | `/api/v1/sessions/{id}` | Terminate session and clean up state. |
-| `GET` | `/api/v1/sessions/{id}/case` | Current JSON case state with all filled fields. |
-| `GET` | `/api/v1/sessions/{id}/case/missing-fields` | Missing fields, next question, and retrieval readiness. |
-| `GET` | `/api/v1/sessions/{id}/case/context` | Current LLM system prompt with case context. |
+| HTTP Method | Route | Description |
+|---|---|---|
+| `POST` | `/api/v1/sessions` | Creates a new session. Initializes Case ID, state machine, and system prompts. |
+| `GET` | `/api/v1/sessions` | Lists all active conversation sessions. |
+| `GET` | `/api/v1/sessions/{id}` | Returns full session state, filled fields, and allowed tool schemas. |
+| `DELETE` | `/api/v1/sessions/{id}` | Terminates session and purges ephemeral memory. |
+| `GET` | `/api/v1/sessions/{id}/case` | Returns snapshot of all extracted fields, status, and worker demographics. |
+| `GET` | `/api/v1/sessions/{id}/case/missing-fields` | Returns missing required fields and prioritized next Hinglish question. |
+| `POST` | `/api/v1/sessions/{id}/tools/{tool_name}` | Direct programmatic execution of any of the 9 backend tools. |
+| `POST` | `/api/v1/sessions/{id}/transcript` | Appends a spoken utterance transcript into the case audit log. |
 
-### 🔧 Tool Execution
+### 🎙️ Sarvam AI Voice Pipeline
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| `POST` | `/api/v1/sessions/{id}/tools/{tool_name}` | Execute a tool (same interface the voice agent uses). Body: `{ "arguments": { ... } }` |
-| `POST` | `/api/v1/sessions/{id}/transcript` | Log a user transcript line. Body: `{ "text": "..." }` |
+| HTTP Method | Route | Description |
+|---|---|---|
+| `POST` | `/api/v1/voice/stt` | Transcribes audio file / base64 payload into text via Sarvam Saaras v4. |
+| `POST` | `/api/v1/voice/tts` | Converts text into natural Indic speech via Sarvam Bulbul v3. |
+| `POST` | `/api/v1/voice/converse` | **Full Agent Turn:** Audio In → STT → Tool Execution → LLM Reasoning → TTS Audio Out. |
+| `POST` | `/api/v1/voice/chat` | Text turn with optional TTS synthesis. |
+| `GET` | `/api/v1/voice/languages` | Lists 22 supported Indic languages and BCP-47 codes. |
+| `GET` | `/api/v1/voice/speakers` | Lists available TTS voice personas (`shubh`, `meera`, etc.). |
 
-### 📚 Knowledge Base
+### ⚖️ Legal Help & Evidence Modules
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| `GET` | `/api/v1/knowledge/stats` | Knowledge base indexing statistics. |
-| `POST` | `/api/v1/knowledge/search` | Manual RAG query execution. |
-
-### 🔊 Real-Time Voice
-
-| Protocol | Endpoint | Description |
-|----------|----------|-------------|
-| `WebSocket` | `/api/v1/voice/{session_id}` | Full-duplex audio proxy. Browser sends `input.audio` (base64 PCM16), receives all AssemblyAI events. Tool calls are intercepted and executed server-side. |
+| HTTP Method | Route | Description |
+|---|---|---|
+| `POST` | `/api/v1/sessions/{id}/eligibility` | Evaluates 90/120-day rule, e-Shram, and State Gig Acts; returns verdict badge & citations. |
+| `POST` | `/api/v1/sessions/{id}/wages` | Computes itemized wage claims, Sec 18 deduction breaches, and Sec 45 10x damages. |
+| `POST` | `/api/v1/sessions/{id}/evidence/upload` | Uploads screenshot/PDF proof, applies **automatic PII regex masking**, extracts amounts. |
+| `GET` | `/api/v1/sessions/{id}/evidence` | Returns all uploaded evidence items and chronological Annexure timeline. |
+| `POST` | `/api/v1/sessions/{id}/complaint` | Drafts formal complaint petition (ALC, DLSA, Grievance Officer, Welfare Board) in EN/HI. |
+| `GET` | `/api/v1/sessions/{id}/complaint/{doc_id}/html` | Returns clean, printable official HTML view of the complaint. |
+| `GET` | `/api/v1/sessions/{id}/complaint/{doc_id}/pdf` | **Downloads official, court-ready PDF complaint petition generated via fpdf2.** |
+| `POST` | `/api/v1/sessions/{id}/action-plan` | Compiles statutory roadmap with milestones, deadlines, and legal references. |
 
 <br/>
 
@@ -622,121 +657,107 @@ WorkerSaathi exposes a fully documented REST + WebSocket API. Interactive docs a
 
 <br/>
 
-## 📁 Project Structure
+## 📁 Repository Directory Structure
 
 ```
-worker-rights-navigator/                  # repository root
+worker-rights-navigator/                      # Repository Root
 │
-├── 📂 backend/                           # 🐍 FastAPI backend + legal knowledge engine
-│   ├── 📂 app/                           # Application source code
-│   │   ├── __init__.py                   # Package metadata (v0.1.0)
-│   │   ├── main.py                      # FastAPI entrypoint + CLI voice runner
-│   │   ├── config.py                    # Pydantic settings from .env
+├── 📂 backend/                               # 🐍 Python FastAPI Backend & Legal Engines
+│   ├── 📂 app/                               # Application Source Code
+│   │   ├── main.py                           # FastAPI application entrypoint & static mounts
+│   │   ├── config.py                         # Pydantic BaseSettings from .env
 │   │   │
-│   │   ├── 📂 agent/                    # 🧠 AI Orchestration Layer
-│   │   │   ├── orchestrator.py          # Central tool dispatcher (611 LOC)
-│   │   │   ├── prompts.py               # System prompt with dynamic case injection
-│   │   │   ├── classifier.py            # LLM-based entity extraction schemas
-│   │   │   ├── tool_registry.py         # Tool definitions + permission matrix
-│   │   │   ├── conversation.py          # Conversation state tracking
-│   │   │   ├── test_orchestrator.py     # Orchestrator unit tests
-│   │   │   └── test_scenarios.py        # End-to-end scenario simulations
+│   │   ├── 📂 agent/                         # 🧠 AI Orchestration & Tool Dispatcher
+│   │   │   ├── orchestrator.py               # Master tool execution engine (9 tools)
+│   │   │   ├── tool_registry.py              # Permission-gated tool schemas
+│   │   │   ├── prompts.py                    # Dynamic case prompt builder
+│   │   │   └── llm.py                        # OpenAI/Groq API client wrapper
 │   │   │
-│   │   ├── 📂 api/                      # 🌐 Transport Layer
-│   │   │   ├── routes.py                # RESTful API endpoints (240 LOC)
-│   │   │   ├── ws.py                    # WebSocket voice proxy (228 LOC)
-│   │   │   ├── schemas.py               # Pydantic request/response models
-│   │   │   ├── session.py               # In-memory session manager
-│   │   │   ├── knowledge.py             # Knowledge base API endpoints
-│   │   │   └── lemur.py                 # Post-call LeMUR action-plan endpoint
+│   │   ├── 📂 api/                           # 🌐 API Transport Layer
+│   │   │   ├── routes.py                     # REST endpoints for sessions, wages, complaints
+│   │   │   ├── voice_routes.py               # Sarvam STT/TTS & converse endpoints
+│   │   │   ├── schemas.py                    # Pydantic request & response models
+│   │   │   └── session.py                    # Ephemeral session manager
 │   │   │
-│   │   ├── 📂 case/                     # 📋 State Management
-│   │   │   ├── models.py                # Enums (WorkerType, IssueCategory, 36 IndianStates)
-│   │   │   ├── state.py                 # CaseManager with field tracking + next-question logic
-│   │   │   └── fields.py                # Field definitions and validation
+│   │   ├── 📂 case/                          # 📋 11-Stage State Machine
+│   │   │   ├── models.py                     # CaseState, WorkerType, IndianState enums
+│   │   │   ├── state.py                      # CaseManager state transition logic
+│   │   │   └── fields.py                     # Field definitions & Hinglish question maps
 │   │   │
-│   │   ├── 📂 rag/                      # 📚 Legal Knowledge Engine (15 modules)
-│   │   │   ├── pipeline.py              # End-to-end data pipeline runner
-│   │   │   ├── loader.py                # JSON research package loader
-│   │   │   ├── pdf_loader.py            # Government PDF extraction (PyMuPDF)
-│   │   │   ├── chunker.py               # Semantic document chunking
-│   │   │   ├── embeddings.py            # Ollama / HuggingFace embedding client
-│   │   │   ├── qdrant_store.py          # Vector DB interface
-│   │   │   ├── retriever.py             # Hybrid BM25 + semantic retriever
-│   │   │   ├── query_builder.py         # Structured query expansion
-│   │   │   ├── reranker.py              # Authority-based reranking
-│   │   │   ├── validator.py             # Legal status + applicability checks
-│   │   │   ├── evidence.py              # LegalEvidence assembly
-│   │   │   ├── models.py                # RAG data models (8.6KB)
-│   │   │   ├── matrix.py                # Rights coverage matrix builder
-│   │   │   └── sources.py               # Source registry management
+│   │   ├── 📂 rag/                           # 📚 7-Stage Hybrid Legal RAG Pipeline
+│   │   │   ├── retriever.py                  # Hybrid Qdrant + BM25 + RRF (k=60)
+│   │   │   ├── reranker.py                   # Custom legislative authority reranker
+│   │   │   ├── validator.py                  # Legal status and coverage validator
+│   │   │   ├── query_builder.py              # Structured query expansion
+│   │   │   ├── embeddings.py                 # OpenRouter / Ollama embeddings client
+│   │   │   └── models.py                     # LegalEvidence & RetrievalCoverage models
 │   │   │
-│   │   ├── 📂 voice/                    # 🎤 Voice I/O
-│   │   │   ├── assemblyai.py            # AssemblyAI WebSocket client (376 LOC)
-│   │   │   └── audio.py                 # PyAudio microphone/speaker wrappers
+│   │   ├── 📂 evidence/                      # ⚖️ Statutory Legal & Evidence Engines
+│   │   │   ├── eligibility.py                # 90/120-Day Rule & State Gig Acts calculator
+│   │   │   ├── wage_calculator.py            # Sec 18 deduction cap & Sec 45 10x claim engine
+│   │   │   ├── screenshot_parser.py          # Evidence ingestion, timeline & regex PII redaction
+│   │   │   └── complaint_generator.py        # Multi-authority legal petitions + fpdf2 PDF engine
 │   │   │
-│   │   ├── 📂 evidence/                 # 📦 Action Planning
-│   │   │   └── action_planner.py        # Source-backed action step generation
+│   │   ├── 📂 voice/                         # 🎙️ Voice Provider Integrations
+│   │   │   ├── stt.py                        # Speech-to-Text provider abstraction
+│   │   │   ├── tts.py                        # Text-to-Speech provider abstraction
+│   │   │   └── 📂 providers/                 # Sarvam AI Saaras & Bulbul integrations
 │   │   │
-│   │   ├── 📂 db/                       # 💾 Persistence
-│   │   │   └── database.py              # SQLite: cases, events, action plans, evidence
+│   │   ├── 📂 safety/                        # 🚨 Emergency Protocols
+│   │   │   ├── emergency.py                  # Verified government helpline directory
+│   │   │   └── redaction.py                  # Aadhaar / Bank / OTP regex sanitizer
 │   │   │
-│   │   └── 📂 safety/                   # 🛡️ Emergency Protocols
-│   │       └── __init__.py              # Safety guardrail definitions
+│   │   └── 📂 db/                            # 💾 SQLite Persistence (WAL Mode)
+│   │       └── database.py                   # Cases, events, evidence & action plans CRUD
 │   │
-│   ├── 📂 knowledge/                    # 📖 Legal Knowledge Base
-│   │   ├── links.txt                    # Curated government source URLs
-│   │   ├── sources.json                 # Parsed source registry (26KB)
-│   │   ├── rights_matrix.json           # Worker-type × Issue coverage matrix (2MB)
-│   │   └── 📂 workersaathi/             # Research data
-│   │       ├── 📂 json/                 # Structured legal knowledge items
-│   │       ├── 📂 raw_sources/          # Extracted government source text
-│   │       └── 📂 docs/                 # Supporting documentation
+│   ├── 📂 knowledge/                         # 📖 Statutory Legal Corpus
+│   │   ├── links.txt                         # Curated official government gazettes
+│   │   └── 📂 workersaathi/                  # Extracted legal items, chunks, and metadata
 │   │
-│   ├── 📂 data/                         # 💾 Runtime data (gitignored)
-│   │   ├── worker_cases.db              # SQLite database
-│   │   └── 📂 qdrant/                   # Pre-built Qdrant vector store (committed)
+│   ├── 📂 tests/                             # 🧪 Comprehensive Test Suites
+│   │   ├── test_legal_evidence.py            # Unit & integration tests for all legal engines
+│   │   └── test_api_integration.py           # E2E REST API endpoint validation
 │   │
-│   ├── 📂 scripts/                      # 🔧 Utilities
-│   │   └── embed.py                     # Standalone embedding script
-│   │
-│   ├── 📂 tests/                        # 🧪 Test Suite
-│   │   └── __init__.py
-│   │
-│   ├── Dockerfile                       # Production image (build context: repo root)
-│   ├── requirements.txt                 # Local dev dependencies (includes PyAudio)
-│   ├── requirements-deploy.txt          # Production dependencies (no PyAudio, + assemblyai)
-│   ├── .env.example                     # Environment template
-│   └── README.md                        # Backend notes
+│   ├── Dockerfile                            # Production container image
+│   ├── requirements.txt                      # Python dependencies (FastAPI, Sarvam, Qdrant, fpdf2)
+│   └── .env.example                          # Environment template
 │
-├── 📂 frontend/                          # 🖥️ Voice web client (static, zero build step)
-│   ├── index.html                       # Markup / page shell
-│   ├── 📂 css/                          # Styles split by responsibility
-│   │   ├── 01-base.css                  # Design tokens + reset
-│   │   ├── 02-layout.css                # Header, main grid, chat + side panels
-│   │   ├── 03-components.css            # Bubbles, mic hero, mute, waveform, progress, tool log
-│   │   ├── 04-responsive.css            # Reduced motion + breakpoints
-│   │   └── 05-modal.css                 # Action-plan modal
-│   ├── 📂 js/                           # Logic split by responsibility (classic scripts)
-│   │   ├── config.js                    # API/WS endpoints + constants
-│   │   ├── state.js                     # Session state + DOM references
-│   │   ├── ui.js                        # Chat, status, progress rendering
-│   │   ├── audio.js                     # Mic capture, playback, visualizer
-│   │   ├── api.js                       # Session / case / action-plan REST calls
-│   │   ├── voice.js                     # WebSocket session lifecycle
-│   │   └── main.js                      # Entry point: wire DOM events
-│   └── README.md                        # Frontend notes
+├── 📂 frontend/                              # 🖥️ Interactive Web Client (Zero-Build)
+│   ├── index.html                            # Semantic HTML5 shell with 6 Legal Workspaces
+│   ├── 📂 css/                               # Responsive design system
+│   │   ├── 01-base.css                       # Color tokens, typography, dark mode
+│   │   ├── 02-layout.css                     # Grid layouts, sidebar navigation slabs
+│   │   ├── 03-components.css                 # Mic hero, waveform, tool log, buttons
+│   │   └── 05-modal.css                      # Action plan modals & PDF preview cards
+│   └── 📂 js/                                # Modular vanilla JavaScript
+│       ├── config.js                         # API endpoints and configuration
+│       ├── legal_hub.js                      # Workspaces: Wages, Eligibility, Evidence, Complaints
+│       ├── voice.js                          # Audio recording, playback, and converse flow
+│       ├── audio.js                          # Web Audio API & waveform visualizer
+│       └── ui.js                             # Chat bubbles, tool logs, state indicators
 │
-├── .env.example / .gitignore / .dockerignore
-├── render.yaml                          # Render blueprint (dockerfilePath: backend/Dockerfile)
-├── railway.toml                         # Railway config
-└── README.md                            # This file
+├── AUDIT_ARTIFACT.md                         # Round 2 Technical Audit Artifact
+└── README.md                                 # Master Documentation (This file)
 ```
 
-> **Serving model:** FastAPI serves the frontend directly — `GET /voice` returns
-> `frontend/index.html`, and the `frontend/css` + `frontend/js` folders are mounted at
-> `/css` and `/js`. There is no frontend build step (plain HTML/CSS/JS).
+<br/>
 
+---
+
+<br/>
+
+## 🔒 Security, Privacy & DPDP Act 2023 Compliance
+
+Informal workers frequently share screenshots of earnings apps containing sensitive account numbers and personal identifiers. WorkerSaathi is designed strictly around **Privacy by Design**:
+
+- 🛡️ **Automated Regex PII Scrubbing**: All uploaded screenshots and texts are passed through `redact_sensitive_pii()` before entering database storage or LLM prompts:
+  - **Aadhaar Numbers**: `\b\d{4}\s?\d{4}\s?\d{4}\b` $\rightarrow$ `[REDACTED_AADHAAR]`
+  - **Bank Account Numbers**: `\b\d{9,18}\b` $\rightarrow$ `[REDACTED_BANK_ACCOUNT]`
+  - **One-Time Passwords (OTPs)**: `\b\d{4,6}\b` $\rightarrow$ `[REDACTED_OTP]`
+  - **Mobile Numbers**: `\b(?:\+91[\-\s]?)?[6-9]\d{9}\b` $\rightarrow$ `[REDACTED_PHONE]`
+- 🛑 **Strict No-Audio-Retention**: Spoken audio is processed in memory during the conversation turn and immediately discarded. No raw audio recordings are stored on disk.
+- ⏱️ **Ephemeral Session TTL**: Case state is kept in memory and synchronized to SQLite with WAL mode; sessions can be purged immediately with a single click or upon termination.
+- 📅 **Legislative Provenance Tracking**: Every legal chunk returned by the RAG engine includes an official `last_verified` timestamp cross-referenced against the gazette publication date.
 
 <br/>
 
@@ -744,48 +765,65 @@ worker-rights-navigator/                  # repository root
 
 <br/>
 
-## 🔒 Privacy & Security
+## 🧪 Testing & Verification
 
-Given the sensitive nature of employment disputes, WorkerSaathi is built with **privacy by design**:
-
-| Principle | Implementation |
-|-----------|---------------|
-| **Ephemeral Sessions** | Case state lives in-memory during the session. Completely wiped on closure or timeout. |
-| **No Audio Logging** | Audio streams are processed in real-time via AssemblyAI and immediately discarded. No WAV/MP3 files ever touch the disk. |
-| **Local Embeddings** | Ollama runs on your machine — legal documents are embedded locally. No data leaves your infrastructure. |
-| **PII Protection** | The system prompt explicitly forbids requesting Aadhaar numbers, bank details, OTP, UPI PIN, or passwords. If a worker offers one, the agent immediately warns them. |
-| **Server-Side Secrets** | AssemblyAI API keys never reach the browser. The WebSocket proxy keeps all credentials server-side. |
-
-<br/>
-
----
-
-<br/>
-
-## 🧪 Testing
+WorkerSaathi maintains 100% passing test suites across both statutory legal logic and REST API endpoints:
 
 ```bash
-# Run from backend/
-cd backend
-
-# Run orchestrator unit tests
-python -m app.agent.test_orchestrator
-
-# Run end-to-end voice scenario simulations
-python -m app.agent.test_scenarios
-
-# Run RAG retrieval quality tests (9 test cases)
-python -m app.rag.pipeline --test
+# 1. Run Legal & Evidence Module Tests
+python -m tests.test_legal_evidence
 ```
 
-The RAG test suite validates:
-- ✅ Gig worker wage retrieval accuracy
-- ✅ Construction worker injury law coverage
-- ✅ Knowledge gap detection (e.g., platform deactivation reinstatement)
-- ✅ State-specific limitation flagging (e.g., Karnataka gig worker bill)
-- ✅ Unknown worker type handling
-- ✅ Disabled/superseded source exclusion
-- ✅ Source metadata completeness
+```
+============================================================
+  WorkerSaathi — Gireesh Legal & Evidence Test Suite
+============================================================
+--- Test 1: 90/120-Day Rule Eligibility ---
+  [ok] Single aggregator (95 days >= 90): ELIGIBLE
+  [ok] Multi-aggregator (125 days >= 120 across 2 apps): ELIGIBLE
+  [ok] Under-tenure (45 days < 90): CONDITIONALLY_ELIGIBLE with countdown
+--- Test 2: State Gig Worker Legislation ---
+  [ok] Rajasthan Act 2023: 21-day grievance & ₹5 Lakh penalty verified
+  [ok] Karnataka Legislation: 14-day notice protection verified
+--- Test 3: Wage Calculator & Statutory Damages ---
+  [ok] Principal due: ₹19,500 | Claim with Section 45 damages: ₹78,000
+  [ok] Section 18(3) 50% deduction cap breach correctly flagged
+--- Test 4: Privacy Redaction & Screenshot Ingestion ---
+  [ok] Sensitive PII (Aadhaar, Bank Account, OTP) successfully redacted
+  [ok] Screenshot parsing extracted: Platform=Swiggy, Amount=₹6,500
+  [ok] Evidence Timeline generated with 3 chronological milestones
+--- Test 5: Legal Complaint Generator ---
+  [ok] English Labour Commissioner complaint drafted with full statutory citations
+  [ok] Hindi Grievance Officer notice generated in clean Devanagari script
+--- Test 6: Orchestrator Legal Tool Call Integration ---
+  [ok] Orchestrator executed check_eligibility tool successfully
+  [ok] Orchestrator executed calculate_unpaid_wages tool successfully
+  [ok] Orchestrator executed generate_complaint_letter tool successfully
+============================================================
+  ALL 6 LEGAL & EVIDENCE TEST SUITES PASSED (100%)!
+============================================================
+```
+
+```bash
+# 2. Run End-to-End REST API Integration Tests
+python -m tests.test_api_integration
+```
+
+```
+--- Starting Legal & Evidence API Integration Test ---
+  [1] Created session: sess-c50fe6cdb3f2
+  [2] Case context verified via GET /case
+  [3] POST /eligibility passed: ✅ Eligible for Aggregator Registration & Protections
+  [4] POST /wages passed: Net ₹19,700.0, Claim ₹78,800.0
+  [5] POST /evidence/upload passed with PII redaction: Annexure
+  [6] GET /evidence passed: 3 timeline events
+  [7a] POST /complaint (English) passed: Doc ID DOC-WS-2026-06D51A-LAB-EN
+  [7b] POST /complaint (Hindi DLSA) passed successfully
+  [8] GET /complaint/{doc_id}/html rendered printable petition successfully
+  [9] POST /action-plan rendered statutory Indian Legal Action Plan successfully
+
+✅ ALL 9 REST API ENDPOINTS VALIDATED AND PASSING E2E (100%)
+```
 
 <br/>
 
@@ -795,28 +833,28 @@ The RAG test suite validates:
 
 ## 🛣️ Roadmap
 
-### ✅ Phase 1 — Core Foundation (Current)
-- [x] Real-time voice agent via AssemblyAI WebSocket
-- [x] 5-tool orchestration with permission-gated state machine
-- [x] Hybrid RAG pipeline (Qdrant + BM25 + RRF + Authority Reranking)
-- [x] PDF document ingestion and processing
-- [x] Local embeddings via Ollama (Qwen3-Embedding-8B)
-- [x] Preemptive safety escalation with verified helplines
-- [x] Browser-based voice client with waveform animations
-- [x] Full REST API with Swagger documentation
-- [x] SQLite persistence for case audit trail
+### ✅ Phase 1 — Core Foundation & Statutory Engines (Delivered)
+- [x] Full Indic voice agent pipeline via **Sarvam AI** (Saaras v4 STT + Bulbul v3 TTS)
+- [x] Deterministic 11-stage case state machine with Hinglish question generator
+- [x] 7-Stage Hybrid RAG pipeline (Qdrant + BM25 + Reciprocal Rank Fusion + Authority Reranker)
+- [x] 90/120-Day Rule & State Gig Worker Acts statutory eligibility checker
+- [x] Section 18 deduction cap and Section 45 10x statutory wage compensation calculator
+- [x] DPDP Act 2023 regex PII redaction for uploaded proofs and screenshots
+- [x] Multi-authority complaint drafting with **pure Python fpdf2 PDF export**
+- [x] Zero-delay emergency safety escalation with verified government helplines
+- [x] SQLite WAL persistence with audit logging and action plan generation
+- [x] Responsive 6-workspace web client with real-time waveform visualization
 
-### 🔜 Phase 2 — Expansion & Accessibility
-- [ ] **State-Level Jurisprudence** — Expand vector DB with state-specific rules (Maharashtra Mathadi Act, Karnataka Gig Worker Bill)
-- [ ] **WhatsApp / IVR Integration** — Fallback channels for users without stable 4G internet
-- [ ] **Regional TTS Models** — Bhashini integration for dialects beyond standard Hindi
-- [ ] **Offline Mode** — Pre-cached legal knowledge for areas with poor connectivity
+### 🔜 Phase 2 — Multi-Channel Accessibility (In Progress)
+- [ ] **WhatsApp Cloud Voice Notes** — Submit grievances via WhatsApp voice notes with automated PDF return.
+- [ ] **State Gazette Auto-Ingestion** — Automated scrapers for newly notified State Gig Worker Rules.
+- [ ] **Tesseract OCR Integration** — On-device image OCR for mobile screenshot extraction without cloud APIs.
+- [ ] **Toll-Free IVR Hotline** — Dual-tone multi-frequency (DTMF) voice support for feature phones without 4G internet.
 
-### 🔮 Phase 3 — Enterprise Integration
-- [ ] **e-Shram Portal Sync** — API integration to verify worker registration status
-- [ ] **Pro Bono Legal Handoff** — Secure, anonymized case dashboard for partnered NGOs and DLSA advocates
-- [ ] **PII Scrubbing** — Local NER models to strip personal identifiers before LLM processing
-- [ ] **Multi-tenant Deployment** — Docker + Kubernetes for NGO/government deployment
+### 🔮 Phase 3 — National Scale & Public Infrastructure
+- [ ] **Direct e-Shram API Sync** — Verify worker registration status against the national e-Shram database.
+- [ ] **DLSA Advocate Dashboard** — Secure, anonymized case export for District Legal Services Authority panel lawyers.
+- [ ] **Trade Union Collaboration Mode** — Aggregated dispute pattern reporting to identify systemic platform wage theft.
 
 <br/>
 
@@ -827,39 +865,10 @@ The RAG test suite validates:
 ## ⚠️ Legal Disclaimer
 
 > [!WARNING]
-> **Not Legal Advice.** WorkerSaathi is an AI-powered informational tool, not a licensed legal professional. It provides general legal navigation based on publicly available Central Government data. It does not create an attorney-client relationship and does not constitute binding legal counsel.
+> **Informational & Assistive Tool:** WorkerSaathi is an artificial intelligence-powered legal information and document preparation system. It is designed to navigate public statutory codes and assist informal workers in organizing their grievances. It **does not constitute licensed legal counsel** and does not establish an attorney-client relationship. For binding representation in court, workers are advised to utilize the free legal aid services provided by the District Legal Services Authority (DLSA) under the Legal Services Authorities Act, 1987.
 
 > [!CAUTION]
-> **In an Emergency?** If you or someone you know is experiencing physical violence, trafficking, or immediate danger — **dial 112 (National Emergency)** immediately. WorkerSaathi's safety escalation is a guide, not a replacement for emergency services.
-
-<br/>
-
----
-
-<br/>
-
-## 🤝 Contributing
-
-We welcome contributions from **legal professionals**, **NLP engineers**, **voice/audio specialists**, and **UI/UX designers**.
-
-```bash
-# 1. Fork the repo
-# 2. Create a feature branch
-git checkout -b feat/add-karnataka-laws
-
-# 3. Make changes with conventional commits
-git commit -m "feat: add karnataka state gig worker laws to RAG"
-
-# 4. Push and open a PR
-git push origin feat/add-karnataka-laws
-```
-
-**High-impact contribution areas:**
-- 📜 Adding state-specific legal data to the knowledge base
-- 🌍 Expanding language support (Tamil, Telugu, Bengali, Marathi)
-- 🧪 Adding more RAG retrieval test cases
-- 📱 Building a mobile-friendly voice interface
-- 🔐 Implementing PII detection and scrubbing
+> **Emergency Notice:** If you or someone you know is in immediate physical danger, trapped at a worksite, facing violence, or witnessing child labor or trafficking — **immediately dial 112 (National Emergency Support System)** or **1098 (Childline)**.
 
 <br/>
 
@@ -869,7 +878,7 @@ git push origin feat/add-karnataka-laws
 
 ## 📄 License
 
-This project is open-sourced under the **MIT License**. See [LICENSE](LICENSE) for details.
+WorkerSaathi is open-sourced under the **MIT License**. See the [LICENSE](LICENSE) file for complete details.
 
 <br/>
 
@@ -879,13 +888,12 @@ This project is open-sourced under the **MIT License**. See [LICENSE](LICENSE) f
 
 <br/>
 
-
 <p>
-  <strong>Built with ❤️ for the workers who build our nation.</strong>
+  <strong>Built with ❤️ for the 450M+ informal and gig workers who build India.</strong>
 </p>
 
 <p>
-  <sub>Made at <a href="https://lablab.ai">LabLab.ai</a> Hackathon • Powered by <a href="https://www.assemblyai.com/">AssemblyAI</a></sub>
+  <sub>Powered by <a href="https://www.sarvam.ai/">Sarvam AI</a> • Built with <a href="https://fastapi.tiangolo.com/">FastAPI</a> & <a href="https://qdrant.tech/">Qdrant</a></sub>
 </p>
 
 <br/>
