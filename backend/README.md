@@ -23,7 +23,7 @@ this service (`GET /voice`).
 | `app/safety/` | Emergency escalation guardrails |
 | `knowledge/` | Legal knowledge base (JSON research packages, source registry, coverage matrix) |
 | `data/` | Runtime data: `worker_cases.db` + committed Qdrant vector store |
-| `scripts/` | Utilities: `embed.py`, `check_env.py` |
+| `scripts/` | Utilities: `embed.py` |
 | `tests/` | Test suite |
 
 ## Run
