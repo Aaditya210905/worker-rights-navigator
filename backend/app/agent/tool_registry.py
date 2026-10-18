@@ -26,7 +26,7 @@ TOOL_PERMISSIONS = {
         "retrieving_rights",
     ],
     "retrieve_rights": [
-        "new", "listening", "classified", "collecting_information",
+        "listening", "classified", "collecting_information",
         "retrieving_rights", "rights_verified",
     ],
     "generate_evidence": [
@@ -47,6 +47,17 @@ TOOL_PERMISSIONS = {
     "search_live_news": [
         "new", "listening", "classified", "collecting_information",
         "retrieving_rights", "rights_verified",
+    ],
+    "check_eligibility": [
+        "classified", "collecting_information", "retrieving_rights",
+        "rights_verified", "action_plan_ready", "evidence_generated",
+    ],
+    "calculate_unpaid_wages": [
+        "classified", "collecting_information", "retrieving_rights",
+        "rights_verified", "action_plan_ready", "evidence_generated",
+    ],
+    "generate_complaint_letter": [
+        "rights_verified", "action_plan_ready", "evidence_generated",
     ],
 }
 
@@ -267,6 +278,103 @@ TOOL_WEB_SEARCH = {
 }
 
 
+TOOL_CHECK_ELIGIBILITY = {
+    "type": "function",
+    "name": "check_eligibility",
+    "description": (
+        "Check worker eligibility under the Code on Social Security 2020 90/120-Day Rule, "
+        "e-Shram registration, and State Gig Worker Acts (Rajasthan, Karnataka, etc.). "
+        "Call this when the worker mentions how long they have worked, their platform(s), "
+        "or asks about their legal rights and eligibility."
+    ),
+    "parameters": {
+        "type": "object",
+        "properties": {
+            "days_with_primary_aggregator": {
+                "type": "integer",
+                "description": "Days worked with their primary platform (e.g., 95).",
+            },
+            "total_days_across_aggregators": {
+                "type": "integer",
+                "description": "Total days worked across all apps (e.g., 130).",
+            },
+            "number_of_aggregators": {
+                "type": "integer",
+                "description": "How many apps/aggregators the worker works on.",
+            },
+            "has_eshram": {
+                "type": "boolean",
+                "description": "Whether the worker has an e-Shram UAN card.",
+            },
+        },
+    },
+}
+
+
+TOOL_CALCULATE_WAGES = {
+    "type": "function",
+    "name": "calculate_unpaid_wages",
+    "description": (
+        "Calculate unpaid wages, unlawful deductions (under Section 18 Code on Wages 2019), "
+        "and potential statutory compensation up to 10x (under Section 45). "
+        "Call this when specific amounts, deductions, or withheld pay are mentioned."
+    ),
+    "parameters": {
+        "type": "object",
+        "properties": {
+            "base_unpaid": {
+                "type": "number",
+                "description": "Unpaid base trip earnings or salary in rupees.",
+            },
+            "withheld_incentives": {
+                "type": "number",
+                "description": "Surge, peak-hour, or target bonuses withheld in rupees.",
+            },
+            "unauthorized_deductions": {
+                "type": "number",
+                "description": "Deductions for penalties, cancellations, or uniforms in rupees.",
+            },
+            "period_description": {
+                "type": "string",
+                "description": "Period of disputed work (e.g. 'Last 2 weeks').",
+            },
+        },
+    },
+}
+
+
+TOOL_GENERATE_COMPLAINT = {
+    "type": "function",
+    "name": "generate_complaint_letter",
+    "description": (
+        "Generate a formal legal complaint or dispute notice. "
+        "Can target the Aggregator Grievance Redressal Officer, Assistant Labour Commissioner, "
+        "or District Legal Services Authority (DLSA for free legal aid). "
+        "Available in English or Hindi."
+    ),
+    "parameters": {
+        "type": "object",
+        "properties": {
+            "authority_type": {
+                "type": "string",
+                "enum": [
+                    "aggregator_grievance_officer",
+                    "labour_commissioner",
+                    "dlsa_legal_aid",
+                    "state_welfare_board",
+                ],
+                "description": "Target authority to address the complaint to.",
+            },
+            "language": {
+                "type": "string",
+                "enum": ["en", "hi"],
+                "description": "Language of complaint ('en' for English, 'hi' for Hindi).",
+            },
+        },
+    },
+}
+
+
 # ── All tools list ───────────────────────────────────────────────────────────
 
 ALL_TOOLS = [
@@ -276,6 +384,9 @@ ALL_TOOLS = [
     TOOL_DRAFT_MESSAGE,
     TOOL_ESCALATE_SAFETY,
     TOOL_WEB_SEARCH,
+    TOOL_CHECK_ELIGIBILITY,
+    TOOL_CALCULATE_WAGES,
+    TOOL_GENERATE_COMPLAINT,
 ]
 
 

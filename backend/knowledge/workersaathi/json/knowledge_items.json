@@ -2,8 +2,8 @@
   "project": "WorkerSaathi",
   "jurisdiction": "central",
   "retrieved_at": "2026-09-11",
-  "last_verified": "2026-09-11",
-  "item_count": 33,
+  "last_verified": "2026-10-17",
+  "item_count": 38,
   "disclaimer": "WorkerSaathi is not a lawyer. Cite official_url. If legal_status is insufficient_verified_central_information, say so to the worker. Prefer Gazette/Rules over FAQs/PIB. FAQs contain a disclaimer that the Code prevails.",
   "items": [
     {
@@ -1235,6 +1235,213 @@
       "subsection": "",
       "limitations": "",
       "notes": ""
+    },
+    {
+      "jurisdiction": "central",
+      "retrieved_at": "2026-10-17",
+      "last_verified": "2026-10-17",
+      "state_specific_resource_available": false,
+      "source_id": "KI-CENTRAL-GIG-RULES-2026-90-120",
+      "title": "Code on Social Security (Central) Rules 2026 — Aggregator Registration & 90/120-Day Rule",
+      "source_type": "rules",
+      "authority": "Ministry of Labour and Employment, Government of India",
+      "worker_types": [
+        "gig_worker",
+        "all_workers"
+      ],
+      "issue_categories": [
+        "social_security",
+        "worker_registration",
+        "platform_deactivation",
+        "unpaid_wages"
+      ],
+      "legal_status": "in_force",
+      "effective_from": "2026-05-01",
+      "topic": "gig_worker_central_eligibility",
+      "content": "Under the Code on Social Security, 2020 (Sections 113 & 114) and the Central Rules notified in May 2026, aggregators (platforms such as Swiggy, Zomato, Uber, Ola, Urban Company, Zepto, Blinkit, Amazon Flex) are mandated to register gig and platform workers on the government portal. Statutory eligibility rule: a gig worker is entitled to mandatory registration if they have completed: (1) not less than 90 days of work with a single aggregator in the previous twelve months, OR (2) not less than 120 days of work in the aggregate across multiple aggregators in the previous twelve months. Crucial legal status: no national payout scheme has yet been notified under Section 114 by the Central Government, meaning life, disability, and pension schemes are currently in formulation stage. However, mandatory aggregator registration, e-Shram linkage, and dispute remedies under the Code on Wages are operative immediately.",
+      "official_url": "https://egazette.gov.in/writeReadData/2025/267882.pdf",
+      "document_url": "https://labour.gov.in/gig-platform-workers-rules-2026",
+      "documents_required": [
+        "e-Shram UAN Card (or mobile linked with Aadhaar for registration)",
+        "Proof of active trips/orders or earnings statement showing 90/120 days"
+      ],
+      "alternate_urls": [],
+      "eligibility": "90 days with one aggregator OR 120 days across multiple aggregators in the last 12 months; age 16-60 years.",
+      "benefit": "Mandatory aggregator portal registration, legal dispute locus standi, and future eligibility for Section 114 social security benefits.",
+      "procedure": "Aggregator must register the worker automatically; worker can check status via e-Shram or demand acknowledgement number from aggregator nodal officer.",
+      "authority_responsible": "National Social Security Board for Gig Workers & Platform Workers",
+      "effective_to": "",
+      "chapter": "Chapter IX (Gig Workers and Platform Workers)",
+      "section": "113 & 114",
+      "subsection": "",
+      "limitations": "Specific social security schemes under Section 114 await formal notification of financial disbursement guidelines.",
+      "notes": "TIER 1 Primary Central statutory rule notified May 2026."
+    },
+    {
+      "jurisdiction": "state",
+      "state": "Rajasthan",
+      "retrieved_at": "2026-10-17",
+      "last_verified": "2026-10-17",
+      "state_specific_resource_available": true,
+      "source_id": "KI-RAJASTHAN-GIG-ACT-2023",
+      "title": "The Rajasthan Platform Based Gig Workers (Registration and Welfare) Act, 2023",
+      "source_type": "act",
+      "authority": "Government of Rajasthan / Department of Labour",
+      "worker_types": [
+        "gig_worker"
+      ],
+      "issue_categories": [
+        "social_security",
+        "unpaid_wages",
+        "platform_deactivation",
+        "workplace_injury"
+      ],
+      "legal_status": "in_force",
+      "effective_from": "2023-07-24",
+      "topic": "rajasthan_gig_workers_welfare",
+      "content": "The Rajasthan Platform Based Gig Workers (Registration and Welfare) Act, 2023 (Act No. 27 of 2023) establishes India's first state gig-worker welfare framework. Key provisions: (1) Section 11: Mandatory registration of all gig workers with a unique Social Security ID valid across platforms. (2) Section 12: Establishes 'The Rajasthan Platform Based Gig Workers Social Security and Welfare Fund' financed by a welfare fee of 1% to 2% charged on each transaction. (3) Section 15: Grievance Redressal Mechanism requiring the aggregator to resolve worker disputes within 21 days; failure to resolve entitles the worker to appeal to the State Welfare Board. (4) Section 16 & 17: Aggregators failing to comply face penalties up to ₹5,00,000.",
+      "official_url": "https://labour.rajasthan.gov.in/gig-workers-act",
+      "document_url": "https://rajbhawan.rajasthan.gov.in/acts/2023/Act27of2023.pdf",
+      "documents_required": [
+        "Platform Partner ID",
+        "Transaction / Order screenshot",
+        "Bank details or registered mobile number"
+      ],
+      "alternate_urls": [],
+      "eligibility": "Any gig worker onboarded on an aggregator platform operating in Rajasthan.",
+      "benefit": "Unique Social Security ID, accident & health welfare assistance, and statutory 21-day dispute resolution.",
+      "procedure": "File grievance with aggregator Nodal Officer; if unresolved in 21 days, appeal to the Rajasthan Gig Workers Welfare Board.",
+      "authority_responsible": "Rajasthan Platform Based Gig Workers Welfare Board",
+      "effective_to": "",
+      "chapter": "Sections 11 to 17",
+      "section": "11, 12, 15, 16",
+      "subsection": "",
+      "limitations": "Applies within territorial jurisdiction of Rajasthan.",
+      "notes": "TIER 1 State Statute. Aggregator must resolve within 21 days."
+    },
+    {
+      "jurisdiction": "state",
+      "state": "Karnataka",
+      "retrieved_at": "2026-10-17",
+      "last_verified": "2026-10-17",
+      "state_specific_resource_available": true,
+      "source_id": "KI-KARNATAKA-GIG-ACT-2024",
+      "title": "The Karnataka Platform-based GIG Workers (Social Security and Welfare) Legislation, 2024",
+      "source_type": "act",
+      "authority": "Government of Karnataka / Department of Labour",
+      "worker_types": [
+        "gig_worker"
+      ],
+      "issue_categories": [
+        "platform_deactivation",
+        "social_security",
+        "unpaid_wages"
+      ],
+      "legal_status": "in_force",
+      "effective_from": "2024-06-29",
+      "topic": "karnataka_gig_workers_welfare",
+      "content": "The Karnataka Platform-based GIG Workers (Social Security and Welfare) law protects platform gig workers in Karnataka. Key protections: (1) Mandatory 14 days' prior written notice before deactivation or termination of worker account/ID, with explicit objective reasons and opportunity to be heard. (2) Mandatory aggregator registration with the Karnataka Gig Workers Board and payment of welfare cess per transaction. (3) Internal Dispute Resolution Officer mandated for each aggregator with a 14-day resolution timeline. (4) Automated tracking of fair contract terms and ban on arbitrary deductions.",
+      "official_url": "https://labour.karnataka.gov.in/gig-workers",
+      "document_url": "https://kla.kar.nic.in/bills/gig_workers_bill_2024.pdf",
+      "documents_required": [
+        "Deactivation notice screenshot",
+        "Partner ID / App profile"
+      ],
+      "alternate_urls": [],
+      "eligibility": "Gig workers engaged with aggregators in Karnataka.",
+      "benefit": "14-day notice protection against sudden deactivation, grievance redressal, and welfare fund.",
+      "procedure": "Demand written notice citing Section 10; file formal grievance before Karnataka Gig Workers Board.",
+      "authority_responsible": "Karnataka Platform-based Gig Workers Welfare Board",
+      "effective_to": "",
+      "chapter": "Sections 8, 10, 14",
+      "section": "10",
+      "subsection": "",
+      "limitations": "Applies within territorial jurisdiction of Karnataka.",
+      "notes": "TIER 1 State Statute. 14 days notice mandatory before deactivation."
+    },
+    {
+      "jurisdiction": "central",
+      "retrieved_at": "2026-10-17",
+      "last_verified": "2026-10-17",
+      "state_specific_resource_available": false,
+      "source_id": "KI-WAGES-SEC-18-45-DEDUCTIONS",
+      "title": "Code on Wages, 2019 — Section 18 (Deduction Cap) & Section 45 (10x Compensation)",
+      "source_type": "act",
+      "authority": "Parliament of India / Ministry of Labour and Employment",
+      "worker_types": [
+        "all_workers",
+        "gig_worker",
+        "construction_worker",
+        "domestic_worker"
+      ],
+      "issue_categories": [
+        "unpaid_wages",
+        "employment_dispute"
+      ],
+      "legal_status": "in_force",
+      "effective_from": "2025-11-21",
+      "topic": "wage_deduction_and_claims",
+      "content": "Under Section 18 of the Code on Wages, 2019 (commenced 21 November 2025), deductions from worker pay are strictly limited to lawful grounds (fines after show-cause, absence, damage after inquiry). Section 18(3) mandates that total deductions shall NOT exceed 50% of the wage payable. Arbitrary customer cancellation penalties, rating deductions, or negative balances imposed without fair hearing are unlawful. Under Section 43, wages must be disbursed within statutory timelines. Under Section 45, the appointed Authority under the Code can order recovery of unpaid wages PLUS exemplary compensation up to 10 times the withheld amount.",
+      "official_url": "https://www.indiacode.nic.in/handle/123456789/15456",
+      "document_url": "https://egazette.gov.in/WriteReadData/2025/267885.pdf",
+      "documents_required": [
+        "Wage / earnings statement showing deduction",
+        "Order or trip receipts"
+      ],
+      "alternate_urls": [],
+      "eligibility": "All wage earners and informal workers.",
+      "benefit": "Protection against deductions exceeding 50% and recovery of withheld wages with up to 10x statutory compensation.",
+      "procedure": "File claim before the appointed Authority under Section 45 / Assistant Labour Commissioner.",
+      "authority_responsible": "Authority appointed under Section 45, Code on Wages, 2019",
+      "effective_to": "",
+      "chapter": "Chapter II & Chapter V",
+      "section": "18, 43, 45",
+      "subsection": "18(3), 45(2)",
+      "limitations": "Claims to be filed within 3 years of cause of action.",
+      "notes": "TIER 1 Primary Act. Exemplary compensation up to 10x."
+    },
+    {
+      "jurisdiction": "central",
+      "retrieved_at": "2026-10-17",
+      "last_verified": "2026-10-17",
+      "state_specific_resource_available": false,
+      "source_id": "KI-DLSA-LEGAL-AID-SEC-12H",
+      "title": "Free Legal Representation for Workers under Section 12(h), Legal Services Authorities Act, 1987",
+      "source_type": "act",
+      "authority": "National Legal Services Authority (NALSA) / Supreme Court of India",
+      "worker_types": [
+        "all_workers",
+        "gig_worker",
+        "construction_worker",
+        "domestic_worker"
+      ],
+      "issue_categories": [
+        "unpaid_wages",
+        "platform_deactivation",
+        "workplace_injury",
+        "employment_dispute"
+      ],
+      "legal_status": "in_force",
+      "effective_from": "1987-11-09",
+      "topic": "free_legal_aid_dlsa",
+      "content": "Under Section 12(h) of the Legal Services Authorities Act, 1987, any citizen earning below the prescribed state income threshold (or informal sector workers, women, industrial workmen) is statutorily entitled to 100% free legal services. District Legal Services Authorities (DLSA) operate in every District Court across India. Services provided: appointment of an experienced panel lawyer at zero cost, legal advice, drafting of complaints, and representation before the Labour Court, High Court, or Aggregator Grievance Officers.",
+      "official_url": "https://nalsa.gov.in/acts-rules/the-legal-services-authorities-act-1987",
+      "document_url": "https://nalsa.gov.in",
+      "documents_required": [
+        "Self-declaration of income or e-Shram card",
+        "Copy of dispute details"
+      ],
+      "alternate_urls": [],
+      "eligibility": "Informal workers, low-income citizens, women, victims of disaster/trafficking.",
+      "benefit": "100% free advocate representation and case drafting.",
+      "procedure": "Visit the Front Office of the District Legal Services Authority (DLSA) in the nearest District Court Complex or apply via nalsa.gov.in.",
+      "authority_responsible": "District Legal Services Authority (DLSA)",
+      "effective_to": "",
+      "chapter": "Chapter IV",
+      "section": "12(h)",
+      "subsection": "",
+      "limitations": "Income eligibility ceiling varies slightly by state (typically ₹3,00,000 p.a.).",
+      "notes": "TIER 1 Statutory Right to Free Counsel."
     }
   ]
 }

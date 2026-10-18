@@ -93,3 +93,6 @@ scratch/
 !backend/data/qdrant/
 !backend/data/qdrant/**
 !backend/data/qdrant/**/*.sqlite
+*.lock
+backend/data/qdrant/.lock
+

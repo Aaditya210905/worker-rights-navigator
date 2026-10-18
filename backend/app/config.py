@@ -6,23 +6,30 @@ Never hardcode API keys or secrets in Python code.
 """
 
 import os
+from pathlib import Path
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from dotenv import load_dotenv
 
-load_dotenv()
+BACKEND_DIR = Path(__file__).resolve().parent.parent
+ROOT_DIR = BACKEND_DIR.parent
+ENV_FILES = [str(ROOT_DIR / ".env"), str(BACKEND_DIR / ".env"), ".env"]
+
+for ef in ENV_FILES:
+    if Path(ef).is_file():
+        load_dotenv(dotenv_path=ef)
 
 
 class Settings(BaseSettings):
     """Central configuration loaded from environment variables."""
 
     model_config = SettingsConfigDict(
-        env_file=".env",
+        env_file=ENV_FILES,
         env_file_encoding="utf-8",
         extra="ignore",
     )
 
-    # --- Sarvam AI (voice provider) ---
-    sarvam_api_key: str = ""
+    # --- AssemblyAI ---
+    assemblyai_api_key: str = ""
 
     # --- Application ---
     app_env: str = "development"

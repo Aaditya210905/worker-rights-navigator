@@ -698,8 +698,7 @@ worker-rights-navigator/                  # repository root
 │   │   └── 📂 qdrant/                   # Pre-built Qdrant vector store (committed)
 │   │
 │   ├── 📂 scripts/                      # 🔧 Utilities
-│   │   ├── embed.py                     # Standalone embedding script
-│   │   └── check_env.py                 # Environment validation
+│   │   └── embed.py                     # Standalone embedding script
 │   │
 │   ├── 📂 tests/                        # 🧪 Test Suite
 │   │   └── __init__.py

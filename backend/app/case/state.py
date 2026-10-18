@@ -36,12 +36,17 @@ class CaseManager:
 
     def _sync_to_db(self):
         """Sync current state to the database."""
+        def _to_val(x, default=""):
+            if x is None:
+                return default
+            return x.value if hasattr(x, "value") else str(x)
+
         db.upsert_case(
             case_id=self.case.case_id,
-            worker_type=self.case.worker_type.value,
-            issue_category=self.case.issue_category.value,
-            status=self.case.status.value,
-            state=self.case.state.value if self.case.state else "Unknown",
+            worker_type=_to_val(self.case.worker_type, "unknown"),
+            issue_category=_to_val(self.case.issue_category, "unknown"),
+            status=_to_val(self.case.status, "new"),
+            state=_to_val(self.case.state, "Unknown"),
             created_at=self.case.created_at
         )
 
@@ -53,6 +58,20 @@ class CaseManager:
         """
         if not hasattr(self.case, field):
             return False
+
+        # Normalize string values to corresponding enums if applicable
+        if isinstance(value, str):
+            try:
+                if field == "status":
+                    value = CaseStatus(value)
+                elif field == "worker_type":
+                    value = WorkerType(value)
+                elif field == "issue_category":
+                    value = IssueCategory(value)
+                elif field == "state":
+                    value = IndianState(value)
+            except ValueError:
+                pass
 
         old_value = getattr(self.case, field)
         if old_value == value:

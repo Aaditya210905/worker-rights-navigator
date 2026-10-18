@@ -8,7 +8,9 @@ validate, dispatch, and format responses.
 
 import json
 from datetime import datetime
-from fastapi import APIRouter, HTTPException
+from typing import Optional, List, Dict, Any
+from fastapi import APIRouter, HTTPException, File, UploadFile, Form
+from fastapi.responses import HTMLResponse
 
 from app.api.session import session_manager
 from app.api.schemas import (
@@ -23,9 +25,18 @@ from app.api.schemas import (
     MissingFieldsResponse,
     CaseContextResponse,
     HealthResponse,
+    EligibilityCheckRequest,
+    WageCalculationRequest,
+    ComplaintGenerateRequest,
 )
 from app.agent.tool_registry import get_tools_for_status
 from app.agent.prompts import build_system_prompt
+from app.evidence.eligibility import EligibilityChecker
+from app.evidence.wage_calculator import WageCalculator, WageCalculationResult
+from app.evidence.screenshot_parser import EvidenceManager, EvidenceItem, EvidenceTimeline
+from app.evidence.complaint_generator import (
+    ComplaintGenerator, ComplaintAuthority, ComplaintLanguage
+)
 
 router = APIRouter(tags=["WorkerSaathi API"])
 
@@ -51,6 +62,12 @@ def _case_to_response(case) -> CaseResponse:
         payment_pending_duration=case.payment_pending_duration,
         raw_description=case.raw_description,
         turn_count=case.turn_count,
+        days_worked=case.days_worked,
+        has_eshram=case.has_eshram,
+        eligibility_report=case.eligibility_report,
+        wage_calculation=case.wage_calculation,
+        evidence_items=case.evidence_items,
+        complaint_drafts=case.complaint_drafts,
         filled_fields=case.get_filled_fields(),
     )
 
@@ -237,3 +254,229 @@ async def log_transcript(session_id: str, req: dict):
     if text.strip():
         session.orchestrator.process_transcript(text)
     return {"status": "ok", "turn_count": session.orchestrator.case.turn_count}
+
+
+# ── Legal Help & Evidence Endpoints (Gireesh) ─────────────────────────────────
+
+@router.post("/sessions/{session_id}/eligibility")
+async def evaluate_eligibility(session_id: str, req: EligibilityCheckRequest):
+    """
+    Evaluate worker eligibility against the 90/120-Day Rule, e-Shram,
+    Section 114 status, and State Gig Worker Acts.
+    """
+    session = _get_session_or_404(session_id)
+    case = session.orchestrator.case
+
+    days_primary = req.days_with_primary_aggregator if req.days_with_primary_aggregator is not None else case.days_worked
+    has_eshram = req.has_eshram if req.has_eshram is not None else case.has_eshram
+    worker_type = req.worker_type or case.worker_type
+    state = req.state or case.state
+    platform = req.platform_name or case.platform_or_employer
+
+    report = EligibilityChecker.evaluate(
+        worker_type=worker_type,
+        state=state,
+        days_with_primary_aggregator=days_primary,
+        total_days_across_aggregators=req.total_days_across_aggregators,
+        number_of_aggregators=req.number_of_aggregators,
+        has_eshram=has_eshram,
+        age=req.age or case.age,
+        platform_name=platform,
+    )
+
+    case.eligibility_report = report.model_dump()
+    if days_primary is not None:
+        session.orchestrator.case_manager.update_field("days_worked", days_primary)
+    if has_eshram is not None:
+        session.orchestrator.case_manager.update_field("has_eshram", has_eshram)
+
+    return report.model_dump()
+
+
+@router.post("/sessions/{session_id}/wages")
+async def calculate_wages(session_id: str, req: WageCalculationRequest):
+    """
+    Calculate itemized unpaid wages, unlawful deductions (Sec 18 cap),
+    and 10x statutory compensation claim under Section 45 Code on Wages.
+    """
+    session = _get_session_or_404(session_id)
+    case = session.orchestrator.case
+
+    calc_result = WageCalculator.calculate(
+        base_unpaid=req.base_unpaid,
+        withheld_incentives=req.withheld_incentives,
+        unauthorized_deductions=req.unauthorized_deductions,
+        fuel_or_expenses_withheld=req.fuel_or_expenses_withheld,
+        worker_type=case.worker_type,
+        state=case.state,
+        period_description=req.period_description or case.payment_pending_duration,
+    )
+
+    case.wage_calculation = calc_result.model_dump()
+    if calc_result.net_unpaid_balance > 0:
+        session.orchestrator.case_manager.update_field("amount", str(int(calc_result.net_unpaid_balance)))
+
+    return calc_result.model_dump()
+
+
+@router.post("/sessions/{session_id}/evidence/upload")
+async def upload_evidence(
+    session_id: str,
+    file: UploadFile = File(...),
+    caption: Optional[str] = Form(None),
+):
+    """
+    Upload payment screenshot, deactivation alert, or chat record.
+    Automatically applies PII redaction (masks Aadhaar, bank numbers, OTPs)
+    and extracts amounts, dates, and order IDs.
+    """
+    session = _get_session_or_404(session_id)
+    case = session.orchestrator.case
+
+    ALLOWED_EXTENSIONS = {".png", ".jpg", ".jpeg", ".webp", ".pdf", ".txt", ".csv"}
+    MAX_FILE_SIZE = 10 * 1024 * 1024  # 10 MB
+
+    filename = file.filename or "uploaded_proof.png"
+    import os
+    ext = os.path.splitext(filename)[1].lower()
+
+    if ext and ext not in ALLOWED_EXTENSIONS:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Unsupported file format '{ext}'. Allowed formats: {', '.join(sorted(ALLOWED_EXTENSIONS))}"
+        )
+
+    file_bytes = await file.read()
+    if len(file_bytes) > MAX_FILE_SIZE:
+        raise HTTPException(
+            status_code=400,
+            detail=f"File exceeds maximum allowed size of {MAX_FILE_SIZE // (1024 * 1024)}MB."
+        )
+
+    item = EvidenceManager.save_and_parse_upload(
+        file_bytes=file_bytes,
+        filename=filename,
+        case_id=case.case_id,
+        user_caption=caption,
+    )
+
+
+    # Append to case evidence items
+    case.evidence_items.append(item.model_dump())
+
+    # If amount was detected and case.amount is empty, update it
+    if item.parsed_data.primary_amount and not case.amount:
+        session.orchestrator.case_manager.update_field("amount", str(int(item.parsed_data.primary_amount)))
+    if item.parsed_data.detected_platform and not case.platform_or_employer:
+        session.orchestrator.case_manager.update_field("platform_or_employer", item.parsed_data.detected_platform)
+
+    return {
+        "status": "success",
+        "evidence_id": item.evidence_id,
+        "filename": item.filename,
+        "annexure_label": item.annexure_label,
+        "evidence_type": item.evidence_type.value,
+        "parsed_data": item.parsed_data.model_dump(),
+        "total_items": len(case.evidence_items),
+    }
+
+
+@router.get("/sessions/{session_id}/evidence")
+async def get_evidence_and_timeline(session_id: str):
+    """
+    Get all uploaded evidence items and the compiled chronological Evidence Timeline.
+    """
+    session = _get_session_or_404(session_id)
+    case = session.orchestrator.case
+
+    evidence_objs = []
+    for itm in case.evidence_items:
+        try:
+            evidence_objs.append(EvidenceItem(**itm))
+        except Exception:
+            pass
+
+    timeline = EvidenceManager.build_timeline(
+        case_id=case.case_id,
+        case_state_fields=case.get_filled_fields(),
+        uploaded_items=evidence_objs,
+    )
+
+    return {
+        "case_id": case.case_id,
+        "evidence_items": [e.model_dump() for e in evidence_objs],
+        "timeline": timeline.model_dump(),
+        "timeline_markdown": timeline.to_markdown_table(),
+    }
+
+
+@router.post("/sessions/{session_id}/complaint")
+async def generate_complaint(session_id: str, req: ComplaintGenerateRequest):
+    """
+    Generate formal dispute complaint draft (Aggregator Nodal Officer, Labour Commissioner, DLSA, Welfare Board)
+    in English or Hindi.
+    """
+    session = _get_session_or_404(session_id)
+    case = session.orchestrator.case
+
+    try:
+        auth_type = ComplaintAuthority(req.authority_type)
+    except ValueError:
+        auth_type = ComplaintAuthority.AGGREGATOR_GRIEVANCE_OFFICER
+
+    lang = ComplaintLanguage.HINDI if req.language == "hi" else ComplaintLanguage.ENGLISH
+
+    wage_calc = None
+    if case.wage_calculation:
+        try:
+            wage_calc = WageCalculationResult(**case.wage_calculation)
+        except Exception:
+            pass
+
+    eligibility = None
+    if case.eligibility_report:
+        try:
+            eligibility = EligibilityReport(**case.eligibility_report)
+        except Exception:
+            pass
+
+    evidence_objs = []
+    for itm in case.evidence_items:
+        try:
+            evidence_objs.append(EvidenceItem(**itm))
+        except Exception:
+            pass
+
+    timeline = EvidenceManager.build_timeline(
+        case_id=case.case_id,
+        case_state_fields=case.get_filled_fields(),
+        uploaded_items=evidence_objs,
+    )
+
+    doc = ComplaintGenerator.generate(
+        case=case,
+        authority=auth_type,
+        language=lang,
+        wage_calc=wage_calc,
+        eligibility=eligibility,
+        timeline=timeline,
+        evidence_items=evidence_objs,
+    )
+
+    case.complaint_drafts.append(doc.model_dump())
+    return doc.model_dump()
+
+
+@router.get("/sessions/{session_id}/complaint/{doc_id}/html", response_class=HTMLResponse)
+async def view_complaint_html(session_id: str, doc_id: str):
+    """
+    Returns clean, official printable HTML view for the generated complaint petition.
+    """
+    session = _get_session_or_404(session_id)
+    case = session.orchestrator.case
+
+    for draft in case.complaint_drafts:
+        if draft.get("document_id") == doc_id:
+            return draft.get("body_html", "<p>No content</p>")
+
+    raise HTTPException(status_code=404, detail="Complaint document not found")
