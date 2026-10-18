@@ -56,9 +56,9 @@
 .text-input-area {
     display: flex !important;
     align-items: center !important;
-    padding: 0.75rem 1.25rem 1rem 1.25rem !important;
+    padding: 0.35rem 1.25rem 0.75rem 1.25rem !important;
     background: #FFFFFF !important;
-    border-top: 1px solid #E2E8F0 !important;
+    border-top: none !important;
     position: relative;
     z-index: 10;
     box-sizing: border-box !important;
@@ -195,9 +195,9 @@
 /* ── Mic Spinner (processing state) ───────────────────────────────── */
 
 .mic-spinner {
-    width: 24px;
-    height: 24px;
-    border: 3px solid rgba(255,255,255,0.3);
+    width: 20px;
+    height: 20px;
+    border: 2.5px solid rgba(255,255,255,0.3);
     border-top-color: white;
     border-radius: 50%;
     animation: spin 0.8s linear infinite;

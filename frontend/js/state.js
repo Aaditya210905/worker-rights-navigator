@@ -19,7 +19,7 @@ let audioChunks = [];
 // ── Language settings ────────────────────────────────────────────
 let selectedLanguage = 'auto';     // STT input language
 let selectedTTSLanguage = 'hi-IN'; // TTS output language
-let selectedSpeaker = 'ritu';     // TTS voice persona (valid Bulbul v3 speaker)
+let selectedSpeaker = 'shubh';    // TTS voice persona (valid Bulbul v3 speaker)
 
 // ── DOM references ───────────────────────────────────────────────
 const badge = document.getElementById('statusBadge');

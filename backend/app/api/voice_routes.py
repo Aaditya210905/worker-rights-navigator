@@ -70,7 +70,7 @@ class ConverseRequest(BaseModel):
     session_id: str = Field(..., description="Session ID from /sessions")
     language_code: str = Field(default="auto", description="Language code or 'auto'")
     stt_mode: str = Field(default="transcribe", description="STT mode")
-    tts_speaker: str = Field(default="meera", description="TTS voice")
+    tts_speaker: str = Field(default="shubh", description="TTS voice")
     tts_language: str = Field(default="hi-IN", description="TTS output language")
 
 
@@ -78,7 +78,7 @@ class ChatTurnRequest(BaseModel):
     """Request for a text conversation turn."""
     session_id: str = Field(..., description="Session ID from /sessions")
     message: str = Field(..., description="Worker's message text")
-    tts_speaker: str = Field(default="ritu", description="TTS voice")
+    tts_speaker: str = Field(default="shubh", description="TTS voice")
     tts_language: str = Field(default="hi-IN", description="TTS output language")
     synthesize_speech: bool = Field(default=False, description="Whether to also generate TTS audio")
 

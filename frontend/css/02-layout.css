@@ -510,10 +510,28 @@
 }
 
 .two-col-grid.voice-layout {
-    grid-template-columns: 1.35fr 0.95fr;
+    grid-template-columns: minmax(0, 1fr) 340px;
     height: calc(100vh - 120px);
     min-height: 580px;
     align-items: stretch;
+    gap: 1.25rem;
+}
+
+.two-col-grid.voice-layout .case-fields-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.6rem;
+}
+
+.two-col-grid.voice-layout .field-stat-card {
+    padding: 0.55rem 0.75rem;
+}
+
+.two-col-grid.voice-layout .field-key {
+    font-size: 0.68rem;
+}
+
+.two-col-grid.voice-layout .field-val {
+    font-size: 0.85rem;
 }
 
 /* ─── Glassmorphism Card System ────────────────────────────────── */

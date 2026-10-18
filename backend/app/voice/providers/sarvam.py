@@ -50,7 +50,7 @@ SARVAM_LANGUAGES = [
 
 # Default speakers per language for TTS
 DEFAULT_SPEAKERS = {
-    "hi-IN": "ritu",
+    "hi-IN": "shubh",
     "en-IN": "simran",
     "bn-IN": "roopa",
     "ta-IN": "gokul",
